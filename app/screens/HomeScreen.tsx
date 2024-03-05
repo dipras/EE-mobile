@@ -1,30 +1,22 @@
-import { type ContentStyle } from "@shopify/flash-list"
 import { observer } from "mobx-react-lite"
 import React, { FC, useRef, useState, useEffect } from "react"
-import {
-  ImageStyle,
-  TextStyle,
-  ViewStyle,
-  View,
-  Image,
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-} from "react-native"
+import { ViewStyle, View, Image, Dimensions, Linking } from "react-native"
 import { Screen, Text, Icon } from "../components"
-import { isRTL } from "../i18n"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { colors, spacing } from "../theme"
 import Carousel, { Pagination } from "react-native-snap-carousel"
+import { useStores } from "app/models"
+import { getPodcasApi } from "app/utils/api/article.api"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 const avatar = require("../../assets/images/avatar.jpg")
 const banner1 = require("../../assets/images/demo/banner-1.png")
 const banner2 = require("../../assets/images/demo/banner-2.png")
-const eventImg = require("../../assets/images/event-img.png");
-const surveyImg = require("../../assets/images/survey-img.png");
-const courseImg = require("../../assets/images/course-img.png");
-const expertImg = require("../../assets/images/expert-img.png");
-const halalImg = require("../../assets/images/halal-img.png");
+const eventImg = require("../../assets/images/event-img.png")
+const surveyImg = require("../../assets/images/survey-img.png")
+const courseImg = require("../../assets/images/course-img.png")
+const expertImg = require("../../assets/images/expert-img.png")
+const halalImg = require("../../assets/images/halal-img.png")
 
 const data = [
   {
@@ -43,23 +35,33 @@ const data = [
 
 const window = Dimensions.get("window")
 
-
-const bannerWidth = window.width - (spacing.sm * 2)
+const bannerWidth = window.width - spacing.sm * 2
 const bannerHeight = bannerWidth / (16 / 9)
 
-const surveyImgWidth = ((window.width - (spacing.sm * 2)) / 2) - 5;
-const surveyImgHeight = surveyImgWidth / (152 / 120);
+const surveyImgWidth = (window.width - spacing.sm * 2) / 2 - 5
+const surveyImgHeight = surveyImgWidth / (152 / 120)
 
-const courseImgWidth = window.width - (spacing.sm * 2);
+const courseImgWidth = window.width - spacing.sm * 2
 const courseImgHeight = courseImgWidth / (335 / 120)
 export const Home: FC<DemoTabScreenProps<"Home">> = observer(function Home(_props) {
+  const {
+    authenticationStore: { isAuthenticated, authName, authToken },
+  } = useStores()
+
   const [index, setIndex] = useState(0)
+  const [podcastData, setPodcastData] = useState([])
+  const [podcastIndex, setPodcastIndex] = useState(0)
   const carouselRef: any = useRef(null)
+  const podcastCarouselRef: any = useRef(null)
 
   useEffect(() => {
     const interval = setInterval(() => {
       carouselRef?.current?.snapToNext()
     }, 10000)
+
+    getPodcasApi(authToken).then((res) => {
+      setPodcastData(res.data.data)
+    })
     return () => clearInterval(interval)
   }, [])
 
@@ -73,37 +75,55 @@ export const Home: FC<DemoTabScreenProps<"Home">> = observer(function Home(_prop
     )
   }
 
+  const CarouselPodcastItem = ({ item, index }: any) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          Linking.openURL(item.url)
+        }}
+      >
+        <Image
+          key={index}
+          source={{ uri: item.image }}
+          style={{ width: bannerWidth, height: bannerHeight, objectFit: "fill", borderRadius: 10 }}
+        />
+      </TouchableOpacity>
+    )
+  }
+
   return (
     <Screen preset="scroll" safeAreaEdges={["top"]} contentContainerStyle={$screenContentContainer}>
-      <View style={$top}>
-        <View style={$identity}>
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: colors.border,
-              padding: 5,
-              height: 40,
-              width: 40,
-              borderRadius: 20,
-              marginRight: 10,
-            }}
-          >
-            <Image source={avatar} style={{ width: "100%", height: "100%", borderRadius: 20 }} />
+      {isAuthenticated && (
+        <View style={$top}>
+          <View style={$identity}>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: colors.border,
+                padding: 5,
+                height: 40,
+                width: 40,
+                borderRadius: 20,
+                marginRight: 10,
+              }}
+            >
+              <Image source={avatar} style={{ width: "100%", height: "100%", borderRadius: 20 }} />
+            </View>
+            <Text>{authName}</Text>
           </View>
-          <Text>Raymond</Text>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Icon icon="love" size={40} style={{ marginRight: 10 }} />
+            <Icon icon="bell" size={30} />
+          </View>
         </View>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Icon icon="love" size={40} style={{ marginRight: 10 }} />
-          <Icon icon="bell" size={30} />
-        </View>
-      </View>
+      )}
 
       <View style={$searchBar}>
         <Icon icon="search" size={20} style={{ marginRight: 10 }} />
         <Text style={{ fontSize: 14 }}>Search product and video</Text>
       </View>
 
-      <View style={{marginTop: spacing.md}}>
+      <View style={{ marginTop: spacing.md }}>
         <Carousel
           layout="default"
           ref={carouselRef}
@@ -117,45 +137,79 @@ export const Home: FC<DemoTabScreenProps<"Home">> = observer(function Home(_prop
           style={{ marginBottom: 0 }}
         />
         <Pagination
-          containerStyle={{paddingVertical: 0, marginTop: 5}}
+          containerStyle={{ paddingVertical: 0, marginTop: 5 }}
           dotsLength={data.length}
           activeDotIndex={index}
           dotStyle={{
             width: 30,
             backgroundColor: "#FBCF17",
-            height: 2
+            height: 2,
           }}
-          inactiveDotStyle={
-            {
-              backgroundColor: "#D9D9D9",
-              width: 14,
-              height: 2,
-            }
-          }
+          inactiveDotStyle={{
+            backgroundColor: "#D9D9D9",
+            width: 14,
+            height: 2,
+          }}
           inactiveDotOpacity={1}
           inactiveDotScale={1}
         />
       </View>
 
-      <View style={{marginTop: 30, flexDirection: "row", justifyContent: "space-between" }}>
-        <Image source={eventImg} style={{width: surveyImgWidth, height: surveyImgHeight}} />
-        <Image source={surveyImg} style={{width: surveyImgWidth, height: surveyImgHeight}} />
+      <View style={{ marginTop: 30, flexDirection: "row", justifyContent: "space-between" }}>
+        <Image source={eventImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
+        <Image source={surveyImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
       </View>
-      <View style={{marginTop: 10}}>
-        <Image source={courseImg} style={{width: courseImgWidth, height: courseImgHeight}} />
+      <View style={{ marginTop: 10 }}>
+        <Image source={courseImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
       </View>
-      <View style={{marginTop: 10}}>
-        <Image source={expertImg} style={{width: courseImgWidth, height: courseImgHeight}} />
+      <View style={{ marginTop: 10 }}>
+        <Image source={expertImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
       </View>
-      <View style={{marginTop: 10}}>
-        <Image source={halalImg} style={{width: courseImgWidth, height: courseImgHeight}} />
+      <View style={{ marginTop: 10 }}>
+        <Image source={halalImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
+      </View>
+      <View style={{ marginTop: 10 }}>
+        <Text size="lg" weight="bold">
+          Podcast
+        </Text>
+      </View>
+      <View style={{ marginTop: spacing.md }}>
+        <Carousel
+          layout="default"
+          ref={podcastCarouselRef}
+          data={podcastData}
+          renderItem={CarouselPodcastItem}
+          sliderWidth={bannerWidth}
+          itemWidth={bannerWidth}
+          loop={true}
+          onSnapToItem={(index) => setPodcastIndex(index)}
+          useScrollView={true}
+          style={{ marginBottom: 0 }}
+        />
+        <Pagination
+          containerStyle={{ paddingVertical: 0, marginTop: 5 }}
+          dotsLength={podcastData.length}
+          activeDotIndex={podcastIndex}
+          dotStyle={{
+            width: 30,
+            backgroundColor: "#FBCF17",
+            height: 2,
+          }}
+          inactiveDotStyle={{
+            backgroundColor: "#D9D9D9",
+            width: 14,
+            height: 2,
+          }}
+          inactiveDotOpacity={1}
+          inactiveDotScale={1}
+        />
       </View>
     </Screen>
   )
 })
 
 const $screenContentContainer: ViewStyle = {
-  padding: spacing.sm
+  padding: spacing.sm,
 }
 
 const $top: ViewStyle = {

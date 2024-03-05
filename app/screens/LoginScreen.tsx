@@ -1,30 +1,30 @@
 import { observer } from "mobx-react-lite"
 import React, { ComponentType, FC, useEffect, useMemo, useRef, useState } from "react"
-import { TextInput, TextStyle, ViewStyle } from "react-native"
+import { TextInput, ViewStyle, View, Image, ActivityIndicator } from "react-native"
 import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
+import axios from "axios"
 
+const googleIcon = require("../../assets/images/google.png")
+const privyIcon = require("../../assets/images/privy.png")
 interface LoginScreenProps extends AppStackScreenProps<"Login"> {}
 
 export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_props) {
   const authPasswordInput = useRef<TextInput>(null)
 
+  const [isLoading, setIsLoading] = useState(false)
   const [authPassword, setAuthPassword] = useState("")
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [attemptsCount, setAttemptsCount] = useState(0)
+  const [isSubmitted] = useState(false)
   const {
-    authenticationStore: { authEmail, setAuthEmail, setAuthToken, validationError },
+    authenticationStore: { authEmail, setAuthEmail, setAuthToken, validationError, setAuthName },
   } = useStores()
 
   useEffect(() => {
     // Here is where you could fetch credentials from keychain or storage
     // and pre-fill the form fields.
-    setAuthEmail("ignite@infinite.red")
-    setAuthPassword("ign1teIsAwes0m3")
-
     // Return a "cleanup" function that React will run when the component unmounts
     return () => {
       setAuthPassword("")
@@ -34,20 +34,30 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 
   const error = isSubmitted ? validationError : ""
 
-  function login() {
-    setIsSubmitted(true)
-    setAttemptsCount(attemptsCount + 1)
+  const login = async () => {
+    setIsLoading(true)
+    try {
+      let response = await axios.post("https://be-dev.exportexpert.id/auth/login", {
+        email: authEmail,
+        password: authPassword,
+      })
 
-    if (validationError) return
+      setAuthToken(response.data.data.accessToken)
 
-    // Make a request to your server to get an authentication token.
-    // If successful, reset the fields and set the token.
-    setIsSubmitted(false)
-    setAuthPassword("")
-    setAuthEmail("")
+      response = await axios.get("https://be-dev.exportexpert.id/auth/me", {
+        headers: {
+          Authorization: `Bearer ${response.data.data.accessToken}`,
+        },
+      })
 
-    // We'll mock this with a fake token.
-    setAuthToken(String(Date.now()))
+      setAuthName(response.data.data.name)
+      _props.navigation.replace("Demo", { screen: "Home" })
+    } catch (error) {
+      console.log(error)
+      console.log({ authEmail, authPassword })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(
@@ -72,47 +82,91 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       contentContainerStyle={$screenContentContainer}
       safeAreaEdges={["top", "bottom"]}
     >
-      <Text testID="login-heading" tx="loginScreen.signIn" preset="heading" style={$signIn} />
-      <Text tx="loginScreen.enterDetails" preset="subheading" style={$enterDetails} />
-      {attemptsCount > 2 && <Text tx="loginScreen.hint" size="sm" weight="light" style={$hint} />}
+      <View>
+        <Text size="xl" weight="bold" style={{ textAlign: "center" }}>
+          Sign In
+        </Text>
+        <Text size="sm" style={{ textAlign: "center", color: "#808080" }}>
+          Hi, Welcome back you have been missed
+        </Text>
+      </View>
+      <View style={{ marginBottom: 50 }}>
+        <TextField
+          value={authEmail}
+          onChangeText={setAuthEmail}
+          containerStyle={$textField}
+          inputWrapperStyle={{
+            backgroundColor: "#F2F2F2",
+            borderRadius: 30,
+            borderWidth: 0,
+            paddingVertical: 5,
+          }}
+          autoCapitalize="none"
+          autoComplete="email"
+          autoCorrect={false}
+          keyboardType="email-address"
+          labelTx="loginScreen.emailFieldLabel"
+          placeholder="Enter your email"
+          helper={error}
+          status={error ? "error" : undefined}
+          onSubmitEditing={() => authPasswordInput.current?.focus()}
+        />
 
-      <TextField
-        value={authEmail}
-        onChangeText={setAuthEmail}
-        containerStyle={$textField}
-        autoCapitalize="none"
-        autoComplete="email"
-        autoCorrect={false}
-        keyboardType="email-address"
-        labelTx="loginScreen.emailFieldLabel"
-        placeholderTx="loginScreen.emailFieldPlaceholder"
-        helper={error}
-        status={error ? "error" : undefined}
-        onSubmitEditing={() => authPasswordInput.current?.focus()}
-      />
+        <TextField
+          ref={authPasswordInput}
+          value={authPassword}
+          onChangeText={setAuthPassword}
+          containerStyle={$textField}
+          inputWrapperStyle={{
+            backgroundColor: "#F2F2F2",
+            borderRadius: 30,
+            borderWidth: 0,
+            paddingVertical: 5,
+          }}
+          autoCapitalize="none"
+          autoComplete="password"
+          autoCorrect={false}
+          secureTextEntry={isAuthPasswordHidden}
+          labelTx="loginScreen.passwordFieldLabel"
+          placeholder="Enter your password"
+          onSubmitEditing={login}
+          RightAccessory={PasswordRightAccessory}
+        />
 
-      <TextField
-        ref={authPasswordInput}
-        value={authPassword}
-        onChangeText={setAuthPassword}
-        containerStyle={$textField}
-        autoCapitalize="none"
-        autoComplete="password"
-        autoCorrect={false}
-        secureTextEntry={isAuthPasswordHidden}
-        labelTx="loginScreen.passwordFieldLabel"
-        placeholderTx="loginScreen.passwordFieldPlaceholder"
-        onSubmitEditing={login}
-        RightAccessory={PasswordRightAccessory}
-      />
-
+        <Text style={{ color: "#F6BE2C", textAlign: "right" }}>Forgot Password?</Text>
+      </View>
       <Button
         testID="login-button"
-        tx="loginScreen.tapToSignIn"
         style={$tapButton}
         preset="reversed"
         onPress={login}
-      />
+        disabled={isLoading}
+      >
+        {isLoading ? <ActivityIndicator /> : "Sign In"}{" "}
+      </Button>
+
+      <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 20 }}>
+        <View style={{ height: 1, backgroundColor: "#878787", flex: 1 }}></View>
+        <Text style={{ paddingHorizontal: 10 }}>Sign In with others</Text>
+        <View style={{ height: 1, backgroundColor: "#878787", flex: 1 }}></View>
+      </View>
+
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          marginBottom: 20,
+        }}
+      >
+        <Image source={googleIcon} style={{ width: 40, height: 40, marginRight: 10 }} />
+        <Image source={privyIcon} style={{ width: 115, height: 30 }} />
+      </View>
+
+      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        <Text> Don't have an account? </Text>
+        <Text style={{ color: "#F6BE2C" }}>Sign Up</Text>
+      </View>
     </Screen>
   )
 })
@@ -121,24 +175,13 @@ const $screenContentContainer: ViewStyle = {
   paddingVertical: spacing.xxl,
   paddingHorizontal: spacing.lg,
 }
-
-const $signIn: TextStyle = {
-  marginBottom: spacing.sm,
-}
-
-const $enterDetails: TextStyle = {
-  marginBottom: spacing.lg,
-}
-
-const $hint: TextStyle = {
-  color: colors.tint,
-  marginBottom: spacing.md,
-}
-
 const $textField: ViewStyle = {
   marginBottom: spacing.lg,
+  backgroundColor: "white",
 }
 
 const $tapButton: ViewStyle = {
   marginTop: spacing.xs,
+  backgroundColor: "#F6BE2C",
+  borderRadius: 15,
 }

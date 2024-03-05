@@ -5,7 +5,7 @@ import { ImageStyle, TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "../i18n"
-import { DemoCommunityScreen, DemoShowroomScreen, DemoDebugScreen, Home } from "../screens"
+import { Home, ProfileScreen } from "../screens"
 import { DemoPodcastListScreen } from "../screens/DemoPodcastListScreen"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
@@ -13,7 +13,7 @@ import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 export type DemoTabParamList = {
   DemoCommunity: undefined
   DemoShowroom: { queryIndex?: string; itemIndex?: string }
-  DemoDebug: undefined
+  Profile: undefined
   DemoPodcastList: undefined
   Home: undefined
 }
@@ -57,9 +57,7 @@ export function DemoNavigator() {
         component={Home}
         options={{
           tabBarLabel: translate("common.home"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="home" style={focused && $active} size={40} />
-          ),
+          tabBarIcon: ({ focused }) => <Icon icon="home" style={focused && $active} size={40} />,
         }}
       />
 
@@ -69,20 +67,16 @@ export function DemoNavigator() {
         options={{
           tabBarAccessibilityLabel: translate("demoNavigator.podcastListTab"),
           tabBarLabel: translate("common.cart"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="cart" style={focused && $active} size={40} />
-          ),
+          tabBarIcon: ({ focused }) => <Icon icon="cart" style={focused && $active} size={40} />,
         }}
       />
 
       <Tab.Screen
-        name="DemoDebug"
-        component={DemoDebugScreen}
+        name="Profile"
+        component={ProfileScreen}
         options={{
           tabBarLabel: translate("common.profile"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="user" style={focused && $active} size={40} />
-          ),
+          tabBarIcon: ({ focused }) => <Icon icon="user" style={focused && $active} size={40} />,
         }}
       />
     </Tab.Navigator>
@@ -104,4 +98,4 @@ const $tabBarLabel: TextStyle = {
   lineHeight: 16,
 }
 
-const $active: ImageStyle = {backgroundColor: "rgba(255, 211, 60, 50)", borderRadius: 25}
+const $active: ImageStyle = { backgroundColor: "rgba(255, 211, 60, 50)", borderRadius: 25 }

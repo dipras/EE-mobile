@@ -6,7 +6,7 @@ const en = {
     logOut: "Log Out",
     home: "Home",
     cart: "Cart",
-    profile: "Profile"
+    profile: "Profile",
   },
   welcomeScreen: {
     postscript:
@@ -121,7 +121,7 @@ const en = {
       content:
         "No favorites have been added yet. Tap the heart on an episode to add it to your favorites!",
     },
-  }
+  },
 }
 
 export default en

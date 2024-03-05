@@ -82,5 +82,5 @@ export const colors = {
    */
   errorBackground: palette.angry100,
 
-  formBackground: palette.neutral200
+  formBackground: palette.neutral200,
 }

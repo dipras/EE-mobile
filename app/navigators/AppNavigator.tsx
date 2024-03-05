@@ -38,6 +38,7 @@ export type AppStackParamList = {
   Welcome: undefined
   Login: undefined
   Demo: NavigatorScreenParams<DemoTabParamList>
+  Boarding: undefined
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
@@ -58,22 +59,19 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
   const {
-    authenticationStore: { isAuthenticated },
+    statusStore: { isFirstTime },
   } = useStores()
 
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false, navigationBarColor: colors.background }}
-      initialRouteName={isAuthenticated ? "Welcome" : "Login"}
+      initialRouteName={isFirstTime ? "Boarding" : "Demo"}
     >
-      {isAuthenticated ? (
-        <>
-          <Stack.Screen name="Welcome" component={Screens.WelcomeScreen} />
-
-          <Stack.Screen name="Demo" component={DemoNavigator} />
-        </>
+      {isFirstTime ? (
+        <Stack.Screen name="Boarding" component={Screens.BoardingScreen} />
       ) : (
         <>
+          <Stack.Screen name="Demo" component={DemoNavigator} />
           <Stack.Screen name="Login" component={Screens.LoginScreen} />
         </>
       )}
