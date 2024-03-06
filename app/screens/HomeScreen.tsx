@@ -8,6 +8,7 @@ import Carousel, { Pagination } from "react-native-snap-carousel"
 import { useStores } from "app/models"
 import { getPodcasApi } from "app/utils/api/article.api"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { useQuery } from "@tanstack/react-query"
 
 const avatar = require("../../assets/images/avatar.jpg")
 const banner1 = require("../../assets/images/demo/banner-1.png")
@@ -18,7 +19,7 @@ const courseImg = require("../../assets/images/course-img.png")
 const expertImg = require("../../assets/images/expert-img.png")
 const halalImg = require("../../assets/images/halal-img.png")
 
-const data = [
+const bannerData = [
   {
     img: banner1,
   },
@@ -43,13 +44,13 @@ const surveyImgHeight = surveyImgWidth / (152 / 120)
 
 const courseImgWidth = window.width - spacing.sm * 2
 const courseImgHeight = courseImgWidth / (335 / 120)
+
 export const Home: FC<DemoTabScreenProps<"Home">> = observer(function Home(_props) {
   const {
     authenticationStore: { isAuthenticated, authName, authToken },
   } = useStores()
 
   const [index, setIndex] = useState(0)
-  const [podcastData, setPodcastData] = useState([])
   const [podcastIndex, setPodcastIndex] = useState(0)
   const carouselRef: any = useRef(null)
   const podcastCarouselRef: any = useRef(null)
@@ -59,11 +60,17 @@ export const Home: FC<DemoTabScreenProps<"Home">> = observer(function Home(_prop
       carouselRef?.current?.snapToNext()
     }, 10000)
 
-    getPodcasApi(authToken).then((res) => {
-      setPodcastData(res.data.data)
-    })
     return () => clearInterval(interval)
   }, [])
+
+  const {
+    isPending: isPendingPodcast,
+    error: errorPodcast,
+    data: podcastData,
+  } = useQuery({
+    queryKey: ["bannerData"],
+    queryFn: () => getPodcasApi(authToken).then((res) => res.data.data),
+  })
 
   const CarouselCardItem = ({ item, index }: any) => {
     return (
@@ -127,7 +134,7 @@ export const Home: FC<DemoTabScreenProps<"Home">> = observer(function Home(_prop
         <Carousel
           layout="default"
           ref={carouselRef}
-          data={data}
+          data={bannerData}
           renderItem={CarouselCardItem}
           sliderWidth={bannerWidth}
           itemWidth={bannerWidth}
@@ -138,7 +145,7 @@ export const Home: FC<DemoTabScreenProps<"Home">> = observer(function Home(_prop
         />
         <Pagination
           containerStyle={{ paddingVertical: 0, marginTop: 5 }}
-          dotsLength={data.length}
+          dotsLength={bannerData.length}
           activeDotIndex={index}
           dotStyle={{
             width: 30,
@@ -173,37 +180,39 @@ export const Home: FC<DemoTabScreenProps<"Home">> = observer(function Home(_prop
           Podcast
         </Text>
       </View>
-      <View style={{ marginTop: spacing.md }}>
-        <Carousel
-          layout="default"
-          ref={podcastCarouselRef}
-          data={podcastData}
-          renderItem={CarouselPodcastItem}
-          sliderWidth={bannerWidth}
-          itemWidth={bannerWidth}
-          loop={true}
-          onSnapToItem={(index) => setPodcastIndex(index)}
-          useScrollView={true}
-          style={{ marginBottom: 0 }}
-        />
-        <Pagination
-          containerStyle={{ paddingVertical: 0, marginTop: 5 }}
-          dotsLength={podcastData.length}
-          activeDotIndex={podcastIndex}
-          dotStyle={{
-            width: 30,
-            backgroundColor: "#FBCF17",
-            height: 2,
-          }}
-          inactiveDotStyle={{
-            backgroundColor: "#D9D9D9",
-            width: 14,
-            height: 2,
-          }}
-          inactiveDotOpacity={1}
-          inactiveDotScale={1}
-        />
-      </View>
+      {!isPendingPodcast && (
+        <View style={{ marginTop: spacing.md }}>
+          <Carousel
+            layout="default"
+            ref={podcastCarouselRef}
+            data={podcastData}
+            renderItem={CarouselPodcastItem}
+            sliderWidth={bannerWidth}
+            itemWidth={bannerWidth}
+            loop={true}
+            onSnapToItem={(index) => setPodcastIndex(index)}
+            useScrollView={true}
+            style={{ marginBottom: 0 }}
+          />
+          <Pagination
+            containerStyle={{ paddingVertical: 0, marginTop: 5 }}
+            dotsLength={podcastData.length}
+            activeDotIndex={podcastIndex}
+            dotStyle={{
+              width: 30,
+              backgroundColor: "#FBCF17",
+              height: 2,
+            }}
+            inactiveDotStyle={{
+              backgroundColor: "#D9D9D9",
+              width: 14,
+              height: 2,
+            }}
+            inactiveDotOpacity={1}
+            inactiveDotScale={1}
+          />
+        </View>
+      )}
     </Screen>
   )
 })

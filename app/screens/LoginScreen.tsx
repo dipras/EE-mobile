@@ -6,6 +6,7 @@ import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
 import axios from "axios"
+import { loginApi } from "app/utils/api/auth.api"
 
 const googleIcon = require("../../assets/images/google.png")
 const privyIcon = require("../../assets/images/privy.png")
@@ -35,13 +36,12 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const error = isSubmitted ? validationError : ""
 
   const login = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      let response = await axios.post("https://be-dev.exportexpert.id/auth/login", {
+      let response = await loginApi({
         email: authEmail,
-        password: authPassword,
-      })
-
+        password: authPassword
+      });
       setAuthToken(response.data.data.accessToken)
 
       response = await axios.get("https://be-dev.exportexpert.id/auth/me", {
