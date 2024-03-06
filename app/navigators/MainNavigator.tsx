@@ -6,15 +6,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "../i18n"
 import { Home, ProfileScreen } from "../screens"
-import { DemoPodcastListScreen } from "../screens/DemoPodcastListScreen"
+import { CartScreen } from "../screens/CartScreen"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 
-export type DemoTabParamList = {
-  DemoCommunity: undefined
-  DemoShowroom: { queryIndex?: string; itemIndex?: string }
+export type MainTabParamList = {
+  MainCommunity: undefined
+  MainShowroom: { queryIndex?: string; itemIndex?: string }
   Profile: undefined
-  DemoPodcastList: undefined
+  Cart: undefined
   Home: undefined
 }
 
@@ -23,21 +23,21 @@ export type DemoTabParamList = {
  *
  * More info: https://reactnavigation.org/docs/typescript/#organizing-types
  */
-export type DemoTabScreenProps<T extends keyof DemoTabParamList> = CompositeScreenProps<
-  BottomTabScreenProps<DemoTabParamList, T>,
+export type MainTabScreenProps<T extends keyof MainTabParamList> = CompositeScreenProps<
+  BottomTabScreenProps<MainTabParamList, T>,
   AppStackScreenProps<keyof AppStackParamList>
 >
 
-const Tab = createBottomTabNavigator<DemoTabParamList>()
+const Tab = createBottomTabNavigator<MainTabParamList>()
 
 /**
- * This is the main navigator for the demo screens with a bottom tab bar.
+ * This is the main navigator for the Main screens with a bottom tab bar.
  * Each tab is a stack navigator with its own set of screens.
  *
  * More info: https://reactnavigation.org/docs/bottom-tab-navigator/
- * @returns {JSX.Element} The rendered `DemoNavigator`.
+ * @returns {JSX.Element} The rendered `MainNavigator`.
  */
-export function DemoNavigator() {
+export function MainNavigator() {
   const { bottom } = useSafeAreaInsets()
 
   return (
@@ -62,10 +62,10 @@ export function DemoNavigator() {
       />
 
       <Tab.Screen
-        name="DemoPodcastList"
-        component={DemoPodcastListScreen}
+        name="Cart"
+        component={CartScreen}
         options={{
-          tabBarAccessibilityLabel: translate("demoNavigator.podcastListTab"),
+          tabBarAccessibilityLabel: "Cart",
           tabBarLabel: translate("common.cart"),
           tabBarIcon: ({ focused }) => <Icon icon="cart" style={focused && $active} size={40} />,
         }}

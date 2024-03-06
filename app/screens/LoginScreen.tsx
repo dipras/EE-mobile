@@ -51,7 +51,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       })
 
       setAuthName(response.data.data.name)
-      _props.navigation.replace("Demo", { screen: "Home" })
+      _props.navigation.replace("Main", { screen: "Home" })
     } catch (error) {
       console.log(error)
       console.log({ authEmail, authPassword })

@@ -17,7 +17,7 @@ import { useColorScheme } from "react-native"
 import * as Screens from "app/screens"
 import Config from "../config"
 import { useStores } from "../models"
-import { DemoNavigator, DemoTabParamList } from "./DemoNavigator"
+import { MainNavigator, MainTabParamList } from "./MainNavigator"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { colors } from "app/theme"
 
@@ -37,7 +37,7 @@ import { colors } from "app/theme"
 export type AppStackParamList = {
   Welcome: undefined
   Login: undefined
-  Demo: NavigatorScreenParams<DemoTabParamList>
+  Main: NavigatorScreenParams<MainTabParamList>
   Boarding: undefined
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
@@ -65,13 +65,13 @@ const AppStack = observer(function AppStack() {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false, navigationBarColor: colors.background }}
-      initialRouteName={isFirstTime ? "Boarding" : "Demo"}
+      initialRouteName={isFirstTime ? "Boarding" : "Main"}
     >
       {isFirstTime ? (
         <Stack.Screen name="Boarding" component={Screens.BoardingScreen} />
       ) : (
         <>
-          <Stack.Screen name="Demo" component={DemoNavigator} />
+          <Stack.Screen name="Main" component={MainNavigator} />
           <Stack.Screen name="Login" component={Screens.LoginScreen} />
         </>
       )}

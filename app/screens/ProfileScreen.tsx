@@ -2,13 +2,13 @@ import React, { FC } from "react"
 import { View, ViewStyle, Image, TouchableOpacity } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Button, Screen, Text } from "../components"
-import { DemoTabScreenProps } from "../navigators/DemoNavigator"
+import { MainTabScreenProps } from "../navigators/MainNavigator"
 import { spacing } from "../theme"
 import { useStores } from "../models"
 
 const avatar = require("../../assets/images/avatar.jpg")
 const avatarSize = 150
-export const ProfileScreen: FC<DemoTabScreenProps<"Profile">> = observer(function DemoDebugScreen(
+export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(function DemoDebugScreen(
   _props,
 ) {
   const {
