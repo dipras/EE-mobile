@@ -12,7 +12,7 @@ import {
 } from "@react-navigation/native"
 import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
-import React from "react"
+import React, { useEffect } from "react"
 import { useColorScheme } from "react-native"
 import * as Screens from "app/screens"
 import Config from "../config"
@@ -39,6 +39,7 @@ export type AppStackParamList = {
   Login: undefined
   Main: NavigatorScreenParams<MainTabParamList>
   Boarding: undefined
+  ProfileDetail: undefined
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
@@ -57,10 +58,26 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStack
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
+let interval: any;
 const AppStack = observer(function AppStack() {
   const {
     statusStore: { isFirstTime },
+    authenticationStore: {expiredTimestamp, logout, authToken}
   } = useStores()
+
+  useEffect(() => {
+    clearInterval(interval);
+    interval = setInterval(() => {
+      if(expiredTimestamp && Math.floor(Date.now() / 1000) > expiredTimestamp) {
+        logout();
+        alert("Session has ended");
+      }
+    }, 5000);
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [expiredTimestamp]);
 
   return (
     <Stack.Navigator
@@ -73,6 +90,7 @@ const AppStack = observer(function AppStack() {
         <>
           <Stack.Screen name="Main" component={MainNavigator} />
           <Stack.Screen name="Login" component={Screens.LoginScreen} />
+          <Stack.Screen name="ProfileDetail" component={Screens.ProfileDetailScreen} options={{headerShown: true, title: "Your Profile"}} />
         </>
       )}
 

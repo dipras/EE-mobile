@@ -6,6 +6,7 @@ export const AuthenticationStoreModel = types
     authToken: types.maybe(types.string),
     authEmail: "",
     authName: "Username",
+    expiredTimestamp: types.maybe(types.number)
   })
   .views((store) => ({
     get isAuthenticated() {
@@ -23,6 +24,9 @@ export const AuthenticationStoreModel = types
     setAuthToken(value?: string) {
       store.authToken = value
     },
+    setExpiredtimestamp(value: number) {
+      store.expiredTimestamp = value
+    },
     setAuthEmail(value: string) {
       store.authEmail = value.replace(/ /g, "")
     },
@@ -32,6 +36,8 @@ export const AuthenticationStoreModel = types
     logout() {
       store.authToken = undefined
       store.authEmail = ""
+      store.authName = ""
+      store.expiredTimestamp = undefined
     },
   }))
 

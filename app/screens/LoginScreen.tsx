@@ -20,7 +20,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   const [isSubmitted] = useState(false)
   const {
-    authenticationStore: { authEmail, setAuthEmail, setAuthToken, validationError, setAuthName },
+    authenticationStore: { authEmail, setAuthEmail, setAuthToken, validationError, setAuthName, setExpiredtimestamp },
   } = useStores()
 
   useEffect(() => {
@@ -42,11 +42,14 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         email: authEmail,
         password: authPassword
       });
-      setAuthToken(response.data.data.accessToken)
+      const {accessToken, expiredIn} = response.data.data;
+      console.log(expiredIn)
+      setAuthToken(accessToken);
+      setExpiredtimestamp(expiredIn);
 
       response = await axios.get("https://be-dev.exportexpert.id/auth/me", {
         headers: {
-          Authorization: `Bearer ${response.data.data.accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       })
 
