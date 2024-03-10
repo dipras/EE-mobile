@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite"
 import React, { FC, useRef, useState, useEffect } from "react"
 import { ViewStyle, View, Image, Dimensions, Linking } from "react-native"
 import { Screen, Text, Icon } from "../components"
-import { DemoTabScreenProps } from "../navigators/MainNavigator"
+import { MainTabScreenProps } from "../navigators/MainNavigator"
 import { colors, spacing } from "../theme"
 import Carousel, { Pagination } from "react-native-snap-carousel"
 import { useStores } from "app/models"
@@ -45,7 +45,7 @@ const surveyImgHeight = surveyImgWidth / (152 / 120)
 const courseImgWidth = window.width - spacing.sm * 2
 const courseImgHeight = courseImgWidth / (335 / 120)
 
-export const Home: FC<DemoTabScreenProps<"Home">> = observer(function Home(_props) {
+export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_props) {
   const {
     authenticationStore: { isAuthenticated, authName, authToken },
   } = useStores()
@@ -56,6 +56,10 @@ export const Home: FC<DemoTabScreenProps<"Home">> = observer(function Home(_prop
   const podcastCarouselRef: any = useRef(null)
 
   useEffect(() => {
+    if(_props.route.params?.redirect) {
+      _props.navigation.setParams({redirect: false});
+      _props.navigation.push("Login");
+    }
     const interval = setInterval(() => {
       carouselRef?.current?.snapToNext()
     }, 10000)

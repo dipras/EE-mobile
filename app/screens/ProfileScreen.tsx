@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useEffect } from "react"
 import { View, ViewStyle, Image, TouchableOpacity } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Button, Screen, Text } from "../components"
@@ -13,7 +13,18 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
 ) {
   const {
     authenticationStore: { logout, isAuthenticated, authName },
-  } = useStores()
+  } = useStores();
+
+  useEffect(() => {
+    if(!isAuthenticated) {
+      const unsubscribe = _props.navigation.addListener('focus', () => {
+        _props.navigation.replace("Main", { screen: "Home", params: {redirect: true} })
+      });
+  
+      // Return the function to unsubscribe from the event so it gets removed on unmount
+      return unsubscribe;
+    }
+  }, []);
 
   return (
     <Screen preset="scroll" safeAreaEdges={["top"]} contentContainerStyle={$container}>
@@ -78,15 +89,7 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
           </Button>
         </>
       ) : (
-        <Button
-          style={{ backgroundColor: "#F6BE2C", borderWidth: 0, borderRadius: 10, marginTop: 20 }}
-          onPress={() => {
-            _props.navigation.navigate("Login")
-          }}
-          textStyle={{ color: "white" }}
-        >
-          Log In
-        </Button>
+        <Text style={{textAlign: "center"}} size="lg">You must login first</Text>
       )}
     </Screen>
   )

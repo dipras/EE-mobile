@@ -15,7 +15,7 @@ export type MainTabParamList = {
   MainShowroom: { queryIndex?: string; itemIndex?: string }
   Profile: undefined
   Cart: undefined
-  Home: undefined
+  Home: {redirect?: boolean}
 }
 
 /**
