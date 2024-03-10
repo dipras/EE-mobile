@@ -34,9 +34,11 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
           </Text>
           <View>
             <TouchableOpacity>
-              <Text size="md" weight="medium" style={$menu}>
-                Profile
-              </Text>
+              <TouchableOpacity onPress={() => _props.navigation.push("ProfileDetail")}>
+                <Text size="md" weight="medium" style={$menu}>
+                  Profile
+                </Text>
+              </TouchableOpacity>
             </TouchableOpacity>
             <TouchableOpacity>
               <Text size="md" weight="medium" style={$menu}>

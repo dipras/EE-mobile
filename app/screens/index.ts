@@ -7,6 +7,7 @@ export * from "./DemoShowroomScreen/DemoShowroomScreen"
 export * from "./HomeScreen"
 export * from "./ProfileScreen"
 export * from "./BoardingScreen"
+export * from "./ProfileDetailScreen"
 
 export * from "./ErrorScreen/ErrorBoundary"
 // export other screens here
