@@ -40,6 +40,7 @@ export type AppStackParamList = {
   Main: NavigatorScreenParams<MainTabParamList>
   Boarding: undefined
   ProfileDetail: undefined
+  Event: undefined
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
@@ -91,6 +92,7 @@ const AppStack = observer(function AppStack() {
           <Stack.Screen name="Main" component={MainNavigator} />
           <Stack.Screen name="Login" component={Screens.LoginScreen} />
           <Stack.Screen name="ProfileDetail" component={Screens.ProfileDetailScreen} options={{headerShown: true, title: "Your Profile"}} />
+          <Stack.Screen name="Event" component={Screens.EventScreen} />
         </>
       )}
 

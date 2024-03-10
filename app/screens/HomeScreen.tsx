@@ -167,7 +167,9 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
       </View>
 
       <View style={{ marginTop: 30, flexDirection: "row", justifyContent: "space-between" }}>
-        <Image source={eventImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
+        <TouchableOpacity onPressOut={() => _props.navigation.push("Event")}>
+          <Image source={eventImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
+        </TouchableOpacity>
         <Image source={surveyImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
       </View>
       <View style={{ marginTop: 10 }}>

@@ -8,6 +8,7 @@ export * from "./HomeScreen"
 export * from "./ProfileScreen"
 export * from "./BoardingScreen"
 export * from "./ProfileDetailScreen"
+export * from "./EventScreen"
 
 export * from "./ErrorScreen/ErrorBoundary"
 // export other screens here
