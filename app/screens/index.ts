@@ -9,6 +9,7 @@ export * from "./ProfileScreen"
 export * from "./BoardingScreen"
 export * from "./ProfileDetailScreen"
 export * from "./EventScreen"
+export * from "./CourseScreen"
 
 export * from "./ErrorScreen/ErrorBoundary"
 // export other screens here

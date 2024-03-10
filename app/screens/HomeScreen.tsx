@@ -56,8 +56,8 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
   const podcastCarouselRef: any = useRef(null)
 
   useEffect(() => {
-    if(_props.route.params?.redirect) {
-      _props.navigation.setParams({redirect: false});
+    if (_props.route.params?.redirect) {
+      _props.navigation.setParams({ redirect: false });
       _props.navigation.push("Login");
     }
     const interval = setInterval(() => {
@@ -173,7 +173,10 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
         <Image source={surveyImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
       </View>
       <View style={{ marginTop: 10 }}>
-        <Image source={courseImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
+        <TouchableOpacity onPressOut={() => _props.navigation.push("Course")}>
+          <Image source={courseImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
+
+        </TouchableOpacity>
       </View>
       <View style={{ marginTop: 10 }}>
         <Image source={expertImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
