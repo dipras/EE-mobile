@@ -81,7 +81,8 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
             style={{ backgroundColor: "#F6BE2C", borderWidth: 0, borderRadius: 10, marginTop: 20 }}
             onPress={() => {
               logout()
-              alert("Success Logout")
+              _props.navigation.push("Main", {screen: "Home", params: {}})
+              alert("Success Logout");
             }}
             textStyle={{ color: "white" }}
           >
