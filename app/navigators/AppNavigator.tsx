@@ -42,6 +42,7 @@ export type AppStackParamList = {
   ProfileDetail: undefined
   Event: undefined
   Course: undefined
+  CourseDetail: undefined
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
@@ -95,6 +96,7 @@ const AppStack = observer(function AppStack() {
           <Stack.Screen name="ProfileDetail" component={Screens.ProfileDetailScreen} options={{headerShown: true, title: "Your Profile"}} />
           <Stack.Screen name="Event" component={Screens.EventScreen} />
           <Stack.Screen name="Course" component={Screens.CourseScreen} />
+          <Stack.Screen name="CourseDetail" component={Screens.CourseDetailScreen} />
         </>
       )}
 

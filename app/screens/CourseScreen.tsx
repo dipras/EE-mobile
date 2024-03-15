@@ -32,7 +32,7 @@ export const CourseScreen: FC<CourseScreenProps> = observer(function Course(_pro
             </View>
             <View style={{ padding: spacing.sm, flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", backgroundColor: "#fafbfa" }}>
                 {[1, 2, 3, 4, 5].map(() => (
-                    <View style={item}>
+                    <TouchableOpacity onPress={() => _props.navigation.push("CourseDetail")} style={item}>
                         <Image source={noImage} style={{ width: "100%", height: "50%" }} />
                         <View style={{ padding: spacing.sm }}>
                             <Text weight="bold" size="md">Export Academy</Text>
@@ -44,7 +44,7 @@ export const CourseScreen: FC<CourseScreenProps> = observer(function Course(_pro
                                 <AntDesign name="staro" size={24} color="black" />
                             </View>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 ))}
             </View>
         </ScrollView>
