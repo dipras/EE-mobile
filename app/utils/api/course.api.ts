@@ -6,3 +6,5 @@ export type getCourseApiParams = {
   }
 
 export const getCourseApi = (params: getCourseApiParams) => apiHandler.get(`/course/active?page=${params.page}&limit=${params.limit}`);
+
+export const getCourseDetailApi = (id: number) => apiHandler.get(`/course/${id}`);

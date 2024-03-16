@@ -56,7 +56,7 @@ export const CourseScreen: FC<CourseScreenProps> = observer(function Course(_pro
             </View>
             <View style={courseListStyle}>
                 {data?.pages.map((page, pageNum) => page.data.map((val: any) => (
-                    <TouchableOpacity onPress={() => {}} style={item}>
+                    <TouchableOpacity onPress={() => _props.navigation.navigate("CourseDetail", {id: Number(val.id)})} style={item}>
                         <Image source={{ uri: val.images }} style={{ width: "100%", height: spacing.xxxl * 3 }} />
                         <View style={{ padding: spacing.sm }}>
                             <Text weight="bold" numberOfLines={2} style={{ height: spacing.xxl }}>{val.name}</Text>
