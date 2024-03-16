@@ -128,7 +128,7 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
                         <Text size="lg" style={{color: "#F6BE2C", marginVertical: 20}}>{rupiah(Number(data.price || 2000))}</Text>
                         <View style={{flexDirection: "row", justifyContent: "space-between"}}>
                             <Button style={{width: ((SCREEN_WIDTH - spacing.lg * 2) / 2) - spacing.xs, borderColor: "#F6BE2C", borderRadius: spacing.sm}} textStyle={{color: "#F6BE2C"}}>Add to Cart</Button>
-                            <Button style={{width: ((SCREEN_WIDTH - spacing.lg * 2) / 2) - spacing.xs, borderRadius: spacing.sm, backgroundColor: "#F6BE2C", borderWidth: 0}} textStyle={{color: "white"}}>Buy</Button>
+                            <Button style={{width: ((SCREEN_WIDTH - spacing.lg * 2) / 2) - spacing.xs, borderRadius: spacing.sm, backgroundColor: "#F6BE2C", borderWidth: 0}} textStyle={{color: "white"}} onPressOut={() => _props.navigation.navigate("OrderSummary", {id: id, image: data.images, price: Number(data.price)})}>Buy</Button>
                         </View>
                     </View>
                 </Animated.View>
