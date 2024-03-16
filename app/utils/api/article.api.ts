@@ -7,3 +7,4 @@ export const getPodcasApi = (authToken: any) =>
       Authorization: `bearer ${authToken}`,
     },
   })
+
