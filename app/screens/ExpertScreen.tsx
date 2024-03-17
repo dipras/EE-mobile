@@ -8,7 +8,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { spacing } from "app/theme";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ScrollView } from "react-native-gesture-handler";
-import { getCourseAPi } from "app/utils/api/article.api";
 
 const courseBanner = require("assets/images/course-banner.png");
 const noImage = require("assets/images/no-image.png");
@@ -17,9 +16,6 @@ const windowWidth = Dimensions.get("window").width;
 const courseBannerRatio = 360 / 240;
 interface ExpertScreenProps extends AppStackScreenProps<"Expert"> { }
 export const ExpertScreen: FC<ExpertScreenProps> = observer(function Course(_props) {
-    useEffect(() => {
-        getCourseAPi({page: 1, limit: 4}).then(res => console.log(res.data))
-    })
 
 
     return (

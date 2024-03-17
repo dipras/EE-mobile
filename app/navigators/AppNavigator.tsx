@@ -44,7 +44,7 @@ export type AppStackParamList = {
   Course: undefined
   CourseDetail: {id: number}
   Expert: undefined,
-  OrderSummary: {id: number, price: number, image: string}
+  OrderSummary: {id: number, price: number, image: string, productType: {id: Number, name: string}, name: string}
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }

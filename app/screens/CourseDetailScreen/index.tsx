@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { AppStackScreenProps } from "app/navigators";
 import { observer } from "mobx-react-lite";
-import { Text, AutoImage, Button } from "app/components";
-import { StatusBar } from "expo-status-bar";
+import { Text, Button } from "app/components";
 import { ActivityIndicator, Dimensions, Image, View, ViewStyle } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { spacing } from "app/theme";
@@ -45,7 +44,8 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
         }
 
         if(btn == "pay") {
-            _props.navigation.navigate("OrderSummary", {id: id, image: data.images, price: Number(data.price)});
+            console.log(data)
+            _props.navigation.navigate("OrderSummary", {id: id, image: data.images, price: Number(data.price), productType: data.product_type, name: data.name});
         } else {
             alert("successfully added to cart");
         }
@@ -132,7 +132,7 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
                         <AntDesign name="star" size={24} color="#FCCD18" />
                         <Text style={{ color: "#878787", marginLeft: spacing.sm }}>4.5 (365 Reviews)</Text>
                     </View>
-                    <Text size="xl" weight="bold" style={{ marginTop: spacing.xl }}>Export Academy</Text>
+                    <Text size="xl" weight="bold" style={{ marginTop: spacing.xl }}>{data.name}</Text>
                     <View style={{ flexDirection: "row", marginTop: spacing.lg }}>
                         {["Overview", "Curriculum", "Review"].map((val, ind) => (
                             <View style={{ ...menuStyle, borderBottomColor: menu == ind ? "red" : "#E9EAF0" }} key={ind}>
