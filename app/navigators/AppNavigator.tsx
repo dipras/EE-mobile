@@ -36,7 +36,7 @@ import { colors } from "app/theme"
  */
 export type AppStackParamList = {
   Welcome: undefined
-  Login: undefined
+  Login: {redirect?: any}
   Main: NavigatorScreenParams<MainTabParamList>
   Boarding: undefined
   ProfileDetail: undefined

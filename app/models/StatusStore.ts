@@ -4,6 +4,8 @@ export const StatusStoreModel = types
   .model("StatusStore")
   .props({
     firstTime: true,
+    redirect: "",
+    redirectParams: types.frozen()
   })
   .views((store) => ({
     get isFirstTime() {
@@ -14,6 +16,14 @@ export const StatusStoreModel = types
     setSecondTime() {
       store.firstTime = false
     },
+    setRedirect(redirect: string, redirectParams: any) {
+      store.redirectParams = redirectParams
+      store.redirect = redirect;
+    },
+    removeRedirect() {
+      store.redirectParams = {}
+      store.redirect = "";
+    }
   }))
 
 export interface StatusStore extends Instance<typeof StatusStoreModel> {}

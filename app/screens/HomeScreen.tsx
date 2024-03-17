@@ -48,6 +48,7 @@ const courseImgHeight = courseImgWidth / (335 / 120)
 export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_props) {
   const {
     authenticationStore: { isAuthenticated, authName, authToken },
+    statusStore: {redirect, redirectParams, removeRedirect}
   } = useStores()
 
   const [index, setIndex] = useState(0)
@@ -58,7 +59,14 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
   useEffect(() => {
     if (_props.route.params?.redirect) {
       _props.navigation.setParams({ redirect: false });
-      _props.navigation.push("Login");
+      _props.navigation.push("Login", {});
+    }
+    if(redirect !== "") {
+      if(redirect == "CourseDetail") {
+        _props.navigation.push("CourseDetail", {id: Number(redirectParams.id)});
+      }
+
+      removeRedirect()
     }
     const interval = setInterval(() => {
       carouselRef?.current?.snapToNext()
@@ -179,7 +187,9 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
         </TouchableOpacity>
       </View>
       <View style={{ marginTop: 10 }}>
-        <Image source={expertImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
+        <TouchableOpacity onPressOut={() => _props.navigation.push("Expert")}>
+          <Image source={expertImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
+        </TouchableOpacity>
       </View>
       <View style={{ marginTop: 10 }}>
         <Image source={halalImg} style={{ width: courseImgWidth, height: courseImgHeight }} />

@@ -21,6 +21,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const [isSubmitted] = useState(false)
   const {
     authenticationStore: { authEmail, setAuthEmail, setAuthToken, validationError, setAuthName, setExpiredtimestamp },
+    statusStore: {setRedirect}
   } = useStores()
 
   useEffect(() => {
@@ -43,7 +44,6 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         password: authPassword
       });
       const {accessToken, expiredIn} = response.data.data;
-      console.log(expiredIn)
       setAuthToken(accessToken);
       setExpiredtimestamp(expiredIn);
 
@@ -54,6 +54,9 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       })
 
       setAuthName(response.data.data.name);
+      if(_props.route.params.redirect?.id) {
+        setRedirect("CourseDetail", {id: _props.route.params.redirect.id});
+      }
       _props.navigation.replace("Main", {screen: "Home", params: {}});
     } catch (error) {
       console.log(error)
