@@ -28,6 +28,8 @@ export const ProfileDetailScreen: FC<ProfileDetailScreenProps> = observer((_prop
     const [gender, setGender] = useState("0");
     const [domicile, setDomicile] = useState("");
     const [loading, setLoading] = useState(true);
+    const [nik, setNik] = useState("");
+    const [npwp, setNpwp] = useState("");
 
     useEffect(() => {
         getData();
@@ -37,11 +39,14 @@ export const ProfileDetailScreen: FC<ProfileDetailScreenProps> = observer((_prop
         try {
             const response = await meApi(authToken);
             const data = response.data.data;
+            console.log(data);
             setName(data.name);
             setDate(new Date(data.date_of_birth));
             setPhone(data.phone_number);
             setGender(data.gender == "Perempuan" ? "1" : "0");
             setDomicile(data.domicile);
+            setNik(data.nik);
+            setNpwp(data.npwp);
         } catch (error) {
             alert("There something is wrong");
         } finally {
@@ -55,7 +60,9 @@ export const ProfileDetailScreen: FC<ProfileDetailScreenProps> = observer((_prop
             dateOfBirth: date.toISOString().substring(0, 10),
             gender: Number(gender),
             phoneNumber: phone.replace("+62", "08"),
-            domicile
+            domicile,
+            nik,
+            npwp
         }
 
         setLoading(true)
@@ -123,6 +130,38 @@ export const ProfileDetailScreen: FC<ProfileDetailScreenProps> = observer((_prop
                         </View>
                     </TouchableOpacity>
                 </View>
+                
+                <TextField
+                    value={nik}
+                    containerStyle={$textField}
+                    inputWrapperStyle={{
+                        backgroundColor: "#F2F2F2",
+                        borderRadius: 30,
+                        borderWidth: 0,
+                        paddingVertical: 5,
+                    }}
+                    autoCapitalize="words"
+                    autoCorrect={false}
+                    onChangeText={text => setNik(text)}
+                    label="NIK"
+                    placeholder="Masukan nama anda"
+                />
+                <TextField
+                    value={npwp}
+                    containerStyle={$textField}
+                    inputWrapperStyle={{
+                        backgroundColor: "#F2F2F2",
+                        borderRadius: 30,
+                        borderWidth: 0,
+                        paddingVertical: 5,
+                    }}
+                    autoCapitalize="words"
+                    autoCorrect={false}
+                    onChangeText={text => setNpwp(text)}
+                    label="NPWP"
+                    placeholder="Masukan NPWP anda"
+                />
+
                 <DatePicker
                     modal
                     open={openDate}

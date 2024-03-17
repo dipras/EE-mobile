@@ -10,7 +10,9 @@ export type updateUserData = {
     dateOfBirth: string
     gender: number
     phoneNumber: string
-    domicile:string
+    domicile:string,
+    nik: string,
+    npwp: string
 }
 
 
