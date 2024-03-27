@@ -4,11 +4,11 @@ import { ViewStyle, View, Image, Dimensions, Linking } from "react-native"
 import { Screen, Text, Icon } from "../components"
 import { MainTabScreenProps } from "../navigators/MainNavigator"
 import { colors, spacing } from "../theme"
-import Carousel, { Pagination } from "react-native-snap-carousel"
 import { useStores } from "app/models"
 import { getPodcasApi } from "app/utils/api/article.api"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { useQuery } from "@tanstack/react-query"
+import Carousel from "app/components/Carousel"
 
 const avatar = require("../../assets/images/avatar.jpg")
 const banner1 = require("../../assets/images/demo/banner-1.png")
@@ -51,11 +51,6 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
     statusStore: {redirect, redirectParams, removeRedirect}
   } = useStores()
 
-  const [index, setIndex] = useState(0)
-  const [podcastIndex, setPodcastIndex] = useState(0)
-  const carouselRef: any = useRef(null)
-  const podcastCarouselRef: any = useRef(null)
-
   useEffect(() => {
     if (_props.route.params?.redirect) {
       _props.navigation.setParams({ redirect: false });
@@ -68,11 +63,6 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
 
       removeRedirect()
     }
-    const interval = setInterval(() => {
-      carouselRef?.current?.snapToNext()
-    }, 10000)
-
-    return () => clearInterval(interval)
   }, [])
 
   const {
@@ -143,35 +133,7 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
       </View>
 
       <View style={{ marginTop: spacing.md }}>
-        <Carousel
-          layout="default"
-          ref={carouselRef}
-          data={bannerData}
-          renderItem={CarouselCardItem}
-          sliderWidth={bannerWidth}
-          itemWidth={bannerWidth}
-          loop={true}
-          onSnapToItem={(index) => setIndex(index)}
-          useScrollView={true}
-          style={{ marginBottom: 0 }}
-        />
-        <Pagination
-          containerStyle={{ paddingVertical: 0, marginTop: 5 }}
-          dotsLength={bannerData.length}
-          activeDotIndex={index}
-          dotStyle={{
-            width: 30,
-            backgroundColor: "#FBCF17",
-            height: 2,
-          }}
-          inactiveDotStyle={{
-            backgroundColor: "#D9D9D9",
-            width: 14,
-            height: 2,
-          }}
-          inactiveDotOpacity={1}
-          inactiveDotScale={1}
-        />
+        <Carousel data={bannerData} renderItem={CarouselCardItem} width={bannerWidth} />
       </View>
 
       <View style={{ marginTop: 30, flexDirection: "row", justifyContent: "space-between" }}>
@@ -201,35 +163,7 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
       </View>
       {!isPendingPodcast && (
         <View style={{ marginTop: spacing.md }}>
-          <Carousel
-            layout="default"
-            ref={podcastCarouselRef}
-            data={podcastData}
-            renderItem={CarouselPodcastItem}
-            sliderWidth={bannerWidth}
-            itemWidth={bannerWidth}
-            loop={true}
-            onSnapToItem={(index) => setPodcastIndex(index)}
-            useScrollView={true}
-            style={{ marginBottom: 0 }}
-          />
-          <Pagination
-            containerStyle={{ paddingVertical: 0, marginTop: 5 }}
-            dotsLength={podcastData.length}
-            activeDotIndex={podcastIndex}
-            dotStyle={{
-              width: 30,
-              backgroundColor: "#FBCF17",
-              height: 2,
-            }}
-            inactiveDotStyle={{
-              backgroundColor: "#D9D9D9",
-              width: 14,
-              height: 2,
-            }}
-            inactiveDotOpacity={1}
-            inactiveDotScale={1}
-          />
+          <Carousel data={podcastData} renderItem={CarouselPodcastItem} width={bannerWidth} />
         </View>
       )}
     </Screen>
