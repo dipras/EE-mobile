@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite"
 import React, { ComponentType, FC, useEffect, useMemo, useRef, useState } from "react"
-import { TextInput, ViewStyle, View, Image, ActivityIndicator } from "react-native"
+import { TextInput, ViewStyle, View, Image, ActivityIndicator, Alert } from "react-native"
 import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
@@ -59,6 +59,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       }
       _props.navigation.replace("Main", {screen: "Home", params: {}});
     } catch (error) {
+      Alert.alert("Error")
       console.log(error)
       console.log({ authEmail, authPassword })
     } finally {

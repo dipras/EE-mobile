@@ -83,4 +83,6 @@ export const colors = {
   errorBackground: palette.angry100,
 
   formBackground: palette.neutral200,
+
+  main: "#F6BE2C"
 }

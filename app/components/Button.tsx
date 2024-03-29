@@ -6,6 +6,7 @@ import {
   StyleProp,
   TextStyle,
   ViewStyle,
+  ActivityIndicator
 } from "react-native"
 import { colors, spacing, typography } from "../theme"
 import { Text, TextProps } from "./Text"
@@ -79,6 +80,11 @@ export interface ButtonProps extends PressableProps {
    * An optional style override for the disabled state
    */
   disabledStyle?: StyleProp<ViewStyle>
+
+  /**
+   * Replace your text with loader and disable your button
+   */
+  loading?: boolean
 }
 
 /**
@@ -110,6 +116,7 @@ export function Button(props: ButtonProps) {
     LeftAccessory,
     disabled,
     disabledStyle: $disabledViewStyleOverride,
+    loading,
     ...rest
   } = props
 
@@ -145,9 +152,9 @@ export function Button(props: ButtonProps) {
     <Pressable
       style={$viewStyle}
       accessibilityRole="button"
-      accessibilityState={{ disabled: !!disabled }}
+      accessibilityState={{ disabled: !!disabled || !!loading }}
       {...rest}
-      disabled={disabled}
+      disabled={disabled || loading}
     >
       {(state) => (
         <>
@@ -156,7 +163,7 @@ export function Button(props: ButtonProps) {
           )}
 
           <Text tx={tx} text={text} txOptions={txOptions} style={$textStyle(state)}>
-            {children}
+            {loading ? <ActivityIndicator /> : children}
           </Text>
 
           {!!RightAccessory && (

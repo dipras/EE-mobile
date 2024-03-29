@@ -16,11 +16,11 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
   } = useStores();
 
   useEffect(() => {
-    if(!isAuthenticated) {
+    if (!isAuthenticated) {
       const unsubscribe = _props.navigation.addListener('focus', () => {
-        _props.navigation.replace("Main", { screen: "Home", params: {redirect: true} })
+        _props.navigation.replace("Main", { screen: "Home", params: { redirect: true } })
       });
-  
+
       // Return the function to unsubscribe from the event so it gets removed on unmount
       return unsubscribe;
     }
@@ -44,12 +44,15 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
             {authName}
           </Text>
           <View>
-            <TouchableOpacity>
-              <TouchableOpacity onPress={() => _props.navigation.push("ProfileDetail")}>
-                <Text size="md" weight="medium" style={$menu}>
-                  Profile
-                </Text>
-              </TouchableOpacity>
+            <TouchableOpacity onPress={() => _props.navigation.push("ProfileDetail")}>
+              <Text size="md" weight="medium" style={$menu}>
+                Profile
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => _props.navigation.push("AccountSetting")}>
+              <Text size="md" weight="medium" style={$menu}>
+                Account Setting
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity>
               <Text size="md" weight="medium" style={$menu}>
@@ -81,7 +84,7 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
             style={{ backgroundColor: "#F6BE2C", borderWidth: 0, borderRadius: 10, marginTop: 20 }}
             onPress={() => {
               logout()
-              _props.navigation.push("Main", {screen: "Home", params: {}})
+              _props.navigation.push("Main", { screen: "Home", params: {} })
               alert("Success Logout");
             }}
             textStyle={{ color: "white" }}
@@ -90,7 +93,7 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
           </Button>
         </>
       ) : (
-        <Text style={{textAlign: "center"}} size="lg">You must login first</Text>
+        <Text style={{ textAlign: "center" }} size="lg">You must login first</Text>
       )}
     </Screen>
   )

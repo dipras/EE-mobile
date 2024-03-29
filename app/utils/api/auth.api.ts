@@ -35,3 +35,13 @@ export const updateUserApi = (token: token, data: updateUserData) => {
         }
     })
 }
+
+export const resetPasswordApi = (token: token, password: string) => {
+    return apiHandler.patch(`/user/change-password`, {
+        password
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+}

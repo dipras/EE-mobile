@@ -71,7 +71,7 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
     data: podcastData,
   } = useQuery({
     queryKey: ["bannerData"],
-    queryFn: () => getPodcasApi(authToken).then((res) => res.data.data),
+    queryFn: () => getPodcasApi(authToken).then((res) => res.data.data).catch(() => []),
   })
 
   const CarouselCardItem = ({ item, index }: any) => {
