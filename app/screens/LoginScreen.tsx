@@ -7,6 +7,7 @@ import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
 import axios from "axios"
 import { loginApi } from "app/utils/api/auth.api"
+import Toast from 'react-native-root-toast';
 
 const googleIcon = require("../../assets/images/google.png")
 const privyIcon = require("../../assets/images/privy.png")
@@ -18,7 +19,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const [isLoading, setIsLoading] = useState(false)
   const [authPassword, setAuthPassword] = useState("")
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
-  const [isSubmitted] = useState(false)
+  const [isSubmitted, setSubmitted] = useState(false)
   const {
     authenticationStore: { authEmail, setAuthEmail, setAuthToken, validationError, setAuthName, setExpiredtimestamp },
     statusStore: {setRedirect}
@@ -37,6 +38,10 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const error = isSubmitted ? validationError : ""
 
   const login = async () => {
+    if(validationError !== "") {
+      setSubmitted(true);
+      return;
+    }
     setIsLoading(true);
     try {
       let response = await loginApi({
@@ -58,10 +63,19 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         setRedirect("CourseDetail", {id: _props.route.params.redirect.id});
       }
       _props.navigation.replace("Main", {screen: "Home", params: {}});
-    } catch (error) {
-      Alert.alert("Error")
-      console.log(error)
-      console.log({ authEmail, authPassword })
+    } catch (error: any) {
+      let toast = Toast.show(error?.response?.data?.message || "There something is wrong", {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0
+      })
+
+      setTimeout(() => {
+        Toast.hide(toast);
+      }, 1000);
     } finally {
       setIsLoading(false)
     }

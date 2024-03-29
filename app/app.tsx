@@ -31,6 +31,7 @@ import Config from "./config"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { ViewStyle } from "react-native"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 const queryClient = new QueryClient()
 
@@ -105,11 +106,13 @@ function App(props: AppProps) {
       <ErrorBoundary catchErrors={Config.catchErrors}>
         <GestureHandlerRootView style={$container}>
           <QueryClientProvider client={queryClient}>
-            <AppNavigator
-              linking={linking}
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-            />
+            <RootSiblingParent>
+              <AppNavigator
+                linking={linking}
+                initialState={initialNavigationState}
+                onStateChange={onNavigationStateChange}
+              />
+            </RootSiblingParent>
           </QueryClientProvider>
         </GestureHandlerRootView>
       </ErrorBoundary>
