@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState, useMemo } from "react";
 import { AppStackScreenProps } from "app/navigators";
 import { observer } from "mobx-react-lite";
 import { Text, Button } from "app/components";
@@ -25,7 +25,10 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
     const [data, setData] = useState<any>({});
     const [loading, setLoading] = useState(true);
     const {id} = _props.route.params;
-    const {authenticationStore: {isAuthenticated}} = useStores();
+    const [react, setReact] = useState(0);
+    const {authenticationStore: {isAuthenticated}, CartStore: {addCart, getCartById, removeCartById}} = useStores();
+
+    const addedCart = getCartById(id);
 
     useEffect(() => {
         getCourseDetailApi(id).then(res => {
@@ -34,7 +37,7 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
             alert("There something is wrong");
         }).finally(() => {
             setLoading(false);
-        })
+        });
     }, []);
 
     const handleClick = (btn : "pay" | "cart") => {
@@ -111,6 +114,15 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
         }
     }
 
+    const handleAddCart = () => {
+        if(addedCart) {
+            removeCartById(id);
+        } else {
+            addCart({id: id, name: data.name, price: parseInt(data.price), imageUrl: data.images, productType: data.product_type})
+        }
+        setReact(react+ 1);
+    }
+
     return (
         <>
             {loading && (
@@ -149,9 +161,11 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
                     </View>
                     <View style={{marginTop: spacing.lg}}>
                         <Text size="lg" style={{color: "#F6BE2C", marginVertical: 20}}>{rupiah(Number(data.price || 2000))}</Text>
-                        <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-                            <Button style={{width: ((SCREEN_WIDTH - spacing.lg * 2) / 2) - spacing.xs, borderColor: "#F6BE2C", borderRadius: spacing.sm}} textStyle={{color: "#F6BE2C"}}>Add to Cart</Button>
-                            <Button style={{width: ((SCREEN_WIDTH - spacing.lg * 2) / 2) - spacing.xs, borderRadius: spacing.sm, backgroundColor: "#F6BE2C", borderWidth: 0}} textStyle={{color: "white"}} onPressOut={() => handleClick("pay")}>Buy</Button>
+                        <View style={{flexDirection: "row", justifyContent: "space-between", columnGap: 10}}>
+                            <Button style={{width: ((SCREEN_WIDTH - spacing.lg * 2) / 2), borderColor: "#F6BE2C", borderRadius: spacing.sm}} textStyle={{color: "#F6BE2C"}} onPress={handleAddCart}>{
+                                addedCart ? "Remove from Cart" : "Add to Cart"
+                            }</Button>
+                            <Button style={{width: ((SCREEN_WIDTH - spacing.lg * 2) / 2), borderRadius: spacing.sm, backgroundColor: "#F6BE2C", borderWidth: 0}} textStyle={{color: "white"}} onPressOut={() => handleClick("pay")}>Buy</Button>
                         </View>
                     </View>
                 </Animated.View>
