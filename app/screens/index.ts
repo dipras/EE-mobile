@@ -14,6 +14,7 @@ export * from "./CourseDetailScreen"
 export * from "./ExpertScreen"
 export * from "./OrderSummary"
 export * from "./AccountSettingScreen"
+export * from "./WishlistScreen"
 
 export * from "./ErrorScreen/ErrorBoundary"
 // export other screens here

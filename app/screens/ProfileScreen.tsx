@@ -69,7 +69,7 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
                 Purchase History
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => _props.navigation.push("Wishlist")}>
               <Text size="md" weight="medium" style={$menu}>
                 Wishlist
               </Text>
