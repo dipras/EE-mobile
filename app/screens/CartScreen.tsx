@@ -15,7 +15,7 @@ import { FlatList } from "react-native-gesture-handler"
 
 export const CartScreen: FC<MainTabScreenProps<"Cart">> = observer(
   function CartScreen(_props) {
-    const { CartStore: { cartData } } = useStores();
+    let { CartStore: { cartData } } = useStores();
     const [selected, setSelected] = useState(0);
 
     const pay = () => {
@@ -38,15 +38,21 @@ export const CartScreen: FC<MainTabScreenProps<"Cart">> = observer(
 
     return (
       <View style={{ paddingHorizontal: spacing.md, flex: 1, paddingTop: 50 }}>
-        <FlatList data={cartData} renderItem={renderItem} style={{flex: 1}} />
+        {cartData[0] ? (
+          <>
+            <FlatList data={cartData} renderItem={renderItem} style={{flex: 1}} />
 
-        <View style={{}}>
-          <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-            <Text>Total (1 Item)</Text>
-            <Text weight="bold">{rupiah(cartData[selected].price)}</Text>
-          </View>
-          <Button style={{backgroundColor: colors.main, borderRadius: 10, marginVertical: spacing.xl, borderColor: "#FFF"}} textStyle={{color: "#FFF"}} onPress={pay}>Proccess to checkout</Button>
-        </View>
+            <View style={{}}>
+              <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+                <Text>Total (1 Item)</Text>
+                <Text weight="bold">{rupiah(cartData[selected].price)}</Text>
+              </View>
+              <Button style={{backgroundColor: colors.main, borderRadius: 10, marginVertical: spacing.xl, borderColor: "#FFF"}} textStyle={{color: "#FFF"}} onPress={pay}>Proccess to checkout</Button>
+            </View>
+          </>
+        ) : (
+          <Text style={{textAlign: "center"}}>Cart is empty</Text>
+        )}
       </View>
     )
   }
