@@ -46,7 +46,8 @@ export type AppStackParamList = {
   Expert: undefined,
   OrderSummary: {id: number, price: number, image: string, productType: {id: Number, name: string}, name: string}
   AccountSetting: undefined,
-  Wishlist: undefined
+  Wishlist: undefined,
+  BoardingSign: undefined
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
@@ -92,21 +93,26 @@ const AppStack = observer(function AppStack() {
       initialRouteName={isFirstTime ? "Boarding" : "Main"}
     >
       {isFirstTime ? (
-        <Stack.Screen name="Boarding" component={Screens.BoardingScreen} />
+        <>
+          <Stack.Screen name="Boarding" component={Screens.BoardingScreen} />
+          <Stack.Screen name="BoardingSign" component={Screens.BoardingSignScreen} />
+    
+        </>
       ) : (
         <>
           <Stack.Screen name="Main" component={MainNavigator} />
-          <Stack.Screen name="Login" component={Screens.LoginScreen} />
-          <Stack.Screen name="ProfileDetail" component={Screens.ProfileDetailScreen} options={{headerShown: true, title: "Your Profile"}} />
-          <Stack.Screen name="Event" component={Screens.EventScreen} />
-          <Stack.Screen name="Course" component={Screens.CourseScreen} />
-          <Stack.Screen name="CourseDetail" component={Screens.CourseDetailScreen} />
-          <Stack.Screen name="Expert" component={Screens.ExpertScreen} />
-          <Stack.Screen name="OrderSummary" component={Screens.OrderSummaryScreen} options={{headerShown: true, title: "Order Summary", headerShadowVisible: false}} />
-          <Stack.Screen name="AccountSetting" component={Screens.AccountSettingScreen} options={{headerShown: true, title: "Account Setting", headerShadowVisible: false}} />
-          <Stack.Screen name="Wishlist" component={Screens.WishlistScreen} options={{headerShown: true, title: "Wishlist", headerShadowVisible: false}} />
         </>
       )}
+      <Stack.Screen name="Login" component={Screens.LoginScreen} />
+      <Stack.Screen name="ProfileDetail" component={Screens.ProfileDetailScreen} options={{headerShown: true, title: "Your Profile"}} />
+      <Stack.Screen name="Event" component={Screens.EventScreen} />
+      <Stack.Screen name="Course" component={Screens.CourseScreen} />
+      <Stack.Screen name="CourseDetail" component={Screens.CourseDetailScreen} />
+      <Stack.Screen name="ExpertDetail" component={Screens.ExpertDetailScreen} />
+      <Stack.Screen name="Expert" component={Screens.ExpertScreen} />
+      <Stack.Screen name="OrderSummary" component={Screens.OrderSummaryScreen} options={{headerShown: true, title: "Order Summary", headerShadowVisible: false}} />
+      <Stack.Screen name="AccountSetting" component={Screens.AccountSettingScreen} options={{headerShown: true, title: "Account Setting", headerShadowVisible: false}} />
+      <Stack.Screen name="Wishlist" component={Screens.WishlistScreen} options={{headerShown: true, title: "Wishlist", headerShadowVisible: false}} />
 
       {/** 🔥 Your screens go here */}
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}

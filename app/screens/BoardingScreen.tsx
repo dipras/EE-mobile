@@ -9,6 +9,10 @@ interface BoardingScreenProps extends AppStackScreenProps<"Boarding"> {}
 
 const bgGetStarted = require("../../assets/images/boarding/get-started.png")
 const bgCourse = require("../../assets/images/boarding/course.png")
+const bgEvent = require("../../assets/images/boarding/landing-event.png")
+const bgExpert = require("../../assets/images/boarding/landing-expert.png")
+const bgHalal = require("../../assets/images/boarding/landing-halal.png")
+const bgMarket = require("../../assets/images/boarding/landing-market.png")
 
 const data = [
   {
@@ -23,11 +27,33 @@ const data = [
     subtitle: `Find The Best Course For You`,
     desc: `presents a variety of course options to meet your exploration needs in the world of exports.`,
   },
+  {
+    bg: bgEvent,
+    title: `EVENT${"\n"}EXHIBITION${"\n"}INTERNATIONAL`,
+    subtitle: `Expand Your Market`,
+    desc: `sell your products more widely by participating in international exhibitions`,
+  },
+  {
+    bg: bgExpert,
+    title: `EXPERT${"\n"}TALK`,
+    subtitle: `Private Chat With Your Mentor`,
+    desc: `Expand your export knowledge, delve intospecific export products, and privatechats alongside experts`,
+  },
+  {
+    bg: bgHalal,
+    title: `HALAL${"\n"}INDONESIA`,
+    subtitle: `Private Chat With Your Mentor`,
+    desc: `Expand your export knowledge, delve intospecific export products, and privatechats alongside experts`,
+  },
+  {
+    bg: bgMarket,
+    title: `MARKET${"\n"}SEARCH${"\n"}INDONESIA`,
+    subtitle: `Find The Best Market In Indonesia`,
+    desc: `Get comprehensive insights into consumer behavior`,
+  },
+  
 ]
-export const BoardingScreen: FC<BoardingScreenProps> = observer(function BoardingScreen(_props) {
-  const {
-    statusStore: { setSecondTime },
-  } = useStores()
+export const BoardingScreen: FC<BoardingScreenProps> = function BoardingScreen(_props) {
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
@@ -40,7 +66,7 @@ export const BoardingScreen: FC<BoardingScreenProps> = observer(function Boardin
     if (data[index + 1]) {
       setIndex(index + 1)
     } else {
-      setSecondTime()
+      _props.navigation.push("BoardingSign")
     }
   }
   return (
@@ -61,7 +87,7 @@ export const BoardingScreen: FC<BoardingScreenProps> = observer(function Boardin
           >
             {data[index].title}
           </Text>
-          <TouchableOpacity onPress={() => setSecondTime()}>
+          <TouchableOpacity onPress={() => _props.navigation.push("BoardingSign")}>
             <Text size="lg" style={{ color: "white", marginRight: 20 }}>
               Skip
             </Text>
@@ -81,4 +107,4 @@ export const BoardingScreen: FC<BoardingScreenProps> = observer(function Boardin
       </View>
     </ImageBackground>
   )
-})
+}
