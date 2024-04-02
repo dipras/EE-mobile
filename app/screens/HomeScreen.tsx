@@ -48,7 +48,7 @@ const courseImgHeight = courseImgWidth / (335 / 120)
 export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_props) {
   const {
     authenticationStore: { isAuthenticated, authName, authToken },
-    statusStore: {redirect, redirectParams, removeRedirect}
+    statusStore: { redirect, redirectParams, removeRedirect }
   } = useStores()
 
   useEffect(() => {
@@ -56,11 +56,11 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
       _props.navigation.setParams({ redirect: false });
       _props.navigation.push("Login", {});
     }
-    if(redirect !== "") {
-      if(redirect == "CourseDetail") {
-        _props.navigation.push("CourseDetail", {id: Number(redirectParams.id)});
-      } else if(redirect == "ExpertDetail") {
-        _props.navigation.push("ExpertDetail", {id: Number(redirectParams.id)})
+    if (redirect !== "") {
+      if (redirect == "CourseDetail") {
+        _props.navigation.push("CourseDetail", { id: Number(redirectParams.id) });
+      } else if (redirect == "ExpertDetail") {
+        _props.navigation.push("ExpertDetail", { id: Number(redirectParams.id) })
       }
 
       removeRedirect()
@@ -103,72 +103,76 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
   }
 
   return (
-    <Screen preset="scroll" safeAreaEdges={["top"]} contentContainerStyle={$screenContentContainer}>
-      {isAuthenticated && (
-        <View style={$top}>
-          <View style={$identity}>
-            <View
-              style={{
-                borderWidth: 1,
-                borderColor: colors.border,
-                padding: 5,
-                height: 40,
-                width: 40,
-                borderRadius: 20,
-                marginRight: 10,
-              }}
-            >
-              <Image source={avatar} style={{ width: "100%", height: "100%", borderRadius: 20 }} />
+    <>
+      <View style={{paddingHorizontal: spacing.sm, paddingTop: spacing.xxl, paddingBottom: 5, backgroundColor: "#FFF"}}>
+        {isAuthenticated && (
+          <View style={$top}>
+            <View style={$identity}>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  padding: 5,
+                  height: 40,
+                  width: 40,
+                  borderRadius: 20,
+                  marginRight: 10,
+                }}
+              >
+                <Image source={avatar} style={{ width: "100%", height: "100%", borderRadius: 20 }} />
+              </View>
+              <Text>{authName}</Text>
             </View>
-            <Text>{authName}</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Icon icon="love" size={40} style={{ marginRight: 10 }} />
+              <Icon icon="bell" size={30} />
+            </View>
           </View>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Icon icon="love" size={40} style={{ marginRight: 10 }} />
-            <Icon icon="bell" size={30} />
-          </View>
+        )}
+
+        <View style={$searchBar}>
+          <Icon icon="search" size={20} style={{ marginRight: 10 }} />
+          <Text style={{ fontSize: 14 }}>Search product and video</Text>
         </View>
-      )}
+      </View>
+      <Screen preset="scroll" contentContainerStyle={$screenContentContainer}>
 
-      <View style={$searchBar}>
-        <Icon icon="search" size={20} style={{ marginRight: 10 }} />
-        <Text style={{ fontSize: 14 }}>Search product and video</Text>
-      </View>
-
-      <View style={{ marginTop: spacing.md }}>
-        <Carousel data={bannerData} renderItem={CarouselCardItem} width={bannerWidth} />
-      </View>
-
-      <View style={{ marginTop: 30, flexDirection: "row", justifyContent: "space-between" }}>
-        <TouchableOpacity onPress={() => _props.navigation.push("Event")}>
-          <Image source={eventImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
-        </TouchableOpacity>
-        <Image source={surveyImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
-      </View>
-      <View style={{ marginTop: 10 }}>
-        <TouchableOpacity onPress={() => _props.navigation.push("Course")}>
-          <Image source={courseImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
-
-        </TouchableOpacity>
-      </View>
-      <View style={{ marginTop: 10 }}>
-        <TouchableOpacity onPress={() => _props.navigation.push("Expert")}>
-          <Image source={expertImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
-        </TouchableOpacity>
-      </View>
-      <View style={{ marginTop: 10 }}>
-        <Image source={halalImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
-      </View>
-      <View style={{ marginTop: 10 }}>
-        <Text size="lg" weight="bold">
-          Podcast
-        </Text>
-      </View>
-      {!isPendingPodcast && (
         <View style={{ marginTop: spacing.md }}>
-          <Carousel data={podcastData} renderItem={CarouselPodcastItem} width={bannerWidth} />
+          <Carousel data={bannerData} renderItem={CarouselCardItem} width={bannerWidth} />
         </View>
-      )}
-    </Screen>
+
+        <View style={{ marginTop: 30, flexDirection: "row", justifyContent: "space-between" }}>
+          <TouchableOpacity onPress={() => _props.navigation.push("Event")}>
+            <Image source={eventImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
+          </TouchableOpacity>
+          <Image source={surveyImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
+        </View>
+        <View style={{ marginTop: 10 }}>
+          <TouchableOpacity onPress={() => _props.navigation.push("Course")}>
+            <Image source={courseImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
+
+          </TouchableOpacity>
+        </View>
+        <View style={{ marginTop: 10 }}>
+          <TouchableOpacity onPress={() => _props.navigation.push("Expert")}>
+            <Image source={expertImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
+          </TouchableOpacity>
+        </View>
+        <View style={{ marginTop: 10 }}>
+          <Image source={halalImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
+        </View>
+        <View style={{ marginTop: 10 }}>
+          <Text size="lg" weight="bold">
+            Podcast
+          </Text>
+        </View>
+        {!isPendingPodcast && (
+          <View style={{ marginTop: spacing.md }}>
+            <Carousel data={podcastData} renderItem={CarouselPodcastItem} width={bannerWidth} />
+          </View>
+        )}
+      </Screen>
+    </>
   )
 })
 
