@@ -5,6 +5,13 @@ type loginData = {
     email: string;
     password: string;
 }
+
+type registerData = {
+    email: string;
+    password: string;
+    name: string;
+}
+
 export type updateUserData = {
     name: string
     dateOfBirth: string
@@ -18,6 +25,10 @@ export type updateUserData = {
 
 export const loginApi = (data: loginData) => {
     return apiHandler.post("/auth/login", data);
+}
+
+export const registerApi = (data: registerData) => {
+    return apiHandler.post("/auth/register", data)
 }
 
 export const meApi = (token: token) => {

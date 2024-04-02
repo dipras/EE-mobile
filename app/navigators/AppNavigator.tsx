@@ -37,6 +37,7 @@ import { colors } from "app/theme"
 export type AppStackParamList = {
   Welcome: undefined
   Login: {redirect?: any}
+  Register: undefined
   Main: NavigatorScreenParams<MainTabParamList>
   Boarding: undefined
   ProfileDetail: undefined
@@ -106,6 +107,7 @@ const AppStack = observer(function AppStack() {
         </>
       )}
       <Stack.Screen name="Login" component={Screens.LoginScreen} />
+      <Stack.Screen name="Register" component={Screens.RegisterScreen} />
       <Stack.Screen name="ProfileDetail" component={Screens.ProfileDetailScreen} options={{headerShown: true, title: "Your Profile"}} />
       <Stack.Screen name="Event" component={Screens.EventScreen} />
       <Stack.Screen name="Course" component={Screens.CourseScreen} />

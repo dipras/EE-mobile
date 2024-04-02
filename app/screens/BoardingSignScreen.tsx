@@ -20,13 +20,18 @@ export const BoardingSignScreen: FC<BoardingSignScreenProps> = observer(function
         setSecondTime();
     }
 
+    const signUp = () => {
+        _props.navigation.push("Register");
+        setSecondTime();
+    }
+
     return (
         <ImageBackground source={signBg} resizeMode="cover" style={{ flex: 1, justifyContent: "flex-end", paddingVertical: spacing.xxl * 2 }}>
             <StatusBar style="light" />
             <View style={{ paddingHorizontal: 10, rowGap: spacing.xl }}>
                 <Text style={{ color: colors.main, fontSize: 30, textAlign: "center" }} size="xl" weight="bold">{`Welcome to\nExpert Export Indonesia`}</Text>
                 <View style={{ rowGap: spacing.md }}>
-                    <Button style={{ backgroundColor: colors.main, borderColor: colors.main, borderRadius: 10 }} textStyle={{ color: "#FFF" }}>Create Account</Button>
+                    <Button style={{ backgroundColor: colors.main, borderColor: colors.main, borderRadius: 10 }} textStyle={{ color: "#FFF" }} onPress={signUp}>Create Account</Button>
                     <Button style={{ backgroundColor: "transparent", borderColor: colors.main, borderRadius: 10 }} textStyle={{ color: colors.main }} onPress={signIn}>Sign In</Button>
                 </View>
                 <Text style={{ color: colors.main, textAlign: "center", textDecorationLine: "underline" }} onPress={() => setSecondTime()}>Sign In Later</Text>
