@@ -74,7 +74,7 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
                 Wishlist
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => _props.navigation.push("About")}>
               <View style={$menu}>
                 <Text size="md" weight="medium">
                   About Expert Export Indonesia

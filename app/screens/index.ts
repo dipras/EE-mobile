@@ -16,6 +16,7 @@ export * from "./OrderSummary"
 export * from "./AccountSettingScreen"
 export * from "./WishlistScreen"
 export * from "./ExpertDetailScreen"
-export *from "./BoardingSignScreen"
+export * from "./BoardingSignScreen"
+export * from "./AboutScreen"
 export * from "./ErrorScreen/ErrorBoundary"
 // export other screens here
