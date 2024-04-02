@@ -75,9 +75,14 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
               </Text>
             </TouchableOpacity>
             <TouchableOpacity>
-              <Text size="md" weight="medium" style={$menu}>
-                About Expert Export Indonesia
-              </Text>
+              <View style={$menu}>
+                <Text size="md" weight="medium">
+                  About Expert Export Indonesia
+                </Text>
+                <Text size="xs" style={{color: "black"}}>
+                  v. 1.2.3
+                </Text>
+              </View>
             </TouchableOpacity>
           </View>
           <Button

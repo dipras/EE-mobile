@@ -59,8 +59,13 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       })
 
       setAuthName(response.data.data.name);
-      if(_props.route.params.redirect?.id) {
-        setRedirect("CourseDetail", {id: _props.route.params.redirect.id});
+      const {id, to} = _props.route.params.redirect || {};
+      if(id) {
+        if(to == "ExpertDetail") {
+          setRedirect("ExpertDetail", {id: id});
+        } else {
+          setRedirect("CourseDetail", {id: id});
+        }
       }
       _props.navigation.replace("Main", {screen: "Home", params: {}});
     } catch (error: any) {
@@ -72,6 +77,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         hideOnPress: true,
         delay: 0
       })
+      console.log(error)
 
       setTimeout(() => {
         Toast.hide(toast);

@@ -8,15 +8,29 @@ import { AntDesign } from '@expo/vector-icons';
 import { spacing } from "app/theme";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ScrollView } from "react-native-gesture-handler";
+import { getExpertsApi } from "app/utils/api/expert.api";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 const expertBanner = require("assets/images/expert-banner.png");
 const expertPeople1 = require("assets/images/expert-people-1.png");
 
 const windowWidth = Dimensions.get("window").width;
 const expertBannerRatio = 360 / 240;
+
+const getExpertsData = ({ pageParam }: { pageParam: number }) => {
+    return getExpertsApi({ limit: 4, page: pageParam }).then(res => res.data);
+}
 interface ExpertScreenProps extends AppStackScreenProps<"Expert"> { }
 export const ExpertScreen: FC<ExpertScreenProps> = observer(function Course(_props) {
-
+    const { data, fetchNextPage, isLoading, error } = useInfiniteQuery({
+        initialPageParam: 1,
+        queryKey: ["courseData"],
+        queryFn: getExpertsData,
+        getNextPageParam: (lastPage) => {
+            return lastPage.meta.currentPage + 1;
+        },
+    });
+    const notLastPage = data && Number(data.pageParams.pop()) < data.pages[0].meta.totalPages;
 
     return (
         <ScrollView style={{ backgroundColor: "#FFF" }}>
@@ -31,30 +45,30 @@ export const ExpertScreen: FC<ExpertScreenProps> = observer(function Course(_pro
                 </View>
             </View>
             <View>
-                <Image source={expertBanner} style={{ width: windowWidth, height: windowWidth / expertBannerRatio}} />
+                <Image source={expertBanner} style={{ width: windowWidth, height: windowWidth / expertBannerRatio }} />
             </View>
-            <View style={{padding: spacing.md}}>
-                {[1,2,3].map((v, k) => (
-                    <View style={{backgroundColor: "rgba(235, 229, 210, 0.5)", paddingVertical: spacing.md, paddingHorizontal: spacing.sm, flexDirection: "row", marginBottom: spacing.xl}} key={k}>
-                        <Image style={{width: 150, height: 200, marginRight: spacing.md}} source={expertPeople1} />
-                        <View style={{flexGrow: 1, flex: 1}}>
-                            <AntDesign name="hearto" size={24} color="black" style={{alignSelf: "flex-end", color: "#DFAC28"}} />
-                            <Text weight="bold" size="xl">Sarwila</Text>
-                            <Text weight="light" size="md">Lorem ipsum dolor bottom kalom</Text>
-                            <View style={{flexDirection: "row", marginTop: spacing.lg, justifyContent: "space-between"}}>
-                                <TouchableOpacity>
-                                    <View style={{paddingVertical: spacing.xs, paddingHorizontal: spacing.lg, backgroundColor: "#DFAC28", borderRadius: spacing.lg}}>
-                                        <Text style={{color: "#FFF"}}>Talk</Text>
+            <View style={{ padding: spacing.md }}>
+                {data?.pages.map((page, pageNum) => page.data.map((val: any, index: number) => (
+                    <View style={{ backgroundColor: "rgba(235, 229, 210, 0.5)", paddingVertical: spacing.md, paddingHorizontal: spacing.sm, flexDirection: "row", marginBottom: spacing.xl }} key={index}>
+                        <Image style={{ width: 150, height: 200, marginRight: spacing.md }} source={{uri: val.images}} />
+                        <View style={{ flexGrow: 1, flex: 1 }}>
+                            <AntDesign name="hearto" size={24} color="black" style={{ alignSelf: "flex-end", color: "#DFAC28" }} />
+                            <Text weight="bold" size="xl">{val.name}</Text>
+                            <Text weight="light" size="md">{val.short_description}</Text>
+                            <View style={{ flexDirection: "row", marginTop: spacing.lg, justifyContent: "space-between" }}>
+                                <TouchableOpacity onPress={() => _props.navigation.push("ExpertDetail", {id: val.id})}>
+                                    <View style={{ paddingVertical: spacing.xs, paddingHorizontal: spacing.lg, backgroundColor: "#DFAC28", borderRadius: spacing.lg }}>
+                                        <Text style={{ color: "#FFF" }}>Talk</Text>
                                     </View>
                                 </TouchableOpacity>
-                                <View style={{flexDirection: "row", marginTop: "auto"}}>
+                                <View style={{ flexDirection: "row", marginTop: "auto" }}>
                                     <AntDesign name="star" size={24} color={"#DFAC28"} />
                                     <Text>5.0</Text>
                                 </View>
                             </View>
                         </View>
                     </View>
-                ))}
+                )))}
             </View>
         </ScrollView>
     )

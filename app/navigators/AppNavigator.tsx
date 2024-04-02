@@ -44,6 +44,7 @@ export type AppStackParamList = {
   Course: undefined
   CourseDetail: {id: number}
   Expert: undefined,
+  ExpertDetail: {id: number},
   OrderSummary: {id: number, price: number, image: string, productType: {id: Number, name: string}, name: string}
   AccountSetting: undefined,
   Wishlist: undefined,

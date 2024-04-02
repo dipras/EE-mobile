@@ -52,21 +52,19 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
   } = useStores()
 
   useEffect(() => {
-    const unsubscribe = _props.navigation.addListener('focus', () => {
-      if (_props.route.params?.redirect) {
-        _props.navigation.setParams({ redirect: false });
-        _props.navigation.push("Login", {});
+    if (_props.route.params?.redirect) {
+      _props.navigation.setParams({ redirect: false });
+      _props.navigation.push("Login", {});
+    }
+    if(redirect !== "") {
+      if(redirect == "CourseDetail") {
+        _props.navigation.push("CourseDetail", {id: Number(redirectParams.id)});
+      } else if(redirect == "ExpertDetail") {
+        _props.navigation.push("ExpertDetail", {id: Number(redirectParams.id)})
       }
-      if(redirect !== "") {
-        if(redirect == "CourseDetail") {
-          _props.navigation.push("CourseDetail", {id: Number(redirectParams.id)});
-        }
-  
-        removeRedirect()
-      }
-    });
-    
-    return unsubscribe;
+
+      removeRedirect()
+    }
   }, [])
 
   const {
