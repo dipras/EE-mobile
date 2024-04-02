@@ -5,8 +5,7 @@ import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
-import axios from "axios"
-import { loginApi } from "app/utils/api/auth.api"
+import { loginApi, meApi } from "app/utils/api/auth.api"
 import Toast from 'react-native-root-toast';
 
 const googleIcon = require("../../assets/images/google.png")
@@ -52,11 +51,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       setAuthToken(accessToken);
       setExpiredtimestamp(expiredIn);
 
-      response = await axios.get("https://be-dev.exportexpert.id/auth/me", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      response = await meApi(accessToken);
 
       setAuthName(response.data.data.name);
       const {id, to} = _props.route.params.redirect || {};
