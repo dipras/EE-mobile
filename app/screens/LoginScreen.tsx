@@ -5,8 +5,21 @@ import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
-import { loginApi, meApi } from "app/utils/api/auth.api"
+import { loginApi, meApi, verifyGoogle } from "app/utils/api/auth.api"
 import Toast from 'react-native-root-toast';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { TouchableOpacity } from "react-native-gesture-handler"
+
+GoogleSignin.configure({
+	webClientId: "227957573473-g5888vmn7gcdpcdfs6jahgpjqgmr0a4f.apps.googleusercontent.com",
+	scopes: ['profile', 'email'],
+});
+
+const GoogleLogin = async () => {
+  await GoogleSignin.hasPlayServices();
+  const userInfo = await GoogleSignin.signIn();
+  return userInfo;
+};
 
 const googleIcon = require("../../assets/images/google.png")
 const privyIcon = require("../../assets/images/privy.png")
@@ -32,21 +45,27 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       setAuthPassword("")
       setAuthEmail("")
     }
-  }, [])
+  }, []);
 
   const error = isSubmitted ? validationError : ""
 
-  const login = async () => {
-    if(validationError !== "") {
-      setSubmitted(true);
-      return;
-    }
-    setIsLoading(true);
+  const login = async (type : "email" | "google") => {
     try {
-      let response = await loginApi({
-        email: authEmail,
-        password: authPassword
-      });
+      setIsLoading(true);
+      let response: any;
+      if(type == "google") {
+        const googleResponse = await GoogleLogin();
+        response = await verifyGoogle(`${googleResponse.idToken}`);
+      } else {
+        if(validationError !== "") {
+          setSubmitted(true);
+          return;
+        }
+        response = await loginApi({
+          email: authEmail,
+          password: authPassword
+        });
+      }
       const {accessToken, expiredIn} = response.data.data;
       setAuthToken(accessToken);
       setExpiredtimestamp(expiredIn);
@@ -151,7 +170,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
           secureTextEntry={isAuthPasswordHidden}
           labelTx="loginScreen.passwordFieldLabel"
           placeholder="Enter your password"
-          onSubmitEditing={login}
+          onSubmitEditing={() => login("email")}
           RightAccessory={PasswordRightAccessory}
         />
 
@@ -161,7 +180,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         testID="login-button"
         style={$tapButton}
         preset="reversed"
-        onPress={login}
+        onPress={() => login("email")}
         disabled={isLoading}
       >
         {isLoading ? <ActivityIndicator /> : "Sign In"}{" "}
@@ -181,7 +200,9 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
           marginBottom: 20,
         }}
       >
-        <Image source={googleIcon} style={{ width: 40, height: 40, marginRight: 10 }} />
+        <TouchableOpacity onPress={() => login("google")}>
+          <Image source={googleIcon} style={{ width: 40, height: 40, marginRight: 10 }} />
+        </TouchableOpacity>
         <Image source={privyIcon} style={{ width: 115, height: 30 }} />
       </View>
 

@@ -56,3 +56,9 @@ export const resetPasswordApi = (token: token, password: string) => {
         }
     });
 }
+
+export const verifyGoogle = (token: token) => {
+    return apiHandler.post("/auth/google/verify", {
+        idToken: token
+    });
+}
