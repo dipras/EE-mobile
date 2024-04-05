@@ -10,6 +10,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { ScrollView } from "react-native-gesture-handler";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getCourseApi } from "app/utils/api/course.api";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const courseBanner = require("assets/images/course-banner.png");
 
@@ -30,19 +31,11 @@ export const CourseScreen: FC<CourseScreenProps> = observer(function Course(_pro
     });
     const notLastPage = data && Number(data.pageParams.pop()) < data.pages[0].meta.totalPages;
 
-    if(error) {
+    if (error) {
         alert("There something is wrong, please try again later");
     }
     return (
-        <ScrollView style={{ backgroundColor: "#D5D5D5" }} onScroll={e => {
-            const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
-            const paddingToBottom = 20;
-            const nearBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
-            if (nearBottom && !isLoading && notLastPage) {
-                fetchNextPage();
-            }
-        }}>
-            <StatusBar style="dark" />
+        <SafeAreaProvider>
             <View style={headerStyle}>
                 <View style={roundFlyStyle}></View>
                 <View style={headerContentStyle}>
@@ -51,49 +44,65 @@ export const CourseScreen: FC<CourseScreenProps> = observer(function Course(_pro
                     </TouchableOpacity>
                     <Text size="lg" style={{ color: "#4E5566" }} weight="medium">Course</Text>
                 </View>
-                <Text size="lg" weight="bold" style={{ color: "#4E5566", padding: 20 }}>Let's start learning with expert</Text>
-                <Image source={courseBanner} style={{ width: windowWidth, height: windowWidth / courseBannerRatio }} />
             </View>
-            <View style={courseListStyle}>
-                {data?.pages.map((page, pageNum) => page.data.map((val: any, index: number) => (
-                    <TouchableOpacity onPress={() => _props.navigation.navigate("CourseDetail", {id: Number(val.id)})} style={item} key={index}>
-                        <Image source={{ uri: val.images }} style={{ width: "100%", height: spacing.xxxl * 3 }} />
-                        <View style={{ padding: spacing.sm }}>
-                            <Text weight="bold" numberOfLines={2} style={{ height: spacing.xxl }}>{val.name}</Text>
-                            <Text weight="light" size="sm" numberOfLines={4} style={{ marginBottom: 20, height: spacing.xxl * 2 }}>{val.description.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 50)}</Text>
-                            <View style={{ flexDirection: "row" }}>
-                                <AntDesign name="star" size={24} color="black" />
-                                <AntDesign name="star" size={24} color="black" />
-                                <AntDesign name="star" size={24} color="black" />
-                                <AntDesign name="staro" size={24} color="black" />
+            <ScrollView style={{ backgroundColor: "#D5D5D5" }} onScroll={e => {
+                const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
+                const paddingToBottom = 20;
+                const nearBottom = layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+                if (nearBottom && !isLoading && notLastPage) {
+                    fetchNextPage();
+                }
+            }}>
+                <StatusBar style="dark" />
+                <View style={$banner}>
+                    <Text size="lg" weight="bold" style={{ color: "#4E5566", padding: 20 }}>Let's start learning with expert</Text>
+                    <Image source={courseBanner} style={{ width: windowWidth, height: windowWidth / courseBannerRatio }} />
+                </View>
+                <View style={courseListStyle}>
+                    {data?.pages.map((page, pageNum) => page.data.map((val: any, index: number) => (
+                        <TouchableOpacity onPress={() => _props.navigation.navigate("CourseDetail", { id: Number(val.id) })} style={item} key={index}>
+                            <Image source={{ uri: val.images }} style={{ width: "100%", height: spacing.xxxl * 3 }} />
+                            <View style={{ padding: spacing.sm }}>
+                                <Text weight="bold" numberOfLines={2} style={{ height: spacing.xxl }}>{val.name}</Text>
+                                <Text weight="light" size="sm" numberOfLines={4} style={{ marginBottom: 20, height: spacing.xxl * 2 }}>{val.description.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 50)}</Text>
+                                <View style={{ flexDirection: "row" }}>
+                                    <AntDesign name="star" size={24} color="black" />
+                                    <AntDesign name="star" size={24} color="black" />
+                                    <AntDesign name="star" size={24} color="black" />
+                                    <AntDesign name="staro" size={24} color="black" />
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    )))}
+                    {notLastPage && [1, 2].map((val, ind) => (
+                        <View style={item} key={ind}>
+                            <View style={{ height: spacing.xxxl * 3, width: "100%", backgroundColor: "#DDD" }}></View>
+                            <View style={{ padding: spacing.sm }}>
+                                <Text weight="bold" numberOfLines={2} style={{ height: spacing.xxl, backgroundColor: "#DDD" }}></Text>
+                                <Text weight="light" size="sm" numberOfLines={4} style={{ marginBottom: 20, height: spacing.xxl * 2, backgroundColor: "#DDD" }}></Text>
+                                <View style={{ backgroundColor: "#DDD", width: "50%", height: 15 }}>
+                                </View>
                             </View>
                         </View>
-                    </TouchableOpacity>
-                )))}
-                {notLastPage && [1, 2].map((val, ind) => (
-                    <View style={item}>
-                        <View style={{ height: spacing.xxxl * 3, width: "100%", backgroundColor: "#DDD" }}></View>
-                        <View style={{ padding: spacing.sm }}>
-                            <Text weight="bold" numberOfLines={2} style={{ height: spacing.xxl, backgroundColor: "#DDD" }}></Text>
-                            <Text weight="light" size="sm" numberOfLines={4} style={{ marginBottom: 20, height: spacing.xxl * 2, backgroundColor: "#DDD" }}></Text>
-                            <View style={{ backgroundColor: "#DDD", width: "50%", height: 15 }}>
-                            </View>
-                        </View>
-                    </View>
-                ))}
-            </View>
-        </ScrollView>
+                    ))}
+                </View>
+            </ScrollView>
+        </SafeAreaProvider>
     )
 })
 
 const headerStyle: ViewStyle = {
     backgroundColor: "#FCCD18",
     width: "100%",
+}
+const roundFlyStyle: ViewStyle = { backgroundColor: "#F2BD00", width: 100, height: 100, borderRadius: 50, position: "absolute", right: 0, top: -30 };
+
+const $banner: ViewStyle = {
+    backgroundColor: "#FCCD18",
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     marginBottom: spacing.md
 }
-const roundFlyStyle: ViewStyle = { backgroundColor: "#F2BD00", width: 100, height: 100, borderRadius: 50, position: "absolute", right: 0, top: -30 };
 
 const headerContentStyle: ViewStyle = { alignItems: "center", flexDirection: "row", padding: 20, marginTop: 30 };
 const item: ViewStyle = {
