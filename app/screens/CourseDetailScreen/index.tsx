@@ -12,21 +12,22 @@ import { CourseCard } from "./CourseCard";
 import { getCourseDetailApi } from "app/utils/api/course.api";
 import { rupiah } from "app/utils/formatText";
 import { useStores } from "app/models";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const courseImage = require("assets/images/course-detail.png");
 const noImage = require("assets/images/no-image.png");
 const avatarImage = require("assets/images/avatar.jpg");
 
 
-const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get("screen");
+const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("screen");
 interface CourseDetailScreenProps extends AppStackScreenProps<"CourseDetail"> { }
 export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function Course(_props) {
     const [menu, setMenu] = useState(0);
     const [data, setData] = useState<any>({});
     const [loading, setLoading] = useState(true);
-    const {id} = _props.route.params;
+    const { id } = _props.route.params;
     const [react, setReact] = useState(0);
-    const {authenticationStore: {isAuthenticated}, CartStore: {addCart, getCartById, removeCartById}} = useStores();
+    const { authenticationStore: { isAuthenticated }, CartStore: { addCart, getCartById, removeCartById } } = useStores();
 
     const addedCart = getCartById(id);
 
@@ -40,24 +41,24 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
         });
     }, []);
 
-    const handleClick = (btn : "pay" | "cart") => {
-        if(!isAuthenticated) {
-            _props.navigation.navigate("Login", {redirect: {id: id}});
+    const handleClick = (btn: "pay" | "cart") => {
+        if (!isAuthenticated) {
+            _props.navigation.navigate("Login", { redirect: { id: id } });
             return;
         }
 
-        if(btn == "pay") {
+        if (btn == "pay") {
             console.log(data)
-            _props.navigation.navigate("OrderSummary", {id: id, image: data.images, price: Number(data.price), productType: data.product_type, name: data.name});
+            _props.navigation.navigate("OrderSummary", { id: id, image: data.images, price: Number(data.price), productType: data.product_type, name: data.name });
         } else {
             alert("successfully added to cart");
         }
     }
 
     const translateY = useSharedValue(0);
-    const contextTranslate = useSharedValue({y: 0});
+    const contextTranslate = useSharedValue({ y: 0 });
     const gesture = Gesture.Pan().onStart(() => {
-        contextTranslate.value = {y: translateY.value}
+        contextTranslate.value = { y: translateY.value }
     }).onUpdate(e => {
         translateY.value = contextTranslate.value.y + e.translationY;
         translateY.value = Math.max(translateY.value, (-SCREEN_HEIGHT * 0.5) + spacing.lg);
@@ -66,7 +67,7 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
 
     const rBottom = useAnimatedStyle(() => {
         return {
-            transform: [{translateY: translateY.value}]
+            transform: [{ translateY: translateY.value }]
         }
     })
 
@@ -81,7 +82,7 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
     const renderReview = () => {
         return (
             <ScrollView>
-                {[0,1,2,3].map((v, i) => (
+                {[0, 1, 2, 3].map((v, i) => (
                     <CourseCard name="Dipras" description="Sangat bagus dan mantap jiwa bang hehe wkwkkw lesgooo" avatar={avatarImage} />
                 ))}
             </ScrollView>
@@ -96,15 +97,15 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
                 return (
                     <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae odio id erat lacinia placerat ut ut est. In at dolor vitae justo vestibulum eleifend. Nulla ipsum ipsum, laoreet eu venenatis sed, euismod eget risus. Integer bibendum neque tristique dolor maximus, non commodo sapien cursus. Curabitur pharetra sollicitudin imperdiet. Morbi porta ligula at posuere rhoncus. Vestibulum justo enim, euismod eu aliquam vitae, volutpat mattis sem. Aliquam erat volutpat. Pellentesque tellus est, congue interdum justo eu, mattis bibendum nunc. In vitae viverra risus. Nullam at dapibus eros. Aenean eu magna dignissim, lacinia augue vitae, suscipit neque. Suspendisse non justo sapien.
 
-                    Sed ornare sem ac dui varius pharetra. Phasellus facilisis lectus at vulputate imperdiet. Quisque faucibus in justo in malesuada. Suspendisse quis tellus turpis. Etiam quis erat in arcu ullamcorper pellentesque eu non mauris. Sed ut est massa. Vivamus vitae ante vel est porta dictum aliquet ut nisl. Vivamus ultrices rhoncus lectus, vel sollicitudin nunc malesuada a. Phasellus ac nulla auctor, elementum tortor tristique, sagittis ante.
-                    
-                    Sed eget justo imperdiet, vehicula est eu, sollicitudin enim. Mauris feugiat imperdiet odio, ut eleifend nunc. Vestibulum euismod aliquet massa, sit amet finibus tortor pretium sed. Praesent id orci sit amet urna tincidunt vulputate. Curabitur rhoncus porta elit, eget fermentum metus vestibulum sit amet. Maecenas a tellus non dui condimentum fringilla a vel arcu. Maecenas malesuada metus nunc, sed ornare sapien tempor a. Proin laoreet sapien in vulputate interdum. Donec a placerat quam, eleifend consectetur enim. Sed volutpat ultrices risus, eu sagittis sapien pellentesque in. Pellentesque non viverra risus. Etiam vitae malesuada augue. Nam vulputate, dui et ultrices accumsan, velit nunc auctor augue, ac commodo ex lorem a felis. Nulla eget facilisis diam. Integer egestas nulla massa, posuere viverra urna mattis et. Duis sit amet diam fermentum, elementum mauris vehicula, sodales massa.
-                    
-                    Nulla ut sem sodales, tempor nunc et, commodo mauris. Duis quis nulla libero. Integer ut velit elementum leo vehicula tincidunt. Curabitur et erat sagittis, fringilla neque eu, malesuada turpis. Morbi ipsum diam, dignissim nec porta at, pharetra eget ante. Etiam et purus posuere, imperdiet orci quis, pellentesque erat. Mauris dui magna, fermentum non libero id, sodales tristique nibh. Nunc lacinia, massa at maximus feugiat, quam odio mattis diam, luctus lobortis quam turpis et nunc. Nullam vitae lobortis dolor.
-                    
-                    Donec tortor risus, tincidunt id tincidunt eu, ultrices sit amet metus. Proin eu tempor felis, et gravida dolor. Praesent sagittis tellus non ligula scelerisque, in luctus turpis tempor. Aliquam erat volutpat. Duis maximus arcu urna, ut rhoncus eros efficitur id. Ut sollicitudin euismod nulla vel tristique. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris vel felis aliquam, aliquet turpis porttitor, aliquam elit.</Text>
+                        Sed ornare sem ac dui varius pharetra. Phasellus facilisis lectus at vulputate imperdiet. Quisque faucibus in justo in malesuada. Suspendisse quis tellus turpis. Etiam quis erat in arcu ullamcorper pellentesque eu non mauris. Sed ut est massa. Vivamus vitae ante vel est porta dictum aliquet ut nisl. Vivamus ultrices rhoncus lectus, vel sollicitudin nunc malesuada a. Phasellus ac nulla auctor, elementum tortor tristique, sagittis ante.
+
+                        Sed eget justo imperdiet, vehicula est eu, sollicitudin enim. Mauris feugiat imperdiet odio, ut eleifend nunc. Vestibulum euismod aliquet massa, sit amet finibus tortor pretium sed. Praesent id orci sit amet urna tincidunt vulputate. Curabitur rhoncus porta elit, eget fermentum metus vestibulum sit amet. Maecenas a tellus non dui condimentum fringilla a vel arcu. Maecenas malesuada metus nunc, sed ornare sapien tempor a. Proin laoreet sapien in vulputate interdum. Donec a placerat quam, eleifend consectetur enim. Sed volutpat ultrices risus, eu sagittis sapien pellentesque in. Pellentesque non viverra risus. Etiam vitae malesuada augue. Nam vulputate, dui et ultrices accumsan, velit nunc auctor augue, ac commodo ex lorem a felis. Nulla eget facilisis diam. Integer egestas nulla massa, posuere viverra urna mattis et. Duis sit amet diam fermentum, elementum mauris vehicula, sodales massa.
+
+                        Nulla ut sem sodales, tempor nunc et, commodo mauris. Duis quis nulla libero. Integer ut velit elementum leo vehicula tincidunt. Curabitur et erat sagittis, fringilla neque eu, malesuada turpis. Morbi ipsum diam, dignissim nec porta at, pharetra eget ante. Etiam et purus posuere, imperdiet orci quis, pellentesque erat. Mauris dui magna, fermentum non libero id, sodales tristique nibh. Nunc lacinia, massa at maximus feugiat, quam odio mattis diam, luctus lobortis quam turpis et nunc. Nullam vitae lobortis dolor.
+
+                        Donec tortor risus, tincidunt id tincidunt eu, ultrices sit amet metus. Proin eu tempor felis, et gravida dolor. Praesent sagittis tellus non ligula scelerisque, in luctus turpis tempor. Aliquam erat volutpat. Duis maximus arcu urna, ut rhoncus eros efficitur id. Ut sollicitudin euismod nulla vel tristique. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris vel felis aliquam, aliquet turpis porttitor, aliquam elit.</Text>
                 )
-            case 2: 
+            case 2:
                 return renderReview();
             default:
                 return (
@@ -115,28 +116,28 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
     }
 
     const handleAddCart = () => {
-        if(addedCart) {
+        if (addedCart) {
             removeCartById(id);
         } else {
-            addCart({id: id, name: data.name, price: parseInt(data.price), imageUrl: data.images, productType: data.product_type})
+            addCart({ id: id, name: data.name, price: parseInt(data.price), imageUrl: data.images, productType: data.product_type })
         }
-        setReact(react+ 1);
+        setReact(react + 1);
     }
 
     return (
-        <>
+        <SafeAreaView>
             {loading && (
-                <View style={{position: "absolute", height: SCREEN_HEIGHT, width: SCREEN_WIDTH, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 3, justifyContent: "center"}}>
+                <View style={{ position: "absolute", height: SCREEN_HEIGHT, width: SCREEN_WIDTH, backgroundColor: "rgba(0,0,0,0.5)", zIndex: 3, justifyContent: "center" }}>
                     <ActivityIndicator size={"large"} />
                 </View>
             )}
             <View style={{ height: "40%" }}>
-                <View style={{ zIndex: 2, marginLeft: spacing.lg, marginTop: spacing.xl, backgroundColor: "#fff", width: 30, height: 30, justifyContent: "center", alignItems: "center", borderRadius: 15 }}>
+                <View style={$backBtn}>
                     <TouchableOpacity onPress={() => _props.navigation.goBack()}>
                         <AntDesign name="arrowleft" size={24} color="black" />
                     </TouchableOpacity>
                 </View>
-                <Image source={data.images ? {uri: data.images} : courseImage} style={{ height: SCREEN_HEIGHT * 70 / 100 }} />
+                <Image source={data.images ? { uri: data.images } : courseImage} style={{ height: SCREEN_HEIGHT * 70 / 100 }} />
             </View>
             <GestureDetector gesture={gesture}>
                 <Animated.View style={[bottomSectionStyle, rBottom]}>
@@ -159,18 +160,18 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
                     <View style={{ marginTop: spacing.lg, height: 400 }}>
                         {renderContent()}
                     </View>
-                    <View style={{marginTop: spacing.lg}}>
-                        <Text size="lg" style={{color: "#F6BE2C", marginVertical: 20}}>{rupiah(Number(data.price || 2000))}</Text>
-                        <View style={{flexDirection: "row", justifyContent: "space-between", columnGap: 10}}>
-                            <Button style={{width: ((SCREEN_WIDTH - spacing.lg * 2) / 2), borderColor: "#F6BE2C", borderRadius: spacing.sm}} textStyle={{color: "#F6BE2C"}} onPress={handleAddCart}>{
+                    <View style={{ marginTop: spacing.lg }}>
+                        <Text size="lg" style={{ color: "#F6BE2C", marginVertical: 20 }}>{rupiah(Number(data.price || 2000))}</Text>
+                        <View style={{ flexDirection: "row", justifyContent: "space-between", columnGap: 10 }}>
+                            <Button style={{ width: ((SCREEN_WIDTH - spacing.lg * 2) / 2), borderColor: "#F6BE2C", borderRadius: spacing.sm }} textStyle={{ color: "#F6BE2C" }} onPress={handleAddCart}>{
                                 addedCart ? "Remove from Cart" : "Add to Cart"
                             }</Button>
-                            <Button style={{width: ((SCREEN_WIDTH - spacing.lg * 2) / 2), borderRadius: spacing.sm, backgroundColor: "#F6BE2C", borderWidth: 0}} textStyle={{color: "white"}} onPressOut={() => handleClick("pay")}>Buy</Button>
+                            <Button style={{ width: ((SCREEN_WIDTH - spacing.lg * 2) / 2), borderRadius: spacing.sm, backgroundColor: "#F6BE2C", borderWidth: 0 }} textStyle={{ color: "white" }} onPressOut={() => handleClick("pay")}>Buy</Button>
                         </View>
                     </View>
                 </Animated.View>
             </GestureDetector>
-        </>
+        </SafeAreaView>
     )
 })
 
@@ -191,3 +192,5 @@ const menuStyle: ViewStyle = {
     alignItems: "center",
     paddingBottom: spacing.md
 }
+
+const $backBtn: ViewStyle = { zIndex: 2, position: "absolute", backgroundColor: "#fff", width: 30, height: 30, justifyContent: "center", alignItems: "center", borderRadius: 15, top: spacing.sm, left: spacing.sm }
