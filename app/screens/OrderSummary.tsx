@@ -13,15 +13,14 @@ interface OrderSummaryScreenProps extends AppStackScreenProps<"OrderSummary"> { 
 export const OrderSummaryScreen: FC<OrderSummaryScreenProps> = observer(function OrderSummary(_props) {
   const {authenticationStore: {authToken}} = useStores();
   const [loading, setLoading] = useState(false);
-  const { image, price, id, productType, name } = _props.route.params;
+  const { image, price, id, productType, name, first_name, last_name, phone_number, email } = _props.route.params;
   const checkOut = async () => {
-    const params : checkoutParams = {
-      email: "bluestackpwc@gmail.com",
+    let params : checkoutParams = {
       product_id: id,
-      first_name: "Aldy",
-      last_name: "Prastyo",
-      phone_number: "+64421343542423",
       product_type_id: productType.id
+    }
+    if(first_name) {
+      params = {...params, last_name, phone_number, email}
     }
     setLoading(true);
     try {
