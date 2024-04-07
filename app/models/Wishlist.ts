@@ -4,7 +4,7 @@ type productType = {
     id: number
     name: string
 }
-export const CartModel = types.model("Cart").props({
+export const WishlistModel = types.model("Wishlist").props({
     id: types.integer,
     name: types.string,
     price: types.number,
@@ -12,5 +12,5 @@ export const CartModel = types.model("Cart").props({
     productType: types.frozen<productType>()
 });
 
-export interface Cart extends Instance<typeof CartModel> {}
-export interface CartSnapshot extends SnapshotOut<typeof CartModel> {}
+export interface Wishlist extends Instance<typeof WishlistModel> {}
+export interface WishlistSnapshot extends SnapshotOut<typeof WishlistModel> {}

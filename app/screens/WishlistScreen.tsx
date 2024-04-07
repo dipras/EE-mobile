@@ -1,4 +1,4 @@
-import {FC} from "react"
+import { FC, useState } from "react"
 import { AppStackScreenProps } from "app/navigators"
 import { observer } from "mobx-react-lite"
 import { Button, Text } from "app/components"
@@ -6,60 +6,82 @@ import { View, TouchableOpacity, Image, ViewStyle } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
 import { spacing, colors } from "app/theme"
 import { rupiah } from "app/utils/formatText"
+import { useStores } from "app/models"
+import { Wishlist } from "app/models/Wishlist"
 
 const noImage = require("assets/images/no-image.png");
 
-const wishListData = [{
-    name: "lorem",
-    price: 3000,
-    id: 15
-
-}]
-
-interface WishlistScreenProps extends AppStackScreenProps<"Wishlist"> {}
+interface WishlistScreenProps extends AppStackScreenProps<"Wishlist"> { }
 export const WishlistScreen: FC<WishlistScreenProps> = observer(function WishlistScreen(_props) {
-    const renderItem = ({ item, index }: any) => {
-        return (
-          <View style={[{ flexDirection: "row", justifyContent: "center" }]} key={index}>
-            <TouchableOpacity style={$wishtlist}>
-              <Image source={noImage} style={{ height: spacing.xxxl * 2, width: spacing.xxl * 2, borderRadius: 10 }} />
-              <View style={{ flex: 1, justifyContent: "space-between" }}>
-                <Text style={{ overflow: "hidden" }} size="md" weight="bold" numberOfLines={1}>{item.name}</Text>
-                <Text size="sm" weight="bold">{rupiah(item.price)}</Text>
-                <Button onPress={() => _props.navigation.push("CourseDetail", {id: 15})} style={{width: 150, padding: 0, margin: 0, minHeight: 0, backgroundColor: colors.main, borderColor: "#FFF", borderRadius: 10}} textStyle={{color: "white"}}>Visit product</Button>
-              </View>
-            </TouchableOpacity>
-          </View>
-        )
-      }
+  const { WishlistStore: { wishlistData, removeWishlistById, resetWishlist } } = useStores();
 
+  const handlePress = (id: number, product_type: string) => {
+    let redirect: "CourseDetail" | "ExpertDetail" | "EventDetail" | "" = "";
+    
+    switch(product_type) {
+      case "Course":
+        redirect = "CourseDetail";
+        break;
+      case "Event":
+        redirect = "EventDetail";
+        break;
+      case "Consultation":
+        redirect = "ExpertDetail";
+        break;
+    }
 
+    if(redirect == "") {
+      alert("There something is wrong");
+      resetWishlist();
+    } else {
+      _props.navigation.navigate(redirect, { id })
+    }
+  }
+
+  const renderItem = ({ item, index }: { item: Wishlist, index: number }) => {
     return (
-        <View style={{ paddingHorizontal: spacing.md, flex: 1, paddingTop: 50 }}>
-          <FlatList data={wishListData} renderItem={renderItem} style={{flex: 1}} />
+      <View style={[{ flexDirection: "row", justifyContent: "center" }]} key={index}>
+        <View style={$wishtlist}>
+          <Image source={{ uri: item.imageUrl }} style={{ height: spacing.xxxl * 2, width: spacing.xxl * 2, borderRadius: 10 }} />
+          <View style={{ flex: 1, justifyContent: "space-between" }}>
+            <Text style={{ overflow: "hidden" }} size="md" weight="bold" numberOfLines={1}>{item.name}</Text>
+            <Text size="sm" weight="bold">{rupiah(item.price)}</Text>
+            <Button onPress={() => handlePress(item.id, item.productType.name)} style={$btn} textStyle={{ color: "white" }}>Visit product</Button>
+          </View>
         </View>
-      )
+      </View>
+    )
+  }
+
+
+  return (
+    <View style={{ paddingHorizontal: spacing.md, flex: 1, paddingTop: 50 }}>
+      <FlatList data={wishlistData} renderItem={renderItem} style={{ flex: 1 }} />
+    </View>
+  )
 })
 
 const $wishtlist: ViewStyle = {
-    height: 160,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3,
-    borderRadius: 10,
-    backgroundColor: "#fff",
-    zIndex: 10,
-    marginBottom: 5,
-    marginTop: 5,
-    width: "95%",
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    paddingBottom: 20,
-    flexDirection: "row",
-    columnGap: 10
-  }
+  height: 160,
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 1,
+  },
+  shadowOpacity: 0.22,
+  shadowRadius: 2.22,
+  elevation: 3,
+  borderRadius: 10,
+  backgroundColor: "#fff",
+  zIndex: 10,
+  marginBottom: 5,
+  marginTop: 5,
+  width: "95%",
+  paddingHorizontal: 10,
+  paddingTop: 10,
+  paddingBottom: 20,
+  flexDirection: "row",
+  columnGap: 10
+}
+
+const $btn : ViewStyle = { width: 150, padding: 0, margin: 0, minHeight: 0, backgroundColor: colors.main, borderColor: "#FFF", borderRadius: 10 };

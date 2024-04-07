@@ -1,16 +1,84 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { AppStackScreenProps } from "app/navigators";
 import { observer } from "mobx-react-lite";
 import { Text } from "app/components";
 import { StatusBar } from "expo-status-bar";
 import { ActivityIndicator, Dimensions, Image, View } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
-import { spacing } from "app/theme";
+import { colors, spacing } from "app/theme";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ScrollView } from "react-native-gesture-handler";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getEventApi } from "app/utils/api/event.api";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useStores } from "app/models";
+
+type EventCardProps = {
+    id: number
+    event_images: string
+    name: string
+    description: string
+    navigate: Function
+    price: number
+    index: number
+    productType: any
+}
+
+const EventCard: FC<EventCardProps> = observer((props) => {
+    const [counter, setCounter] = useState(0);
+    const {WishlistStore: {addWishlist, getWishlistById, removeWishlistById}} = useStores();
+    const {
+        id,
+        event_images,
+        name,
+        description,
+        navigate,
+        index,
+        productType,
+        price
+    } = props;
+    const status = getWishlistById(id, "Event");
+
+    const toggle = () => {
+        if (status) {
+            removeWishlistById(id, "Event");
+        } else {
+            addWishlist({
+                id,
+                name,
+                imageUrl: event_images,
+                productType,
+                price: Number(price)
+            })
+        };
+        setCounter(counter + 1);
+    }
+
+    return (
+        <TouchableOpacity onPress={() => navigate()}>
+            <View style={{ backgroundColor: "#fff", borderRadius: 10, position: "relative", overflow: "hidden", marginBottom: 20 }} key={index}>
+                <View  style={{ width: windowWidth - spacing.md * 2, height: (windowWidth - spacing.md * 2) / eventRatio, position: "relative" }}>
+                    <View style={{position: "absolute", right: 5, top: 5, zIndex: 5}}>
+                        <TouchableOpacity onPress={toggle}>
+                            <AntDesign size={24} color={colors.main} name={status ? "heart" : "hearto"} />
+                        </TouchableOpacity>
+                    </View>
+                    <Image source={{ uri: event_images }} style={{width: "100%", height: "100%"}} />
+                </View>
+                <View style={{ padding: spacing.md }}>
+                    <Text weight="bold" size="md">{name}</Text>
+                    <Text weight="light" size="sm" style={{ marginBottom: 20 }}>{description.slice(0, 50)}</Text>
+                    <View style={{ flexDirection: "row" }}>
+                        <AntDesign name="star" size={24} color="black" />
+                        <AntDesign name="star" size={24} color="black" />
+                        <AntDesign name="star" size={24} color="black" />
+                        <AntDesign name="staro" size={24} color="black" />
+                    </View>
+                </View>
+            </View>
+        </TouchableOpacity>
+    )
+});
 
 const eventBanner = require("assets/images/event-banner.png");
 
@@ -57,25 +125,21 @@ export const EventScreen: FC<EventScreenProps> = observer(function Event(_props)
             <ScrollView style={{ backgroundColor: "#DEDEDE" }} onScroll={handleEndScroll}>
                 <Image source={eventBanner} style={{ width: windowWidth, height: windowWidth / eventBannerRatio, marginBottom: 20 }} />
                 <View style={{ padding: spacing.md }}>
-                    {data?.pages.map((page, pageNum) => page.data.map((val: any, index: number) => (
-                        <TouchableOpacity onPress={() => _props.navigation.navigate("EventDetail", {id: Number(val.id)})}>
-                            <View style={{ backgroundColor: "#fff", borderRadius: 10, position: "relative", overflow: "hidden", marginBottom: 20 }} key={index}>
-                                <Image source={{ uri: val.event_images }} style={{ width: windowWidth - spacing.md * 2, height: (windowWidth - spacing.md * 2) / eventRatio }} />
-                                <View style={{ padding: spacing.md }}>
-                                    <Text weight="bold" size="md">{val.name}</Text>
-                                    <Text weight="light" size="sm" style={{ marginBottom: 20 }}>{val.description.slice(0, 50)}</Text>
-                                    <View style={{ flexDirection: "row" }}>
-                                        <AntDesign name="star" size={24} color="black" />
-                                        <AntDesign name="star" size={24} color="black" />
-                                        <AntDesign name="star" size={24} color="black" />
-                                        <AntDesign name="staro" size={24} color="black" />
-                                    </View>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )))}
+                    {data?.pages.map((page, pageNum) => page.data.map((val: any, index: number) => {
+                        const {
+                            id,
+                            event_images,
+                            name,
+                            description,
+                            price,
+                            product_type
+                        } = val;
+                        return (
+                            <EventCard navigate={() => _props.navigation.navigate("EventDetail", { id: Number(id) })} id={id} event_images={event_images} name={name} description={description} price={price} productType={product_type} index={index} />
+                        )
+                    }))}
                     {notLastPage && (
-                        <ActivityIndicator size={"large"} style={{alignSelf: "center"}} />
+                        <ActivityIndicator size={"large"} style={{ alignSelf: "center" }} />
                     )}
                 </View>
             </ScrollView>

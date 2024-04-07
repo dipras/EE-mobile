@@ -1,21 +1,76 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { AppStackScreenProps } from "app/navigators";
 import { observer } from "mobx-react-lite";
 import { Text } from "app/components";
 import { StatusBar } from "expo-status-bar";
 import { Dimensions, Image, View, ViewStyle } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
-import { spacing } from "app/theme";
+import { colors, spacing } from "app/theme";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ScrollView } from "react-native-gesture-handler";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getCourseApi } from "app/utils/api/course.api";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useStores } from "app/models";
 
 const courseBanner = require("assets/images/course-banner.png");
-
 const windowWidth = Dimensions.get("window").width;
 const courseBannerRatio = 360 / 240;
+
+type CourseCardProps = {
+    images: string
+    name: string
+    description: string
+    index: number
+    navigate: Function
+    id: number
+    productType: any
+    price: number
+}
+const CourseCard: FC<CourseCardProps> = observer((props) => {
+    const { id, name, description, images, productType, navigate, index, price } = props;
+    const { WishlistStore: { addWishlist, getWishlistById, removeWishlistById } } = useStores();
+    const status = getWishlistById(id, "Course");
+    const [counter, setCounter] = useState(0);
+    const toggle = () => {
+        if (status) {
+            removeWishlistById(id, "Course");
+        } else {
+            addWishlist({
+                id,
+                name,
+                imageUrl: images,
+                productType,
+                price: Number(price)
+            })
+        };
+        setCounter(counter + 1);
+    }
+
+    return (
+        <TouchableOpacity onPress={() => navigate()} style={item} key={index}>
+            <View style={{ width: "100%", height: spacing.xxxl * 3, position: "relative" }}>
+                <View style={{ position: "absolute", zIndex: 10, right: 5, top: 5 }}>
+                    <TouchableOpacity onPress={toggle}>
+                        <AntDesign size={24} color={colors.main} name={status ? "heart" : "hearto"} />
+                    </TouchableOpacity>
+                </View>
+                <Image source={{ uri: images }} style={{ width: "100%", height: "100%" }} />
+            </View>
+            <View style={{ padding: spacing.sm }}>
+                <Text weight="bold" numberOfLines={2} style={{ height: spacing.xxl }}>{name}</Text>
+                <Text weight="light" size="sm" numberOfLines={4} style={{ marginBottom: 20, height: spacing.xxl * 2 }}>{description.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 50)}</Text>
+                <View style={{ flexDirection: "row" }}>
+                    <AntDesign name="star" size={24} color="black" />
+                    <AntDesign name="star" size={24} color="black" />
+                    <AntDesign name="star" size={24} color="black" />
+                    <AntDesign name="staro" size={24} color="black" />
+                </View>
+            </View>
+        </TouchableOpacity>
+    )
+})
+
 const getCourseData = ({ pageParam }: { pageParam: number }) => {
     return getCourseApi({ limit: 4, page: pageParam }).then(res => res.data);
 }
@@ -59,21 +114,19 @@ export const CourseScreen: FC<CourseScreenProps> = observer(function Course(_pro
                     <Image source={courseBanner} style={{ width: windowWidth, height: windowWidth / courseBannerRatio }} />
                 </View>
                 <View style={courseListStyle}>
-                    {data?.pages.map((page, pageNum) => page.data.map((val: any, index: number) => (
-                        <TouchableOpacity onPress={() => _props.navigation.navigate("CourseDetail", { id: Number(val.id) })} style={item} key={index}>
-                            <Image source={{ uri: val.images }} style={{ width: "100%", height: spacing.xxxl * 3 }} />
-                            <View style={{ padding: spacing.sm }}>
-                                <Text weight="bold" numberOfLines={2} style={{ height: spacing.xxl }}>{val.name}</Text>
-                                <Text weight="light" size="sm" numberOfLines={4} style={{ marginBottom: 20, height: spacing.xxl * 2 }}>{val.description.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 50)}</Text>
-                                <View style={{ flexDirection: "row" }}>
-                                    <AntDesign name="star" size={24} color="black" />
-                                    <AntDesign name="star" size={24} color="black" />
-                                    <AntDesign name="star" size={24} color="black" />
-                                    <AntDesign name="staro" size={24} color="black" />
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )))}
+                    {data?.pages.map((page, pageNum) => page.data.map((val: any, index: number) => {
+                        const {
+                            id,
+                            name,
+                            description,
+                            images,
+                            product_type,
+                            price
+                        } = val;
+                        return (
+                            <CourseCard index={index} navigate={() => _props.navigation.navigate("CourseDetail", { id: Number(id) })} name={name} description={description} images={images} id={id} productType={product_type} price={price} />
+                        )
+                    }))}
                     {notLastPage && [1, 2].map((val, ind) => (
                         <View style={item} key={ind}>
                             <View style={{ height: spacing.xxxl * 3, width: "100%", backgroundColor: "#DDD" }}></View>

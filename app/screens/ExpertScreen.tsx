@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { AppStackScreenProps } from "app/navigators";
 import { observer } from "mobx-react-lite";
 import { Text, } from "app/components";
@@ -11,6 +11,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { getExpertsApi } from "app/utils/api/expert.api";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useStores } from "app/models";
 
 const expertBanner = require("assets/images/expert-banner.png");
 const expertPeople1 = require("assets/images/expert-people-1.png");
@@ -23,6 +24,8 @@ const getExpertsData = ({ pageParam }: { pageParam: number }) => {
 }
 interface ExpertScreenProps extends AppStackScreenProps<"Expert"> { }
 export const ExpertScreen: FC<ExpertScreenProps> = observer(function Course(_props) {
+    const {WishlistStore: {addWishlist, getWishlistById, removeWishlistById}} = useStores();
+    const [counter, setCounter] = useState(0);
     const { data, fetchNextPage, isLoading, error } = useInfiniteQuery({
         initialPageParam: 1,
         queryKey: ["courseData"],
@@ -63,7 +66,16 @@ export const ExpertScreen: FC<ExpertScreenProps> = observer(function Course(_pro
                         <View style={$item} key={index}>
                             <Image style={{ width: 150, height: 200, marginRight: spacing.md }} source={{ uri: val.images }} />
                             <View style={{ flexGrow: 1, flex: 1 }}>
-                                <AntDesign name="hearto" size={24} color="black" style={{ alignSelf: "flex-end", color: "#DFAC28" }} />
+                                <TouchableOpacity onPress={() => {
+                                    if(getWishlistById(val.id, "Consultation")) {
+                                        removeWishlistById(val.id, "Consultation");
+                                    } else {
+                                        addWishlist({id: val.id, name: val.name, price: val.price, imageUrl: val.images, productType: val.product_type});
+                                    }
+                                    setCounter(counter + 1);
+                                }}>
+                                    <AntDesign name={getWishlistById(val.id, "Consultation") ? "heart" : "hearto"} size={24} color="black" style={{ alignSelf: "flex-end", color: "#DFAC28" }} />
+                                </TouchableOpacity>
                                 <Text weight="bold" size="xl">{val.name}</Text>
                                 <Text weight="light" size="md">{val.short_description}</Text>
                                 <View style={{ flexDirection: "row", marginTop: spacing.lg, justifyContent: "space-between" }}>
