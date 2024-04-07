@@ -20,5 +20,6 @@ export * from "./WishlistScreen"
 export * from "./ExpertDetailScreen"
 export * from "./BoardingSignScreen"
 export * from "./AboutScreen"
+export * from "./ExhibitorScreen"
 export * from "./ErrorScreen/ErrorBoundary"
 // export other screens here

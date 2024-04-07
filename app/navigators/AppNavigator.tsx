@@ -43,11 +43,12 @@ export type AppStackParamList = {
   ProfileDetail: undefined
   Event: undefined
   EventDetail: {id: number}
+  Exhibitor :{id: number, price: number, image: string, productType: {id: Number, name: string}, name: string},
   Course: undefined
   CourseDetail: {id: number}
   Expert: undefined,
   ExpertDetail: {id: number},
-  OrderSummary: {id: number, price: number, image: string, productType: {id: Number, name: string}, name: string}
+  OrderSummary: {id: number, price: number, image: string, productType: {id: Number, name: string}, name: string, first_name?: string, last_name?: string, phone_number?: string, email?: string}
   AccountSetting: undefined,
   Wishlist: undefined,
   BoardingSign: undefined,
@@ -121,6 +122,7 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="OrderSummary" component={Screens.OrderSummaryScreen} options={{headerShown: true, title: "Order Summary", headerShadowVisible: false}} />
       <Stack.Screen name="AccountSetting" component={Screens.AccountSettingScreen} options={{headerShown: true, title: "Account Setting", headerShadowVisible: false}} />
       <Stack.Screen name="Wishlist" component={Screens.WishlistScreen} options={{headerShown: true, title: "Wishlist", headerShadowVisible: false}} />
+      <Stack.Screen name="Exhibitor" component={Screens.ExhibitorScreen} options={{headerShown: true, title: "Exhibitor", headerShadowVisible: false}} />
 
       {/** 🔥 Your screens go here */}
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}

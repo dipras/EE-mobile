@@ -6,9 +6,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Text } from "app/components";
 import { colors, spacing } from "app/theme";
 import { AntDesign } from "@expo/vector-icons";
-import { getEventDetailApi } from "app/utils/api/event.api";
+import { getEventDetailApi, eventDetailResponse, eventDetailSample } from "app/utils/api/event.api";
 import { useQuery } from "@tanstack/react-query";
 import { useStores } from "app/models";
+import { rupiah } from "app/utils/formatText";
 
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
@@ -18,12 +19,8 @@ export const EventDetailScreen: FC<EventDetailScreenProps> = observer(function E
     const { id } = _props.route.params;
     const { isLoading, error, data } = useQuery({
         queryKey: ["EventDetailData"],
-        queryFn: () => getEventDetailApi(id, `${authToken}`).then(res => res.data.data),
-        initialData: {
-            name: "Event Name",
-            desc: "Event Description",
-            event_image: [{image: "https://upload.wikimedia.org/wikipedia/commons/7/75/No_image_available.png"}]
-        }
+        queryFn: () => getEventDetailApi(id, `${authToken}`).then((res) : eventDetailResponse => res.data.data),
+        initialData: eventDetailSample
     })
 
     const modalPosition = useRef(new Animated.Value(SCREEN_HEIGHT * 0.9)).current;
@@ -41,6 +38,16 @@ export const EventDetailScreen: FC<EventDetailScreenProps> = observer(function E
             duration: 500,
             useNativeDriver: true
         }).start()
+    }
+    
+    const pay = () => {
+        _props.navigation.navigate("Exhibitor", {
+            id,
+            price: data.price,
+            productType: data.product_type,
+            image: data.event_image[0].image,
+            name: data.name
+        })
     }
 
     return (
@@ -65,12 +72,15 @@ export const EventDetailScreen: FC<EventDetailScreenProps> = observer(function E
                 </View>
                 <View style={$actionElementBtn}>
                     <View style={[{ flexDirection: "row", justifyContent: "space-between" }]}>
-                        <Text>Rp. 80.000</Text>
-                        <Text>56% OFF</Text>
+                        <View style={{flexDirection: "row", columnGap: spacing.xs}}>
+                            <Text style={{textDecorationLine: "line-through", display: data.sale_price && data.sale_price != 0 ? "flex" : "none"}} size="xs">{rupiah(data.sale_price)}</Text>
+                            <Text>{rupiah(data.price)}</Text>
+                        </View>
+                        <Text style={{display: data.discount && data.discount != 0 ? "flex" : "none"}}>{`${data.discount}% OFF`}</Text>
                     </View>
                     <View style={{ flexDirection: "row", columnGap: spacing.md }}>
                         <Button style={{ flexGrow: 1, flexBasis: 0, borderColor: colors.main }} textStyle={{ color: colors.main }}>Add To Cart</Button>
-                        <Button style={{ flexGrow: 1, flexBasis: 0, backgroundColor: colors.main, borderColor: colors.main }} textStyle={{ color: "#FFF" }}>Buy Now</Button>
+                        <Button style={{ flexGrow: 1, flexBasis: 0, backgroundColor: colors.main, borderColor: colors.main }} textStyle={{ color: "#FFF" }} onPress={pay}>Buy Now</Button>
                     </View>
                 </View>
             </View>
