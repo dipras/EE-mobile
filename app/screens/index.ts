@@ -21,5 +21,7 @@ export * from "./ExpertDetailScreen"
 export * from "./BoardingSignScreen"
 export * from "./AboutScreen"
 export * from "./ExhibitorScreen"
+export * from "./SurveyScreen"
+export * from "./HalalScreen"
 export * from "./ErrorScreen/ErrorBoundary"
 // export other screens here

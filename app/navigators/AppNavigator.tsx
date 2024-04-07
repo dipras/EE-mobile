@@ -53,6 +53,8 @@ export type AppStackParamList = {
   Wishlist: undefined,
   BoardingSign: undefined,
   About: undefined
+  Survey: undefined
+  Halal: undefined
 
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
@@ -123,6 +125,8 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="AccountSetting" component={Screens.AccountSettingScreen} options={{headerShown: true, title: "Account Setting", headerShadowVisible: false}} />
       <Stack.Screen name="Wishlist" component={Screens.WishlistScreen} options={{headerShown: true, title: "Wishlist", headerShadowVisible: false}} />
       <Stack.Screen name="Exhibitor" component={Screens.ExhibitorScreen} options={{headerShown: true, title: "Exhibitor", headerShadowVisible: false}} />
+      <Stack.Screen name="Survey" component={Screens.SurveyScreen} options={{headerShown: true, title: "Survey Your Market"}} />
+      <Stack.Screen name="Halal" component={Screens.HalalScreen} options={{headerShown: true, title: "Halal Your Market"}} />
 
       {/** 🔥 Your screens go here */}
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}

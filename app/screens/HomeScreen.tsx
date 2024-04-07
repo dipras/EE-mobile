@@ -104,7 +104,7 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
 
   return (
     <>
-      <View style={{paddingHorizontal: spacing.sm, paddingTop: spacing.xxl, paddingBottom: 5, backgroundColor: "#FFF"}}>
+      <View style={{ paddingHorizontal: spacing.sm, paddingTop: spacing.xxl, paddingBottom: 5, backgroundColor: "#FFF" }}>
         {isAuthenticated && (
           <View style={$top}>
             <View style={$identity}>
@@ -145,7 +145,9 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
           <TouchableOpacity onPress={() => _props.navigation.push("Event")}>
             <Image source={eventImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
           </TouchableOpacity>
-          <Image source={surveyImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
+          <TouchableOpacity onPress={() => _props.navigation.navigate("Survey")}>
+            <Image source={surveyImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
+          </TouchableOpacity>
         </View>
         <View style={{ marginTop: 10 }}>
           <TouchableOpacity onPress={() => _props.navigation.push("Course")}>
@@ -159,7 +161,9 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
           </TouchableOpacity>
         </View>
         <View style={{ marginTop: 10 }}>
-          <Image source={halalImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
+          <TouchableOpacity onPress={() => _props.navigation.navigate("Halal")}>
+            <Image source={halalImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
+          </TouchableOpacity>
         </View>
         <View style={{ marginTop: 10 }}>
           <Text size="lg" weight="bold">
