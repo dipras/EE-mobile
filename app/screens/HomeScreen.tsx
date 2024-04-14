@@ -73,7 +73,7 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
     data: podcastData,
   } = useQuery({
     queryKey: ["bannerData"],
-    queryFn: () => getPodcasApi(authToken).then((res) => res.data.data).catch(() => []),
+    queryFn: () => getPodcasApi().then((res) => res.data.data).catch(() => []),
   })
 
   const CarouselCardItem = ({ item, index }: any) => {
@@ -165,9 +165,12 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
             <Image source={halalImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
           </TouchableOpacity>
         </View>
-        <View style={{ marginTop: 10 }}>
+        <View style={{ marginTop: 10, flexDirection: "row", justifyContent: "space-between" }}>
           <Text size="lg" weight="bold">
             Podcast
+          </Text>
+          <Text size="lg" weight="bold" style={{color: colors.main}} onPress={() => _props.navigation.push("Podcast")}>
+            See All
           </Text>
         </View>
         {!isPendingPodcast && (
