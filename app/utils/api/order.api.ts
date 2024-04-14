@@ -13,3 +13,9 @@ export const checkoutApi = (authKey: any, params: checkoutParams) => apiHandler.
         Authorization: `Bearer ${authKey}`
     }
 })
+
+export const getPurchaseHistory = (authKey: any) => apiHandler.get(`/order-detail/purchase-history`, {
+    headers: {
+        Authorization: `Bearer ${authKey}`
+    }
+});

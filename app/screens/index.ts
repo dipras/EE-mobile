@@ -24,5 +24,6 @@ export * from "./ExhibitorScreen"
 export * from "./SurveyScreen"
 export * from "./HalalScreen"
 export * from "./PodcastScreen"
+export * from "./PurchaseHistoryScreen"
 export * from "./ErrorScreen/ErrorBoundary"
 // export other screens here
