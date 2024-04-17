@@ -2,9 +2,9 @@ import React, { FC, useEffect, useState } from "react"
 import { View, ImageBackground, TouchableOpacity } from "react-native"
 import { Button, Text } from "../components"
 import { AppStackScreenProps } from "../navigators"
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from "expo-status-bar"
 
-interface BoardingScreenProps extends AppStackScreenProps<"Boarding"> {}
+interface BoardingScreenProps extends AppStackScreenProps<"Boarding"> { }
 
 const bgGetStarted = require("../../assets/images/boarding/get-started.png")
 const bgCourse = require("../../assets/images/boarding/course.png")
@@ -50,7 +50,7 @@ const data = [
     subtitle: `Find The Best Market In Indonesia`,
     desc: `Get comprehensive insights into consumer behavior`,
   },
-  
+
 ]
 export const BoardingScreen: FC<BoardingScreenProps> = function BoardingScreen(_props) {
   const [index, setIndex] = useState(0)
@@ -69,43 +69,42 @@ export const BoardingScreen: FC<BoardingScreenProps> = function BoardingScreen(_
     }
   }
   return (
-    <SafeAreaProvider>
-      <ImageBackground source={data[index].bg} resizeMode="cover" style={{ flex: 1 }}>
-        <View
-          style={{
-            backgroundColor: "rgba(0,0,0,0.5)",
-            flex: 1,
-            paddingBottom: 100,
-            paddingTop: 50,
-            paddingHorizontal: 20,
-          }}
-        >
-          <View style={{ flexDirection: "row", flex: 1 }}>
-            <Text
-              size="xxl"
-              style={{ color: "white", fontFamily: "Poppins", fontWeight: "900", flex: 1 }}
-            >
-              {data[index].title}
-            </Text>
-            <TouchableOpacity onPress={() => _props.navigation.push("BoardingSign")}>
-              <Text size="lg" style={{ color: "white", marginRight: 20 }}>
-                Skip
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <Text size="lg" weight="bold" style={{ color: "white" }}>
-            {data[index].subtitle}
-          </Text>
-          <Text style={{ color: "white" }}>{data[index].desc} </Text>
-          <Button
-            style={{ backgroundColor: "#F6BE2C", marginTop: 50 }}
-            textStyle={{ color: "white" }}
-            onPress={next}
+    <ImageBackground source={data[index].bg} resizeMode="cover" style={{ flex: 1 }}>
+      <StatusBar style="light" />
+      <View
+        style={{
+          backgroundColor: "rgba(0,0,0,0.5)",
+          flex: 1,
+          paddingBottom: 100,
+          paddingTop: 50,
+          paddingHorizontal: 20,
+        }}
+      >
+        <View style={{ flexDirection: "row", flex: 1 }}>
+          <Text
+            size="xxl"
+            style={{ color: "white", fontFamily: "Poppins", fontWeight: "900", flex: 1 }}
           >
-            Next
-          </Button>
+            {data[index].title}
+          </Text>
+          <TouchableOpacity onPress={() => _props.navigation.push("BoardingSign")}>
+            <Text size="lg" style={{ color: "white", marginRight: 20 }}>
+              Skip
+            </Text>
+          </TouchableOpacity>
         </View>
-      </ImageBackground>
-    </SafeAreaProvider>
+        <Text size="lg" weight="bold" style={{ color: "white" }}>
+          {data[index].subtitle}
+        </Text>
+        <Text style={{ color: "white" }}>{data[index].desc} </Text>
+        <Button
+          style={{ backgroundColor: "#F6BE2C", marginTop: 50 }}
+          textStyle={{ color: "white" }}
+          onPress={next}
+        >
+          Next
+        </Button>
+      </View>
+    </ImageBackground>
   )
 }
