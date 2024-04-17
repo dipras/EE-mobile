@@ -10,11 +10,6 @@ import Toast from 'react-native-root-toast';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { TouchableOpacity } from "react-native-gesture-handler"
 
-GoogleSignin.configure({
-	webClientId: "227957573473-g5888vmn7gcdpcdfs6jahgpjqgmr0a4f.apps.googleusercontent.com",
-	scopes: ['profile', 'email'],
-});
-
 const GoogleLogin = async () => {
   await GoogleSignin.hasPlayServices();
   const userInfo = await GoogleSignin.signIn();

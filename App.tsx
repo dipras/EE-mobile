@@ -2,6 +2,12 @@ import App from "./app/app"
 import React, {useEffect, useRef} from "react"
 import * as SplashScreen from "expo-splash-screen"
 import * as Notifications from 'expo-notifications';
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+
+GoogleSignin.configure({
+	webClientId: "227957573473-g5888vmn7gcdpcdfs6jahgpjqgmr0a4f.apps.googleusercontent.com",
+	scopes: ['profile', 'email'],
+});
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
