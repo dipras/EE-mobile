@@ -52,7 +52,7 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
   } = useStores()
 
   useEffect(() => {
-    if (_props.route.params?.redirect) {
+    if (_props.route.params?.redirect &&_props.route.params?.redirect !== undefined) {
       _props.navigation.setParams({ redirect: undefined });
       _props.navigation.push(_props.route.params.redirect, {});
     }
