@@ -57,6 +57,7 @@ export type AppStackParamList = {
   Halal: undefined
   Podcast: undefined
   PurchaseHistory: undefined
+  PodcastPlay: {data: any}
 
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
@@ -123,6 +124,7 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="Exhibitor" component={Screens.ExhibitorScreen} options={{headerShown: true, title: "Exhibitor", headerShadowVisible: false}} />
       <Stack.Screen name="Survey" component={Screens.SurveyScreen} options={{headerShown: true, title: "Survey Your Market"}} />
       <Stack.Screen name="Halal" component={Screens.HalalScreen} options={{headerShown: true, title: "Halal Your Market"}} />
+      <Stack.Screen name="PodcastPlay" component={Screens.PodcastPlayScreen} options={{headerShown: true, title: "Export Expert Podcast"}} />
 
       {/** 🔥 Your screens go here */}
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}

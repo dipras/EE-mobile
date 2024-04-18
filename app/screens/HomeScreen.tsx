@@ -90,7 +90,7 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
     return (
       <TouchableOpacity
         onPress={() => {
-          Linking.openURL(item.url)
+          _props.navigation.navigate("PodcastPlay", {data: item})
         }}
       >
         <Image
