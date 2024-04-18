@@ -5,8 +5,10 @@ import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
-import { registerApi } from "app/utils/api/auth.api"
+import { registerApi, verifyGoogle, meApi } from "app/utils/api/auth.api"
 import Toast from 'react-native-root-toast';
+import { GoogleSignin } from "@react-native-google-signin/google-signin"
+import { TouchableOpacity } from "react-native-gesture-handler"
 
 const googleIcon = require("../../assets/images/google.png")
 const privyIcon = require("../../assets/images/privy.png")
@@ -14,7 +16,17 @@ const checkSuccess = require("assets/images/check-success.png");
 
 interface RegisterScreenProps extends AppStackScreenProps<"Register"> {}
 
+
+const GoogleLogin = async () => {
+  await GoogleSignin.hasPlayServices();
+  const userInfo = await GoogleSignin.signIn();
+  return userInfo;
+};
+
 export const RegisterScreen: FC<RegisterScreenProps> = observer(function RegisterScreen(_props) {
+  const {
+    authenticationStore: { setAuthToken, setAuthName, setExpiredtimestamp }
+  } = useStores()
   const authPasswordInput = useRef<TextInput>(null)
 
   const [isLoading, setIsLoading] = useState(false)
@@ -63,6 +75,41 @@ export const RegisterScreen: FC<RegisterScreenProps> = observer(function Registe
         setIsLoading(false)
     }
     
+  }
+
+  const login = async (type : "privy" | "google") => {
+    try {
+      setIsLoading(true);
+      let response: any;
+      if(type == "google") {
+        const googleResponse = await GoogleLogin();
+        response = await verifyGoogle(`${googleResponse.idToken}`);
+      }
+      const {accessToken, expiredIn} = response.data.data;
+      setAuthToken(accessToken);
+      setExpiredtimestamp(expiredIn);
+
+      response = await meApi(accessToken);
+
+      setAuthName(response.data.data.name);
+      _props.navigation.replace("Main", {screen: "Home", params: {}});
+    } catch (error: any) {
+      let toast = Toast.show(error?.response?.data?.message || "There something is wrong", {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0
+      })
+      console.log(error)
+
+      setTimeout(() => {
+        Toast.hide(toast);
+      }, 1000);
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(
@@ -175,7 +222,9 @@ export const RegisterScreen: FC<RegisterScreenProps> = observer(function Registe
           marginBottom: 20,
         }}
       >
-        <Image source={googleIcon} style={{ width: 40, height: 40, marginRight: 10 }} />
+        <TouchableOpacity onPress={() => login("google")}>
+          <Image source={googleIcon} style={{ width: 40, height: 40, marginRight: 10 }} />
+        </TouchableOpacity>
         <Image source={privyIcon} style={{ width: 115, height: 30 }} />
       </View>
 
