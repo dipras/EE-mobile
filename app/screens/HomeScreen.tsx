@@ -53,8 +53,8 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
 
   useEffect(() => {
     if (_props.route.params?.redirect) {
-      _props.navigation.setParams({ redirect: false });
-      _props.navigation.push("Login", {});
+      _props.navigation.setParams({ redirect: undefined });
+      _props.navigation.push(_props.route.params.redirect, {});
     }
     if (redirect !== "") {
       if (redirect == "CourseDetail") {

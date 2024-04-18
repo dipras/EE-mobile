@@ -16,13 +16,13 @@ export const BoardingSignScreen: FC<BoardingSignScreenProps> = observer(function
     } = useStores()
 
     const signIn = () => {
-        _props.navigation.push("Login", {});
         setSecondTime();
+        _props.navigation.replace("Main", { screen: "Home", params: { redirect: "Login" } })
     }
 
     const signUp = () => {
-        _props.navigation.push("Register");
         setSecondTime();
+        _props.navigation.replace("Main", { screen: "Home", params: { redirect: "Register" } })
     }
 
     return (

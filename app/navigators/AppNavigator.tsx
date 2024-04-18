@@ -102,17 +102,9 @@ const AppStack = observer(function AppStack() {
       screenOptions={{ headerShown: false, navigationBarColor: colors.background }}
       initialRouteName={isFirstTime ? "Boarding" : "Main"}
     >
-      {isFirstTime ? (
-        <>
-          <Stack.Screen name="Boarding" component={Screens.BoardingScreen} />
-          <Stack.Screen name="BoardingSign" component={Screens.BoardingSignScreen} />
-    
-        </>
-      ) : (
-        <>
-          <Stack.Screen name="Main" component={MainNavigator} />
-        </>
-      )}
+      <Stack.Screen name="Boarding" component={Screens.BoardingScreen} />
+      <Stack.Screen name="BoardingSign" component={Screens.BoardingSignScreen} />
+      <Stack.Screen name="Main" component={MainNavigator} />
       <Stack.Screen name="Login" component={Screens.LoginScreen} />
       <Stack.Screen name="Register" component={Screens.RegisterScreen} />
       <Stack.Screen name="ProfileDetail" component={Screens.ProfileDetailScreen} options={{headerShown: true, title: "Your Profile"}} />

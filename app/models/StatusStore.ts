@@ -16,6 +16,9 @@ export const StatusStoreModel = types
     setSecondTime() {
       store.firstTime = false
     },
+    setFirstTime() {
+      store.firstTime = true
+    },
     setRedirect(redirect: string, redirectParams: any) {
       store.redirectParams = redirectParams
       store.redirect = redirect;
@@ -23,7 +26,7 @@ export const StatusStoreModel = types
     removeRedirect() {
       store.redirectParams = {}
       store.redirect = "";
-    }
+    },
   }))
 
 export interface StatusStore extends Instance<typeof StatusStoreModel> {}

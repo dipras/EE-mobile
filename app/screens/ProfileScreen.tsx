@@ -18,7 +18,7 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
   useEffect(() => {
     if (!isAuthenticated) {
       const unsubscribe = _props.navigation.addListener('focus', () => {
-        _props.navigation.replace("Main", { screen: "Home", params: { redirect: true } })
+        _props.navigation.replace("Main", { screen: "Home", params: { redirect: "Login" } })
       });
 
       // Return the function to unsubscribe from the event so it gets removed on unmount
