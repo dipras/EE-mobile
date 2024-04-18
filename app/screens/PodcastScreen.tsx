@@ -13,7 +13,7 @@ interface PodcastScreenProps extends AppStackScreenProps<"Podcast"> {}
 
 const {width: SCREEN_WIDTH} = Dimensions.get("screen");
 const itemWidth = (SCREEN_WIDTH - (spacing.md * 3)) / 2;
-export const PodcastScreen: FC<PodcastScreenProps> = () => {
+export const PodcastScreen: FC<PodcastScreenProps> = (_props) => {
     const [desc, setDesc] = useState(true);
     const { data, fetchNextPage, isLoading, error } = useInfiniteQuery({
         initialPageParam: 1,
@@ -52,13 +52,15 @@ export const PodcastScreen: FC<PodcastScreenProps> = () => {
                 </View>
                 <View style={{flexDirection: "row", flexWrap: "wrap", rowGap: spacing.lg, justifyContent: "space-between"}}>
                     {data?.pages.map((page, pageNum) => page.data.map((val: any, index: number) => (
-                        <View style={{width: 170}}>
-                            <Image source={{uri: val.image}} style={{width: "100%", aspectRatio: 4 / 3}} />
-                            <View style={{rowGap: spacing.sm}}>
-                                <Text style={{color: "#4E5566"}} weight="bold" numberOfLines={2}>{val.title}</Text>
-                                <Text style={{color: "#8CA2C0"}}>6 Oktober 2023</Text>
+                        <TouchableOpacity onPress={() => _props.navigation.navigate("PodcastPlay", {data: val})}>
+                            <View style={{width: 170}}>
+                                <Image source={{uri: val.image}} style={{width: "100%", aspectRatio: 4 / 3}} />
+                                <View style={{rowGap: spacing.sm}}>
+                                    <Text style={{color: "#4E5566"}} weight="bold" numberOfLines={2}>{val.title}</Text>
+                                    <Text style={{color: "#8CA2C0"}}>6 Oktober 2023</Text>
+                                </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     )))}
                 </View>
             </ScrollView>
