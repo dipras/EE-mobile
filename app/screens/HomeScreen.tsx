@@ -156,7 +156,7 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
           </TouchableOpacity>
         </View>
         <View style={{ marginTop: 10 }}>
-          <TouchableOpacity onPress={() => _props.navigation.push("Expert")}>
+          <TouchableOpacity onPress={() => Linking.openURL("https://exportexpert.id/expert")}>
             <Image source={expertImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
           </TouchableOpacity>
         </View>
