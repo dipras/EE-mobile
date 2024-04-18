@@ -25,6 +25,11 @@ export const BoardingSignScreen: FC<BoardingSignScreenProps> = observer(function
         _props.navigation.replace("Main", { screen: "Home", params: { redirect: "Register" } })
     }
 
+    const home = () => {
+        setSecondTime();
+        _props.navigation.replace("Main", { screen: "Home", params: { } })
+    }
+
     return (
         <ImageBackground source={signBg} resizeMode="cover" style={{ flex: 1, justifyContent: "flex-end", paddingVertical: spacing.xxl * 2 }}>
             <StatusBar style="light" />
@@ -34,7 +39,7 @@ export const BoardingSignScreen: FC<BoardingSignScreenProps> = observer(function
                     <Button style={{ backgroundColor: colors.main, borderColor: colors.main, borderRadius: 10 }} textStyle={{ color: "#FFF" }} onPress={signUp}>Create Account</Button>
                     <Button style={{ backgroundColor: "transparent", borderColor: colors.main, borderRadius: 10 }} textStyle={{ color: colors.main }} onPress={signIn}>Sign In</Button>
                 </View>
-                <Text style={{ color: colors.main, textAlign: "center", textDecorationLine: "underline" }} onPress={() => setSecondTime()}>Sign In Later</Text>
+                <Text style={{ color: colors.main, textAlign: "center", textDecorationLine: "underline" }} onPress={home}>Sign In Later</Text>
             </View>
         </ImageBackground>
     )
