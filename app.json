@@ -29,8 +29,7 @@
       "splash": {
         "image": "./assets/images/splash-logo-all.png",
         "resizeMode": "cover"
-      },
-      "googleServicesFile": "./google-services.json"
+      }
     },
     "ios": {
       "icon": "./assets/images/app-icon-ios.png",
