@@ -55,6 +55,8 @@ const config = {
         DemoCommunity: "community",
       },
     },
+    Event: "event",
+    PurchaseHistory: "history"
   },
 }
 
@@ -96,7 +98,7 @@ function App(props: AppProps) {
   if (!rehydrated || !isNavigationStateRestored || !areFontsLoaded) return null
 
   const linking = {
-    prefixes: [prefix],
+    prefixes: [prefix, "https://m.exportexpert.id"],
     config,
   }
 
