@@ -5,8 +5,7 @@ import { Text, Button } from "app/components";
 import { ActivityIndicator, Dimensions, Image, View, ViewStyle } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { spacing } from "app/theme";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { GestureDetector, Gesture, ScrollView } from "react-native-gesture-handler";
+import { TouchableOpacity , GestureDetector, Gesture, ScrollView } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { CourseCard } from "./CourseCard";
 import { getCourseDetailApi } from "app/utils/api/course.api";
@@ -43,13 +42,13 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
 
     const handleClick = (btn: "pay" | "cart") => {
         if (!isAuthenticated) {
-            _props.navigation.navigate("Login", { redirect: { id: id } });
+            _props.navigation.navigate("Login", { redirect: { id } });
             return;
         }
 
         if (btn == "pay") {
             console.log(data)
-            _props.navigation.navigate("OrderSummary", { id: id, image: data.images, price: Number(data.price), productType: data.product_type, name: data.name });
+            _props.navigation.navigate("OrderSummary", { id, image: data.images, price: Number(data.price), productType: data.product_type, name: data.name });
         } else {
             alert("successfully added to cart");
         }
@@ -119,7 +118,7 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
         if (addedCart) {
             removeCartById(id);
         } else {
-            addCart({ id: id, name: data.name, price: parseInt(data.price), imageUrl: data.images, productType: data.product_type })
+            addCart({ id, name: data.name, price: parseInt(data.price), imageUrl: data.images, productType: data.product_type })
         }
         setReact(react + 1);
     }

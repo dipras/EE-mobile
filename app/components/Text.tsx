@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import i18n from "i18n-js"
 import React from "react"
 import { StyleProp, Text as RNText, TextProps as RNTextProps, TextStyle } from "react-native"

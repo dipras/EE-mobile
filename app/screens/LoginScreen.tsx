@@ -71,14 +71,14 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       const {id, to} = _props.route.params.redirect || {};
       if(id) {
         if(to == "ExpertDetail") {
-          setRedirect("ExpertDetail", {id: id});
+          setRedirect("ExpertDetail", {id});
         } else {
-          setRedirect("CourseDetail", {id: id});
+          setRedirect("CourseDetail", {id});
         }
       }
       _props.navigation.replace("Main", {screen: "Home", params: {}});
     } catch (error: any) {
-      let toast = Toast.show(error?.response?.data?.message || "There something is wrong", {
+      const toast = Toast.show(error?.response?.data?.message || "There something is wrong", {
         duration: Toast.durations.SHORT,
         position: Toast.positions.TOP,
         shadow: true,

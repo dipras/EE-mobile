@@ -1,11 +1,11 @@
+import { colors, spacing } from "app/theme"
+import { StatusBar } from "expo-status-bar"
 import { observer } from "mobx-react-lite"
-import React, { FC, useEffect, useState } from "react"
-import { View, ImageBackground, TouchableOpacity } from "react-native"
+import React, { FC } from "react"
+import { ImageBackground, View } from "react-native"
 import { Button, Text } from "../components"
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
-import { StatusBar } from "expo-status-bar"
-import { colors, spacing } from "app/theme"
 
 interface BoardingSignScreenProps extends AppStackScreenProps<"BoardingSign"> { }
 

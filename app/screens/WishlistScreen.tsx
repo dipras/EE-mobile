@@ -40,7 +40,7 @@ export const WishlistScreen: FC<WishlistScreenProps> = observer(function Wishlis
 
   const renderItem = ({ item, index }: { item: Wishlist, index: number }) => {
     return (
-      <View style={[{ flexDirection: "row", justifyContent: "center" }]} key={index}>
+      <View style={{ flexDirection: "row", justifyContent: "center" }} key={index}>
         <View style={$wishtlist}>
           <Image source={{ uri: item.imageUrl }} style={{ height: spacing.xxxl * 2, width: spacing.xxl * 2, borderRadius: 10 }} />
           <View style={{ flex: 1, justifyContent: "space-between" }}>

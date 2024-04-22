@@ -15,7 +15,7 @@ import { FlatList } from "react-native-gesture-handler"
 
 export const CartScreen: FC<MainTabScreenProps<"Cart">> = observer(
   function CartScreen(_props) {
-    let { CartStore: { cartData } } = useStores();
+    const { CartStore: { cartData } } = useStores();
     const [selected, setSelected] = useState(0);
 
     const pay = () => {
@@ -24,8 +24,8 @@ export const CartScreen: FC<MainTabScreenProps<"Cart">> = observer(
 
     const renderItem = ({ item, index }: any) => {
       return (
-        <View style={[{ flexDirection: "row", justifyContent: "center" }]} key={index}>
-          <TouchableOpacity style={[$cart, (index == selected ? $cartActive : [])]} onPress={() => setSelected(index)}>
+        <View style={{ flexDirection: "row", justifyContent: "center" }} key={index}>
+          <TouchableOpacity style={[$cart, (index === selected ? $cartActive : [])]} onPress={() => setSelected(index)}>
             <Image source={{ uri: item.imageUrl }} style={{ height: "100%", width: "30%", borderRadius: 10 }} />
             <View style={{ flex: 1, justifyContent: "space-between" }}>
               <Text style={{ overflow: "hidden" }} size="md" weight="bold" numberOfLines={1}>{item.name}</Text>

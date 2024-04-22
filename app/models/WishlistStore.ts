@@ -10,7 +10,7 @@ export const WishlistStoreModel = types.model("WishlistStore").props({
         store.wishlistData.push(product);
     },
     getWishlistById(id: number, type: product_type = "Course") {
-        return store.wishlistData.filter(wishlist => wishlist.id == id && wishlist.productType.name == type)[0];
+        return store.wishlistData.filter(wishlist => wishlist.id === id && wishlist.productType.name === type)[0];
     },
     removeWishlistById(id: number, type: product_type = "Course") {
         const removed = this.getWishlistById(id, type);

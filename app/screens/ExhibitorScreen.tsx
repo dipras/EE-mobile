@@ -37,7 +37,7 @@ export const ExhibitorScreen: FC<ExhibitorScreenProps> = observer(function Exhib
         };
         setErrors(result);
 
-        let response : boolean = true;
+        let response  = true;
         Object.values(result).forEach(v => {
             if(v !== "") response = false;
         })

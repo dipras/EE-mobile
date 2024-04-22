@@ -10,16 +10,16 @@ import {
   NavigationContainer,
   NavigatorScreenParams,
 } from "@react-navigation/native"
-import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack"
+import { NativeStackScreenProps, createNativeStackNavigator } from "@react-navigation/native-stack"
+import * as Screens from "app/screens"
+import { colors } from "app/theme"
 import { observer } from "mobx-react-lite"
 import React, { useEffect } from "react"
 import { useColorScheme } from "react-native"
-import * as Screens from "app/screens"
 import Config from "../config"
 import { useStores } from "../models"
 import { MainNavigator, MainTabParamList } from "./MainNavigator"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
-import { colors } from "app/theme"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -43,12 +43,12 @@ export type AppStackParamList = {
   ProfileDetail: undefined
   Event: undefined
   EventDetail: {id: number}
-  Exhibitor :{id: number, price: number, image: string, productType: {id: Number, name: string}, name: string},
+  Exhibitor :{id: number, price: number, image: string, productType: {id: number, name: string}, name: string},
   Course: undefined
   CourseDetail: {id: number}
   Expert: undefined,
   ExpertDetail: {id: number},
-  OrderSummary: {id: number, price: number, image: string, productType: {id: Number, name: string}, name: string, first_name?: string, last_name?: string, phone_number?: string, email?: string}
+  OrderSummary: {id: number, price: number, image: string, productType: {id: number, name: string}, name: string, first_name?: string, last_name?: string, phone_number?: string, email?: string}
   AccountSetting: undefined,
   Wishlist: undefined,
   BoardingSign: undefined,
@@ -81,7 +81,7 @@ let interval: any;
 const AppStack = observer(function AppStack() {
   const {
     statusStore: { isFirstTime },
-    authenticationStore: {expiredTimestamp, logout, authToken}
+    authenticationStore: {expiredTimestamp, logout}
   } = useStores()
 
   useEffect(() => {

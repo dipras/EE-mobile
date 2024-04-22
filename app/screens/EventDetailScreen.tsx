@@ -71,7 +71,7 @@ export const EventDetailScreen: FC<EventDetailScreenProps> = observer(function E
                     </View>
                 </View>
                 <View style={$actionElementBtn}>
-                    <View style={[{ flexDirection: "row", justifyContent: "space-between" }]}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                         <View style={{flexDirection: "row", columnGap: spacing.xs}}>
                             <Text style={{textDecorationLine: "line-through", display: data.sale_price && data.sale_price != 0 ? "flex" : "none"}} size="xs">{rupiah(data.sale_price)}</Text>
                             <Text>{rupiah(data.price)}</Text>

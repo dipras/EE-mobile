@@ -53,7 +53,7 @@ const Carousel: FC<CarouselType> = ({ data, renderItem, width, time }) => {
       />
       <View style={$pagination}>
         {data.map((v, i) => (
-          <View style={[$dot, (i == currentIndex ? $activeDot : {})]} key={i}></View>
+          <View style={[$dot, (i === currentIndex ? $activeDot : {})]} key={i}></View>
         ))}
       </View>
     </>

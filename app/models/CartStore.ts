@@ -12,7 +12,7 @@ export const CartStoreModel = types.model("CartStore").props({
         store.cartData.push(cart)
     },
     getCartById(id: number) {
-        return store.cartData.filter(cart => cart.id == id)[0];
+        return store.cartData.filter(cart => cart.id === id)[0];
     },
     removeCartById(id: number) {
         const removed = this.getCartById(id);

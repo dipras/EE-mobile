@@ -1,14 +1,13 @@
 import { Text } from "app/components";
 import React, { FC } from "react";
-import { ImageSourcePropType, View, ViewStyle } from "react-native";
-import { Image } from "react-native";
+import { ImageSourcePropType, View, ViewStyle , Image } from "react-native";
 
-type CourseCard = {
+type CourseCardType = {
     avatar: ImageSourcePropType;
     name: string;
     description: string;
 }
-export const CourseCard: FC<CourseCard> = (_props) => {
+export const CourseCard: FC<CourseCardType> = (_props) => {
     return (
         <View style={cardStyle}>
             <Image source={_props.avatar} style={{ width: 50, height: 50, borderRadius: 25, marginRight: 20 }} />

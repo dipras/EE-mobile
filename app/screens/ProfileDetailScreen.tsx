@@ -1,10 +1,8 @@
 import React, { FC, useEffect, useState } from "react";
-import { Button, Text, TextField } from "app/components";
+import { Button, Text, TextField , Screen } from "app/components";
 import { AppStackScreenProps } from "app/navigators";
 import { observer } from "mobx-react-lite";
-import { Screen } from "app/components";
-import { ActivityIndicator, Image, TextInputChangeEventData } from "react-native";
-import { View, ViewStyle } from "react-native";
+import { ActivityIndicator, Image, TextInputChangeEventData , View, ViewStyle } from "react-native";
 import { spacing } from "app/theme";
 import { meApi, updateUserApi, updateUserData } from "app/utils/api/auth.api";
 import { useStores } from "app/models";
@@ -80,7 +78,7 @@ export const ProfileDetailScreen: FC<ProfileDetailScreenProps> = observer((_prop
 
     const setPhoneEvent = (text: string) => {
         text = text.replace("+62", "");
-        let temp = Number(text);
+        const temp = Number(text);
 
         setPhone(`+62${temp || ""}`);
     }

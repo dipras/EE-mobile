@@ -28,7 +28,7 @@ export const PurchaseHistoryScreen: FC<PurchaseHistoryScreenProps> = observer(fu
 
     const renderItem = ({ item, index }: { item: any, index: number }) => {
         return (
-            <View style={[{ flexDirection: "row", justifyContent: "center" }]} key={index}>
+            <View style={{ flexDirection: "row", justifyContent: "center" }} key={index}>
                 <View style={$wishtlist}>
                     <View style={{ flex: 1, justifyContent: "space-between" }}>
                         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>

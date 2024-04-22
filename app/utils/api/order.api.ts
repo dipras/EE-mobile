@@ -1,8 +1,8 @@
 import { apiHandler } from "./index.api";
 
 export type checkoutParams = {
-    product_type_id: Number,
-    product_id: Number,
+    product_type_id: number,
+    product_id: number,
     first_name?: string,
     last_name?: string,
     phone_number?: string,

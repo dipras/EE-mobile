@@ -37,7 +37,7 @@ export const ExpertDetailScreen: FC<ExpertDetailScreenProps> = observer(function
                 image: {uri: res.data.data.expert_image}
             });
         }).catch(e => {
-            let toast = Toast.show(e?.response?.data?.message || "There something is wrong", {
+            const toast = Toast.show(e?.response?.data?.message || "There something is wrong", {
                 duration: Toast.durations.SHORT,
                 position: Toast.positions.TOP,
                 shadow: true,
