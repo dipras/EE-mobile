@@ -142,7 +142,7 @@ export const ProfileDetailScreen: FC<ProfileDetailScreenProps> = observer((_prop
                     autoCorrect={false}
                     onChangeText={text => setNik(text)}
                     label="NIK"
-                    placeholder="Masukan nama anda"
+                    placeholder="Masukan NIK anda"
                 />
                 <TextField
                     value={npwp}
