@@ -25,9 +25,8 @@ export const OrderSummaryScreen: FC<OrderSummaryScreenProps> = observer(function
     setLoading(true);
     try {
       const response = await checkoutApi(authToken, params);
-      alert("Payment successfully!");
       Linking.openURL(response.data.data.midtrans_url);
-      _props.navigation.replace("Main", {screen: "Home", params: {}})
+      _props.navigation.navigate("Success");
     } catch (error) {
       alert("There something is wrong");
       console.log(error);

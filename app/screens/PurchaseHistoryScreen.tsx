@@ -44,7 +44,7 @@ export const PurchaseHistoryScreen: FC<PurchaseHistoryScreenProps> = observer(fu
                                     <Text>Price</Text>
                                     <Text size="sm" weight="bold">{rupiah(item.price)}</Text>
                                 </View>
-                                <TouchableOpacity onPress={() => item.status == "Completed" ? "" : Linking.openURL(item.payment_url)}>
+                                <TouchableOpacity onPress={() => _props.navigation.navigate("Success")}>
                                     <View style={{backgroundColor: colors.main, borderRadius: spacing.sm, paddingHorizontal: spacing.lg, paddingVertical: spacing.xs}}>
                                         <Text style={{color: "#FFF"}}>{item.status == "Completed" ? "Appointment" : "Pay Now"}</Text>
                                     </View>
