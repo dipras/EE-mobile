@@ -1,11 +1,11 @@
 import React, { FC } from "react"
 import { AppStackScreenProps } from "app/navigators"
-import { SafeAreaView } from "react-native-safe-area-context"
 import YoutubePlayer from "react-native-youtube-iframe"
 import { spacing } from "app/theme"
 import { Text } from "app/components"
 import { Dimensions, View } from "react-native"
 import RenderHTML from "react-native-render-html"
+import { ScrollView } from "react-native-gesture-handler"
 
 interface PodcastPlayScreenProps extends AppStackScreenProps<"PodcastPlay"> { }
 
@@ -25,10 +25,10 @@ export const PodcastPlayScreen: FC<PodcastPlayScreenProps> = (_props) => {
                     `,
                 }}
             />
-            <View style={{marginTop: spacing.xl}}>
+            <ScrollView style={{marginTop: spacing.xl}}>
                 <Text weight="bold" size="lg">{data.title}</Text>
                 <RenderHTML source={{html: data.description}} contentWidth={SCREEN_WIDTH - (spacing.xl * 2)} />
-            </View>
+            </ScrollView>
         </View>
     )
 }
