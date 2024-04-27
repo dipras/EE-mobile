@@ -55,15 +55,15 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
               </Text>
             </TouchableOpacity>
             <TouchableOpacity>
-              <Text size="md" weight="medium" style={$menu}>
+              <Text size="md" weight="medium" style={$menu} onPress={() => _props.navigation.navigate("Cart")}>
                 Cart
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Text size="md" weight="medium" style={$menu}>
                 Notification
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={() => _props.navigation.navigate("PurchaseHistory")}>
               <Text size="md" weight="medium" style={$menu}>
                 Purchase History

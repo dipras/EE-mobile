@@ -124,16 +124,16 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
               <Text>{authName}</Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Icon icon="love" size={40} style={{ marginRight: 10 }} />
-              <Icon icon="bell" size={30} />
+              <Icon icon="love" size={40} style={{ marginRight: 10 }} onPress={() => _props.navigation.navigate("Wishlist")} />
+              {/* <Icon icon="bell" size={30} /> */}
             </View>
           </View>
         )}
 
-        <View style={$searchBar}>
+        {/* <View style={$searchBar}>
           <Icon icon="search" size={20} style={{ marginRight: 10 }} />
           <Text style={{ fontSize: 14 }}>Search product and video</Text>
-        </View>
+        </View> */}
       </View>
       <Screen preset="scroll" contentContainerStyle={$screenContentContainer}>
 
