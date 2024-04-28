@@ -8,12 +8,19 @@ import { spacing, colors } from "app/theme"
 import { rupiah } from "app/utils/formatText"
 import { useStores } from "app/models"
 import { Wishlist } from "app/models/Wishlist"
+import { EvilIcons } from "@expo/vector-icons"
 
 const noImage = require("assets/images/no-image.png");
 
 interface WishlistScreenProps extends AppStackScreenProps<"Wishlist"> { }
 export const WishlistScreen: FC<WishlistScreenProps> = observer(function WishlistScreen(_props) {
   const { WishlistStore: { wishlistData, removeWishlistById, resetWishlist } } = useStores();
+  const [counter, setCounter] = useState(0);
+
+  const handleFunc = (callback: Function) => {
+    setCounter(counter + 1);
+    callback();
+  }
 
   const handlePress = (id: number, product_type: string) => {
     let redirect: "CourseDetail" | "ExpertDetail" | "EventDetail" | "" = "";
@@ -29,6 +36,7 @@ export const WishlistScreen: FC<WishlistScreenProps> = observer(function Wishlis
         redirect = "ExpertDetail";
         break;
     }
+
 
     if(redirect == "") {
       alert("There something is wrong");
@@ -46,7 +54,12 @@ export const WishlistScreen: FC<WishlistScreenProps> = observer(function Wishlis
           <View style={{ flex: 1, justifyContent: "space-between" }}>
             <Text style={{ overflow: "hidden" }} size="md" weight="bold" numberOfLines={1}>{item.name}</Text>
             <Text size="sm" weight="bold">{rupiah(item.price)}</Text>
-            <Button onPress={() => handlePress(item.id, item.productType.name)} style={$btn} textStyle={{ color: "white" }}>Visit product</Button>
+            <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+              <Button onPress={() => handlePress(item.id, item.productType.name)} style={$btn} textStyle={{ color: "white" }}>Visit product</Button>
+              <TouchableOpacity onPress={() => handleFunc(() => removeWishlistById(item.id, item.productType.name))}>
+                <EvilIcons name="trash" size={48} color="black" />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>

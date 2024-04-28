@@ -9,7 +9,10 @@ export const CartStoreModel = types.model("CartStore").props({
     }
 })).actions((store) => ({
     addCart(cart: Cart) {
-        store.cartData.push(cart)
+        const item = this.getCartById(cart.id);
+        if(!item) {
+            store.cartData.push(cart)
+        }
     },
     getCartById(id: number) {
         return store.cartData.filter(cart => cart.id === id)[0];

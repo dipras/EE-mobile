@@ -7,7 +7,10 @@ export const WishlistStoreModel = types.model("WishlistStore").props({
     wishlistData: types.array(WishlistModel)
 }).actions(store => ({
     addWishlist(product: Wishlist) {
-        store.wishlistData.push(product);
+        const item = this.getWishlistById(product.id, product.productType.name);
+        if(!item) {
+            store.wishlistData.push(product);
+        }
     },
     getWishlistById(id: number, type: product_type = "Course") {
         return store.wishlistData.filter(wishlist => wishlist.id === id && wishlist.productType.name === type)[0];

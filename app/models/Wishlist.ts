@@ -2,7 +2,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 type productType = {
     id: number
-    name: string
+    name: "Course" | "Event" | "Consultation"
 }
 export const WishlistModel = types.model("Wishlist").props({
     id: types.integer,
