@@ -53,6 +53,7 @@ export const WishlistScreen: FC<WishlistScreenProps> = observer(function Wishlis
           <Image source={{ uri: item.imageUrl }} style={{ height: spacing.xxxl * 2, width: spacing.xxl * 2, borderRadius: 10 }} />
           <View style={{ flex: 1, justifyContent: "space-between" }}>
             <Text style={{ overflow: "hidden" }} size="md" weight="bold" numberOfLines={1}>{item.name}</Text>
+            <Text style={{color: "#575757"}}>{item.productType.name}</Text>
             <Text size="sm" weight="bold">{rupiah(item.price)}</Text>
             <View style={{flexDirection: "row", justifyContent: "space-between"}}>
               <Button onPress={() => handlePress(item.id, item.productType.name)} style={$btn} textStyle={{ color: "white" }}>Visit product</Button>
