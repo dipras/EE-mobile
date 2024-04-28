@@ -22,8 +22,10 @@ export const PurchaseHistoryScreen: FC<PurchaseHistoryScreenProps> = observer(fu
         })
     }, []);
 
-    const handlePress = () => {
-        return true
+    const handlePress = (status : string, url: string) => {
+        if(status !== "Completed") {
+            _props.navigation.navigate("Payment", {url: url});
+        }
     }
 
     const renderItem = ({ item, index }: { item: any, index: number }) => {
@@ -44,7 +46,7 @@ export const PurchaseHistoryScreen: FC<PurchaseHistoryScreenProps> = observer(fu
                                     <Text>Price</Text>
                                     <Text size="sm" weight="bold">{rupiah(item.price)}</Text>
                                 </View>
-                                <TouchableOpacity onPress={() => _props.navigation.navigate("Success")}>
+                                <TouchableOpacity onPress={() => handlePress(item.status, item.snapUrl)}>
                                     <View style={{backgroundColor: colors.main, borderRadius: spacing.sm, paddingHorizontal: spacing.lg, paddingVertical: spacing.xs}}>
                                         <Text style={{color: "#FFF"}}>{item.status == "Completed" ? "Appointment" : "Pay Now"}</Text>
                                     </View>

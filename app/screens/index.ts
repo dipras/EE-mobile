@@ -27,5 +27,6 @@ export * from "./PodcastScreen"
 export * from "./PurchaseHistoryScreen"
 export * from "./PodcastPlayScreen"
 export * from "./SuccessScreen"
+export * from "./PaymentScreen"
 export * from "./ErrorScreen/ErrorBoundary"
 // export other screens here
