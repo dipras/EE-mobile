@@ -6,33 +6,18 @@ import { MainTabScreenProps } from "../navigators/MainNavigator"
 import { colors, spacing } from "../theme"
 import { useStores } from "app/models"
 import { getPodcasApi } from "app/utils/api/article.api"
+import { getActiveBanner } from "app/utils/api/banner.api"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { useQuery } from "@tanstack/react-query"
 import Carousel from "app/components/Carousel"
 
 const avatar = require("../../assets/images/avatar.jpg")
-const banner1 = require("../../assets/images/demo/banner-1.png")
-const banner2 = require("../../assets/images/demo/banner-2.png")
 const eventImg = require("../../assets/images/event-img.png")
 const surveyImg = require("../../assets/images/survey-img.png")
 const courseImg = require("../../assets/images/course-img.png")
 const expertImg = require("../../assets/images/expert-img.png")
-const halalImg = require("../../assets/images/halal-img.png")
+const halalImg = require("../../assets/images/halal-img.png");
 
-const bannerData = [
-  {
-    img: banner1,
-  },
-  {
-    img: banner2,
-  },
-  {
-    img: banner1,
-  },
-  {
-    img: banner2,
-  },
-]
 
 const window = Dimensions.get("window")
 
@@ -72,17 +57,24 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
     error: errorPodcast,
     data: podcastData,
   } = useQuery({
-    queryKey: ["bannerData"],
+    queryKey: ["podcastApi"],
     queryFn: () => getPodcasApi().then((res) => res.data.data).catch(() => []),
+  })
+
+  const {data: bannerData, isPending: isPendingBanner} = useQuery({
+    queryKey: ["bannerApi"],
+    queryFn: () => getActiveBanner().then((res) => res.data.data).catch(() => [])
   })
 
   const CarouselCardItem = ({ item, index }: any) => {
     return (
-      <Image
-        key={index}
-        source={item.img}
-        style={{ width: bannerWidth, height: bannerHeight, objectFit: "fill", borderRadius: 10 }}
-      />
+      <TouchableOpacity onPress={() => Linking.openURL(item.url)}>
+          <Image
+            key={index}
+            source={{uri: item.file}}
+            style={{ width: bannerWidth, height: bannerHeight, objectFit: "fill", borderRadius: 10 }}
+          />
+      </TouchableOpacity>
     )
   }
 
@@ -136,10 +128,11 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
         </View> */}
       </View>
       <Screen preset="scroll" contentContainerStyle={$screenContentContainer}>
-
-        <View style={{ marginTop: spacing.md }}>
-          <Carousel data={bannerData} renderItem={CarouselCardItem} width={bannerWidth} />
-        </View>
+        {!isPendingBanner && (
+          <View style={{ marginTop: spacing.md }}>
+            <Carousel data={bannerData} renderItem={CarouselCardItem} width={bannerWidth} />
+          </View>
+        )}
 
         <View style={{ marginTop: 30, flexDirection: "row", justifyContent: "space-between" }}>
           <TouchableOpacity onPress={() => _props.navigation.push("Event")}>
