@@ -1,4 +1,4 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useRef, useState } from "react";
 import { AppStackScreenProps } from "app/navigators";
 import { observer } from "mobx-react-lite";
 import { Dimensions, Image, View, ViewStyle, Animated, TouchableOpacity, ActivityIndicator } from "react-native";
@@ -15,13 +15,16 @@ import { rupiah } from "app/utils/formatText";
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
 interface EventDetailScreenProps extends AppStackScreenProps<"EventDetail"> { }
 export const EventDetailScreen: FC<EventDetailScreenProps> = observer(function Event(_props) {
-    const { authenticationStore: { authToken } } = useStores();
+    const { authenticationStore: { authToken, isAuthenticated }, CartStore: {addCart, getCartById, removeCartById} } = useStores();
     const { id } = _props.route.params;
     const { isLoading, error, data } = useQuery({
         queryKey: ["EventDetailData"],
         queryFn: () => getEventDetailApi(id, `${authToken}`).then((res) : eventDetailResponse => res.data.data),
         initialData: eventDetailSample
     })
+    const [react, setReact] = useState(0);
+
+    const addedCart = getCartById(id, "Event");
 
     const modalPosition = useRef(new Animated.Value(SCREEN_HEIGHT * 0.9)).current;
 
@@ -41,6 +44,11 @@ export const EventDetailScreen: FC<EventDetailScreenProps> = observer(function E
     }
     
     const pay = () => {
+        if(!isAuthenticated) {
+            _props.navigation.navigate("Login", { redirect: { id } });
+            return;
+        }
+
         _props.navigation.navigate("Exhibitor", {
             id,
             price: data.price,
@@ -48,6 +56,29 @@ export const EventDetailScreen: FC<EventDetailScreenProps> = observer(function E
             image: data.event_image[0].image,
             name: data.name
         })
+    }
+
+    const handleAddCart = () => {
+        if(!isAuthenticated) {
+            _props.navigation.navigate("Login", { redirect: { id } });
+            return;
+        }
+
+        if(addedCart) {
+            removeCartById(id, "Event");
+        } else {
+            addCart({
+                id: id,
+                name: data.name,
+                price: data.price,
+                imageUrl: data.event_image[0].image,
+                productType: {
+                    id: data.product_type.id,
+                    name: data.product_type.name == "Course" ? "Course" : "Event"
+                }
+            })
+        }
+        setReact(react + 1);
     }
 
     return (
@@ -79,7 +110,7 @@ export const EventDetailScreen: FC<EventDetailScreenProps> = observer(function E
                         <Text style={{display: data.discount && data.discount != 0 ? "flex" : "none"}}>{`${data.discount}% OFF`}</Text>
                     </View>
                     <View style={{ flexDirection: "row", columnGap: spacing.md }}>
-                        <Button style={{ flexGrow: 1, flexBasis: 0, borderColor: colors.main }} textStyle={{ color: colors.main }}>Add To Cart</Button>
+                        <Button style={{ flexGrow: 1, flexBasis: 0, borderColor: colors.main }} textStyle={{ color: colors.main }} onPress={handleAddCart}>{addedCart ? "Remove from Cart" : "Add to Cart"}</Button>
                         <Button style={{ flexGrow: 1, flexBasis: 0, backgroundColor: colors.main, borderColor: colors.main }} textStyle={{ color: "#FFF" }} onPress={pay}>Buy Now</Button>
                     </View>
                 </View>

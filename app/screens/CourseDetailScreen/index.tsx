@@ -28,7 +28,7 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
     const [react, setReact] = useState(0);
     const { authenticationStore: { isAuthenticated }, CartStore: { addCart, getCartById, removeCartById } } = useStores();
 
-    const addedCart = getCartById(id);
+    const addedCart = getCartById(id, "Course");
 
     useEffect(() => {
         getCourseDetailApi(id).then(res => {
@@ -116,7 +116,7 @@ export const CourseDetailScreen: FC<CourseDetailScreenProps> = observer(function
 
     const handleAddCart = () => {
         if (addedCart) {
-            removeCartById(id);
+            removeCartById(id, "Course");
         } else {
             addCart({ id, name: data.name, price: parseInt(data.price), imageUrl: data.images, productType: data.product_type })
         }

@@ -2,7 +2,7 @@ import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 type productType = {
     id: number
-    name: string
+    name: "Course" | "Event"
 }
 export const CartModel = types.model("Cart").props({
     id: types.integer,

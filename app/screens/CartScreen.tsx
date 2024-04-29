@@ -29,6 +29,7 @@ export const CartScreen: FC<MainTabScreenProps<"Cart">> = observer(
             <Image source={{ uri: item.imageUrl }} style={{ height: "100%", width: "30%", borderRadius: 10 }} />
             <View style={{ flex: 1, justifyContent: "space-between" }}>
               <Text style={{ overflow: "hidden" }} size="md" weight="bold" numberOfLines={1}>{item.name}</Text>
+              <Text style={{color: "#575757"}}>{item.productType.name}</Text>
               <Text size="sm" weight="bold">{rupiah(item.price)}</Text>
             </View>
           </TouchableOpacity>

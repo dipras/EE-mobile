@@ -9,16 +9,16 @@ export const CartStoreModel = types.model("CartStore").props({
     }
 })).actions((store) => ({
     addCart(cart: Cart) {
-        const item = this.getCartById(cart.id);
+        const item = this.getCartById(cart.id, cart.productType.name);
         if(!item) {
             store.cartData.push(cart)
         }
     },
-    getCartById(id: number) {
-        return store.cartData.filter(cart => cart.id === id)[0];
+    getCartById(id: number, type: "Course" | "Event") {
+        return store.cartData.filter(cart => cart.id === id && cart.productType.name == type)[0];
     },
-    removeCartById(id: number) {
-        const removed = this.getCartById(id);
+    removeCartById(id: number, type: "Course" | "Event") {
+        const removed = this.getCartById(id, type);
         store.cartData.remove(removed);
     }
 }))
