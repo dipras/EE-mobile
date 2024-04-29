@@ -33,7 +33,8 @@ export const EventDetailScreen: FC<EventDetailScreenProps> = observer(function E
       getEventDetailApi(id, `${authToken}`).then((res): eventDetailResponse => res.data.data),
     initialData: eventDetailSample,
   })
-  const [react, setReact] = useState(0)
+  const [react, setReact] = useState(0);
+  const image = data.event_image[data.event_image.length - 1];
 
   const addedCart = getCartById(id, "Event")
 
@@ -64,7 +65,7 @@ export const EventDetailScreen: FC<EventDetailScreenProps> = observer(function E
       id,
       price: data.price,
       productType: data.product_type,
-      image: data.event_image[0].image,
+      image: image.image,
       name: data.name,
     })
   }
@@ -82,7 +83,7 @@ export const EventDetailScreen: FC<EventDetailScreenProps> = observer(function E
         id,
         name: data.name,
         price: data.price,
-        imageUrl: data.event_image[0].image,
+        imageUrl: image.image,
         productType: {
           id: data.product_type.id,
           name: data.product_type.name === "Course" ? "Course" : "Event",
@@ -101,7 +102,7 @@ export const EventDetailScreen: FC<EventDetailScreenProps> = observer(function E
       )}
       <View>
         <Image
-          source={{ uri: data.event_image[0].image }}
+          source={{ uri: image.image }}
           style={{ width: "100%", aspectRatio: 4 / 3 }}
         />
       </View>

@@ -8,9 +8,9 @@ import { getEventApi } from "app/utils/api/event.api"
 import { StatusBar } from "expo-status-bar"
 import { observer } from "mobx-react-lite"
 import React, { FC, useState } from "react"
-import { ActivityIndicator, Dimensions, Image, View } from "react-native"
+import { ActivityIndicator, Dimensions, Image, View, ViewStyle } from "react-native"
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler"
-import { SafeAreaProvider } from "react-native-safe-area-context"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 type EventCardProps = {
   id: number
@@ -100,7 +100,7 @@ const getEventData = ({ pageParam }: { pageParam: number }) => {
 const windowWidth = Dimensions.get("window").width
 const eventBannerRatio = 360 / 240
 const eventRatio = 321 / 119
-interface EventScreenProps extends AppStackScreenProps<"Event"> {}
+interface EventScreenProps extends AppStackScreenProps<"Event"> { }
 export const EventScreen: FC<EventScreenProps> = observer(function Event(_props) {
   const { data, fetchNextPage, isLoading } = useInfiniteQuery({
     initialPageParam: 1,
@@ -123,21 +123,11 @@ export const EventScreen: FC<EventScreenProps> = observer(function Event(_props)
   }
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaView edges={["bottom"]}>
       <StatusBar style="dark" />
-      <View style={{ backgroundColor: "#FCCD18", width: "100%", height: 90, padding: 20 }}>
-        <View
-          style={{
-            backgroundColor: "#F2BD00",
-            width: 100,
-            height: 100,
-            borderRadius: 50,
-            position: "absolute",
-            right: 0,
-            top: -30,
-          }}
-        ></View>
-        <View style={{ alignItems: "center", height: "100%", flexDirection: "row" }}>
+      <View style={$header}>
+        <View style={$roundedFly}></View>
+        <View style={$headerContent}>
           <TouchableOpacity onPress={() => _props.navigation.goBack()}>
             <AntDesign
               name="arrowleft"
@@ -151,7 +141,7 @@ export const EventScreen: FC<EventScreenProps> = observer(function Event(_props)
           </Text>
         </View>
       </View>
-      <ScrollView style={{ backgroundColor: "#DEDEDE" }} onScroll={handleEndScroll}>
+      <ScrollView style={{ backgroundColor: "#DEDEDE", marginBottom: 100 }} onScroll={handleEndScroll}>
         <Image
           source={eventBanner}
           style={{ width: windowWidth, height: windowWidth / eventBannerRatio, marginBottom: 20 }}
@@ -178,6 +168,30 @@ export const EventScreen: FC<EventScreenProps> = observer(function Event(_props)
           {notLastPage && <ActivityIndicator size={"large"} style={{ alignSelf: "center" }} />}
         </View>
       </ScrollView>
-    </SafeAreaProvider>
+    </SafeAreaView>
   )
 })
+
+const $header: ViewStyle = {
+  backgroundColor: "#FCCD18",
+  width: "100%",
+  height: 90,
+  padding: 20,
+  overflow: "hidden",
+}
+
+const $roundedFly: ViewStyle = {
+  backgroundColor: "#F2BD00",
+  width: 100,
+  height: 100,
+  borderRadius: 50,
+  position: "absolute",
+  right: 0,
+  top: -30,
+}
+
+const $headerContent: ViewStyle = {
+  alignItems: "center",
+  height: "100%",
+  flexDirection: "row"
+}
