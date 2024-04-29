@@ -1,20 +1,20 @@
+import { GoogleSignin } from "@react-native-google-signin/google-signin"
+import { loginApi, meApi, verifyGoogle } from "app/utils/api/auth.api"
 import { observer } from "mobx-react-lite"
 import React, { ComponentType, FC, useEffect, useMemo, useRef, useState } from "react"
-import { TextInput, ViewStyle, View, Image, ActivityIndicator, Alert } from "react-native"
+import { ActivityIndicator, Image, TextInput, View, ViewStyle } from "react-native"
+import { TouchableOpacity } from "react-native-gesture-handler"
+import Toast from "react-native-root-toast"
 import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
-import { loginApi, meApi, verifyGoogle } from "app/utils/api/auth.api"
-import Toast from 'react-native-root-toast';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { TouchableOpacity } from "react-native-gesture-handler"
 
 const GoogleLogin = async () => {
-  await GoogleSignin.hasPlayServices();
-  const userInfo = await GoogleSignin.signIn();
-  return userInfo;
-};
+  await GoogleSignin.hasPlayServices()
+  const userInfo = await GoogleSignin.signIn()
+  return userInfo
+}
 
 const googleIcon = require("../../assets/images/google.png")
 const privyIcon = require("../../assets/images/privy.png")
@@ -28,8 +28,15 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   const [isSubmitted, setSubmitted] = useState(false)
   const {
-    authenticationStore: { authEmail, setAuthEmail, setAuthToken, validationError, setAuthName, setExpiredtimestamp },
-    statusStore: {setRedirect}
+    authenticationStore: {
+      authEmail,
+      setAuthEmail,
+      setAuthToken,
+      validationError,
+      setAuthName,
+      setExpiredtimestamp,
+    },
+    statusStore: { setRedirect },
   } = useStores()
 
   useEffect(() => {
@@ -40,43 +47,43 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       setAuthPassword("")
       setAuthEmail("")
     }
-  }, []);
+  }, [])
 
   const error = isSubmitted ? validationError : ""
 
-  const login = async (type : "email" | "google") => {
+  const login = async (type: "email" | "google") => {
     try {
-      setIsLoading(true);
-      let response: any;
-      if(type == "google") {
-        const googleResponse = await GoogleLogin();
-        response = await verifyGoogle(`${googleResponse.idToken}`);
+      setIsLoading(true)
+      let response: any
+      if (type === "google") {
+        const googleResponse = await GoogleLogin()
+        response = await verifyGoogle(`${googleResponse.idToken}`)
       } else {
-        if(validationError !== "") {
-          setSubmitted(true);
-          return;
+        if (validationError !== "") {
+          setSubmitted(true)
+          return
         }
         response = await loginApi({
           email: authEmail,
-          password: authPassword
-        });
+          password: authPassword,
+        })
       }
-      const {accessToken, expiredIn} = response.data.data;
-      setAuthToken(accessToken);
-      setExpiredtimestamp(expiredIn);
+      const { accessToken, expiredIn } = response.data.data
+      setAuthToken(accessToken)
+      setExpiredtimestamp(expiredIn)
 
-      response = await meApi(accessToken);
+      response = await meApi(accessToken)
 
-      setAuthName(response.data.data.name);
-      const {id, to} = _props.route.params.redirect || {};
-      if(id) {
-        if(to == "ExpertDetail") {
-          setRedirect("ExpertDetail", {id});
+      setAuthName(response.data.data.name)
+      const { id, to } = _props.route.params.redirect || {}
+      if (id) {
+        if (to === "ExpertDetail") {
+          setRedirect("ExpertDetail", { id })
         } else {
-          setRedirect("CourseDetail", {id});
+          setRedirect("CourseDetail", { id })
         }
       }
-      _props.navigation.replace("Main", {screen: "Home", params: {}});
+      _props.navigation.replace("Main", { screen: "Home", params: {} })
     } catch (error: any) {
       const toast = Toast.show(error?.response?.data?.message || "There something is wrong", {
         duration: Toast.durations.SHORT,
@@ -84,13 +91,13 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         shadow: true,
         animation: true,
         hideOnPress: true,
-        delay: 0
+        delay: 0,
       })
       console.log(error)
 
       setTimeout(() => {
-        Toast.hide(toast);
-      }, 1000);
+        Toast.hide(toast)
+      }, 1000)
     } finally {
       setIsLoading(false)
     }
@@ -203,7 +210,9 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <Text> Don't have an account? </Text>
-        <Text style={{ color: "#F6BE2C" }} onPress={() => _props.navigation.navigate("Register")}>Sign Up</Text>
+        <Text style={{ color: "#F6BE2C" }} onPress={() => _props.navigation.navigate("Register")}>
+          Sign Up
+        </Text>
       </View>
     </Screen>
   )

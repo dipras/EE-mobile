@@ -6,7 +6,7 @@ export const AuthenticationStoreModel = types
     authToken: types.maybe(types.string),
     authEmail: "",
     authName: "Username",
-    expiredTimestamp: types.maybe(types.number)
+    expiredTimestamp: types.maybe(types.number),
   })
   .views((store) => ({
     get isAuthenticated() {

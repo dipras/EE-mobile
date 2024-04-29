@@ -2,7 +2,7 @@
 import i18n from "i18n-js"
 import React from "react"
 import { StyleProp, Text as RNText, TextProps as RNTextProps, TextStyle } from "react-native"
-import {Poppins_400Regular, useFonts} from "@expo-google-fonts/poppins"
+import { Poppins_400Regular, useFonts } from "@expo-google-fonts/poppins"
 import { isRTL, translate, TxKeyPath } from "../i18n"
 import { colors, typography } from "../theme"
 
@@ -55,7 +55,7 @@ export interface TextProps extends RNTextProps {
  */
 export function Text(props: TextProps) {
   const [fontLoaded] = useFonts({
-    Poppins_400Regular
+    Poppins_400Regular,
   })
   const { weight, size, tx, txOptions, text, children, style: $styleOverride, ...rest } = props
 

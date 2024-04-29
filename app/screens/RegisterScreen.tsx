@@ -1,98 +1,61 @@
+import { GoogleSignin } from "@react-native-google-signin/google-signin"
+import { meApi, registerApi, verifyGoogle } from "app/utils/api/auth.api"
 import { observer } from "mobx-react-lite"
-import React, { ComponentType, FC, useEffect, useMemo, useRef, useState } from "react"
-import { TextInput, ViewStyle, View, Image, ActivityIndicator, Alert } from "react-native"
+import React, { ComponentType, FC, useMemo, useRef, useState } from "react"
+import { ActivityIndicator, Image, TextInput, View, ViewStyle } from "react-native"
+import { TouchableOpacity } from "react-native-gesture-handler"
+import Toast from "react-native-root-toast"
 import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
-import { registerApi, verifyGoogle, meApi } from "app/utils/api/auth.api"
-import Toast from 'react-native-root-toast';
-import { GoogleSignin } from "@react-native-google-signin/google-signin"
-import { TouchableOpacity } from "react-native-gesture-handler"
 
 const googleIcon = require("../../assets/images/google.png")
 const privyIcon = require("../../assets/images/privy.png")
-const checkSuccess = require("assets/images/check-success.png");
+const checkSuccess = require("assets/images/check-success.png")
 
 interface RegisterScreenProps extends AppStackScreenProps<"Register"> {}
 
-
 const GoogleLogin = async () => {
-  await GoogleSignin.hasPlayServices();
-  const userInfo = await GoogleSignin.signIn();
-  return userInfo;
-};
+  await GoogleSignin.hasPlayServices()
+  const userInfo = await GoogleSignin.signIn()
+  return userInfo
+}
 
 export const RegisterScreen: FC<RegisterScreenProps> = observer(function RegisterScreen(_props) {
   const {
-    authenticationStore: { setAuthToken, setAuthName, setExpiredtimestamp }
+    authenticationStore: { setAuthToken, setAuthName, setExpiredtimestamp },
   } = useStores()
   const authPasswordInput = useRef<TextInput>(null)
 
   const [isLoading, setIsLoading] = useState(false)
   const [authPassword, setAuthPassword] = useState("")
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
-  const [isSuccess, setSuccess] = useState(false);
-  const [error, setError] = useState("");
+  const [isSuccess, setSuccess] = useState(false)
+  const [error, setError] = useState("")
 
   const setEmailForm = (text: string) => {
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) {
-        setError("Email is not valid");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) {
+      setError("Email is not valid")
     } else {
-        setError("");
+      setError("")
     }
-    
-    setEmail(text);
+
+    setEmail(text)
   }
 
   const register = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-        await registerApi({
-            name,
-            email,
-            password: authPassword,
-        });
+      await registerApi({
+        name,
+        email,
+        password: authPassword,
+      })
 
-        setSuccess(true);
-    } catch (error: any) {
-        const toast = Toast.show(error?.response?.data?.message || "There something is wrong", {
-            duration: Toast.durations.SHORT,
-            position: Toast.positions.TOP,
-            shadow: true,
-            animation: true,
-            hideOnPress: true,
-            delay: 0
-          })
-          console.log(error)
-    
-          setTimeout(() => {
-            Toast.hide(toast);
-          }, 1000);
-    } finally {
-        setIsLoading(false)
-    }
-    
-  }
-
-  const login = async (type : "privy" | "google") => {
-    try {
-      setIsLoading(true);
-      let response: any;
-      if(type == "google") {
-        const googleResponse = await GoogleLogin();
-        response = await verifyGoogle(`${googleResponse.idToken}`);
-      }
-      const {accessToken, expiredIn} = response.data.data;
-      setAuthToken(accessToken);
-      setExpiredtimestamp(expiredIn);
-
-      response = await meApi(accessToken);
-
-      setAuthName(response.data.data.name);
-      _props.navigation.replace("Main", {screen: "Home", params: {}});
+      setSuccess(true)
     } catch (error: any) {
       const toast = Toast.show(error?.response?.data?.message || "There something is wrong", {
         duration: Toast.durations.SHORT,
@@ -100,13 +63,48 @@ export const RegisterScreen: FC<RegisterScreenProps> = observer(function Registe
         shadow: true,
         animation: true,
         hideOnPress: true,
-        delay: 0
+        delay: 0,
       })
       console.log(error)
 
       setTimeout(() => {
-        Toast.hide(toast);
-      }, 1000);
+        Toast.hide(toast)
+      }, 1000)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const login = async (type: "privy" | "google") => {
+    try {
+      setIsLoading(true)
+      let response: any
+      if (type === "google") {
+        const googleResponse = await GoogleLogin()
+        response = await verifyGoogle(`${googleResponse.idToken}`)
+      }
+      const { accessToken, expiredIn } = response.data.data
+      setAuthToken(accessToken)
+      setExpiredtimestamp(expiredIn)
+
+      response = await meApi(accessToken)
+
+      setAuthName(response.data.data.name)
+      _props.navigation.replace("Main", { screen: "Home", params: {} })
+    } catch (error: any) {
+      const toast = Toast.show(error?.response?.data?.message || "There something is wrong", {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.TOP,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+      })
+      console.log(error)
+
+      setTimeout(() => {
+        Toast.hide(toast)
+      }, 1000)
     } finally {
       setIsLoading(false)
     }
@@ -128,17 +126,27 @@ export const RegisterScreen: FC<RegisterScreenProps> = observer(function Registe
     [isAuthPasswordHidden],
   )
 
-  if(isSuccess) {
-      return (
-        <View style={{flex: 1, paddingVertical: spacing.xxl, paddingHorizontal: spacing.md}}>
-            <View style={{flex: 1, justifyContent: "center"}}>
-                <Image source={checkSuccess} style={{alignSelf: "center", height: 125, width: 125}} />
-                <Text weight="bold" size="lg" style={{textAlign: "center"}} >Submitted</Text>
-                <Text style={{textAlign: "center"}}>You have successfully submited your register, please check your email to confirm</Text>
-            </View>
-            <Button style={{backgroundColor: colors.main, borderColor: colors.main}} textStyle={{color: "#FFF"}} onPress={() => _props.navigation.goBack()}>Back</Button>
+  if (isSuccess) {
+    return (
+      <View style={{ flex: 1, paddingVertical: spacing.xxl, paddingHorizontal: spacing.md }}>
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Image source={checkSuccess} style={{ alignSelf: "center", height: 125, width: 125 }} />
+          <Text weight="bold" size="lg" style={{ textAlign: "center" }}>
+            Submitted
+          </Text>
+          <Text style={{ textAlign: "center" }}>
+            You have successfully submited your register, please check your email to confirm
+          </Text>
         </View>
-      )
+        <Button
+          style={{ backgroundColor: colors.main, borderColor: colors.main }}
+          textStyle={{ color: "#FFF" }}
+          onPress={() => _props.navigation.goBack()}
+        >
+          Back
+        </Button>
+      </View>
+    )
   }
 
   return (
@@ -152,19 +160,19 @@ export const RegisterScreen: FC<RegisterScreenProps> = observer(function Registe
           Sign Up
         </Text>
         <Text size="sm" style={{ textAlign: "center", color: "#808080" }}>
-            Fill your information below or register with your Google account 
+          Fill your information below or register with your Google account
         </Text>
       </View>
       <View style={{ marginBottom: 50 }}>
         <TextField
-            value={name}
-            onChangeText={text => setName(text)}
-            containerStyle={$textField}
-            inputWrapperStyle={$inputWrapper}
-            autoCapitalize="words"
-            label="Name"
-            placeholder="Enter Your Name"
-         />
+          value={name}
+          onChangeText={(text) => setName(text)}
+          containerStyle={$textField}
+          inputWrapperStyle={$inputWrapper}
+          autoCapitalize="words"
+          label="Name"
+          placeholder="Enter Your Name"
+        />
         <TextField
           value={email}
           onChangeText={setEmailForm}
@@ -196,7 +204,6 @@ export const RegisterScreen: FC<RegisterScreenProps> = observer(function Registe
           onSubmitEditing={register}
           RightAccessory={PasswordRightAccessory}
         />
-
       </View>
       <Button
         testID="login-button"
@@ -230,7 +237,9 @@ export const RegisterScreen: FC<RegisterScreenProps> = observer(function Registe
 
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <Text> Already have an account? </Text>
-        <Text style={{ color: "#F6BE2C"}} onPress={() => _props.navigation.navigate("Login", {})}>Sign In</Text>
+        <Text style={{ color: "#F6BE2C" }} onPress={() => _props.navigation.navigate("Login", {})}>
+          Sign In
+        </Text>
       </View>
     </Screen>
   )
@@ -252,8 +261,8 @@ const $tapButton: ViewStyle = {
 }
 
 const $inputWrapper = {
-    backgroundColor: "#F2F2F2",
-    borderRadius: 30,
-    borderWidth: 0,
-    paddingVertical: 5,
-  };
+  backgroundColor: "#F2F2F2",
+  borderRadius: 30,
+  borderWidth: 0,
+  paddingVertical: 5,
+}

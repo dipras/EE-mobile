@@ -4,7 +4,7 @@ import { Button, Text } from "../components"
 import { AppStackScreenProps } from "../navigators"
 import { StatusBar } from "expo-status-bar"
 
-interface BoardingScreenProps extends AppStackScreenProps<"Boarding"> { }
+interface BoardingScreenProps extends AppStackScreenProps<"Boarding"> {}
 
 const bgGetStarted = require("../../assets/images/boarding/get-started.png")
 const bgCourse = require("../../assets/images/boarding/course.png")
@@ -50,7 +50,6 @@ const data = [
     subtitle: `Find The Best Market In Indonesia`,
     desc: `Get comprehensive insights into consumer behavior`,
   },
-
 ]
 export const BoardingScreen: FC<BoardingScreenProps> = function BoardingScreen(_props) {
   const [index, setIndex] = useState(0)

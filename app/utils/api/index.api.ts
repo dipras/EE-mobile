@@ -1,5 +1,5 @@
-import axios from "axios";
+import axios from "axios"
 
 export const apiHandler = axios.create({
-    baseURL: "https://dev-be.exportexpert.id"
-});
+  baseURL: "https://dev-be.exportexpert.id",
+})

@@ -13,18 +13,18 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
 ) {
   const {
     authenticationStore: { logout, isAuthenticated, authName },
-  } = useStores();
+  } = useStores()
 
   useEffect(() => {
     if (!isAuthenticated) {
-      const unsubscribe = _props.navigation.addListener('focus', () => {
+      const unsubscribe = _props.navigation.addListener("focus", () => {
         _props.navigation.replace("Main", { screen: "Home", params: { redirect: "Login" } })
-      });
+      })
 
       // Return the function to unsubscribe from the event so it gets removed on unmount
-      return unsubscribe;
+      return unsubscribe
     }
-  }, []);
+  }, [])
 
   return (
     <Screen preset="scroll" safeAreaEdges={["top"]} contentContainerStyle={$container}>
@@ -55,7 +55,12 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
               </Text>
             </TouchableOpacity>
             <TouchableOpacity>
-              <Text size="md" weight="medium" style={$menu} onPress={() => _props.navigation.navigate("Cart")}>
+              <Text
+                size="md"
+                weight="medium"
+                style={$menu}
+                onPress={() => _props.navigation.navigate("Cart")}
+              >
                 Cart
               </Text>
             </TouchableOpacity>
@@ -79,7 +84,7 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
                 <Text size="md" weight="medium">
                   About Expert Export Indonesia
                 </Text>
-                <Text size="xs" style={{color: "black"}}>
+                <Text size="xs" style={{ color: "black" }}>
                   v. 1.2.3
                 </Text>
               </View>
@@ -90,7 +95,7 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
             onPress={() => {
               logout()
               _props.navigation.push("Main", { screen: "Home", params: {} })
-              alert("Success Logout");
+              alert("Success Logout")
             }}
             textStyle={{ color: "white" }}
           >
@@ -98,7 +103,9 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
           </Button>
         </>
       ) : (
-        <Text style={{ textAlign: "center" }} size="lg">You must login first</Text>
+        <Text style={{ textAlign: "center" }} size="lg">
+          You must login first
+        </Text>
       )}
     </Screen>
   )

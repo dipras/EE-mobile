@@ -36,30 +36,46 @@ import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
  */
 export type AppStackParamList = {
   Welcome: undefined
-  Login: {redirect?: any}
+  Login: { redirect?: any }
   Register: undefined
   Main: NavigatorScreenParams<MainTabParamList>
   Boarding: undefined
   ProfileDetail: undefined
   Event: undefined
-  EventDetail: {id: number}
-  Exhibitor :{id: number, price: number, image: string, productType: {id: number, name: string}, name: string},
+  EventDetail: { id: number }
+  Exhibitor: {
+    id: number
+    price: number
+    image: string
+    productType: { id: number; name: string }
+    name: string
+  }
   Course: undefined
-  CourseDetail: {id: number}
-  Expert: undefined,
-  ExpertDetail: {id: number},
-  OrderSummary: {id: number, price: number, image: string, productType: {id: number, name: string}, name: string, first_name?: string, last_name?: string, phone_number?: string, email?: string}
-  AccountSetting: undefined,
-  Wishlist: undefined,
-  BoardingSign: undefined,
+  CourseDetail: { id: number }
+  Expert: undefined
+  ExpertDetail: { id: number }
+  OrderSummary: {
+    id: number
+    price: number
+    image: string
+    productType: { id: number; name: string }
+    name: string
+    first_name?: string
+    last_name?: string
+    phone_number?: string
+    email?: string
+  }
+  AccountSetting: undefined
+  Wishlist: undefined
+  BoardingSign: undefined
   About: undefined
   Survey: undefined
   Halal: undefined
   Podcast: undefined
   PurchaseHistory: undefined
-  PodcastPlay: {data: any},
+  PodcastPlay: { data: any }
   Success: undefined
-  Payment: {url: string}
+  Payment: { url: string }
 
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
@@ -79,26 +95,26 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStack
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
-let interval: any;
+let interval: any
 const AppStack = observer(function AppStack() {
   const {
     statusStore: { isFirstTime },
-    authenticationStore: {expiredTimestamp, logout}
+    authenticationStore: { expiredTimestamp, logout },
   } = useStores()
 
   useEffect(() => {
-    clearInterval(interval);
+    clearInterval(interval)
     interval = setInterval(() => {
-      if(expiredTimestamp && Math.floor(Date.now() / 1000) > expiredTimestamp) {
-        logout();
-        alert("Session has ended");
+      if (expiredTimestamp && Math.floor(Date.now() / 1000) > expiredTimestamp) {
+        logout()
+        alert("Session has ended")
       }
-    }, 5000);
+    }, 5000)
 
     return () => {
       clearInterval(interval)
     }
-  }, [expiredTimestamp]);
+  }, [expiredTimestamp])
 
   return (
     <Stack.Navigator
@@ -110,7 +126,11 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="Main" component={MainNavigator} />
       <Stack.Screen name="Login" component={Screens.LoginScreen} />
       <Stack.Screen name="Register" component={Screens.RegisterScreen} />
-      <Stack.Screen name="ProfileDetail" component={Screens.ProfileDetailScreen} options={{headerShown: true, title: "Your Profile"}} />
+      <Stack.Screen
+        name="ProfileDetail"
+        component={Screens.ProfileDetailScreen}
+        options={{ headerShown: true, title: "Your Profile" }}
+      />
       <Stack.Screen name="Event" component={Screens.EventScreen} />
       <Stack.Screen name="Course" component={Screens.CourseScreen} />
       <Stack.Screen name="CourseDetail" component={Screens.CourseDetailScreen} />
@@ -119,16 +139,52 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="Expert" component={Screens.ExpertScreen} />
       <Stack.Screen name="About" component={Screens.AboutScreen} />
       <Stack.Screen name="Podcast" component={Screens.PodcastScreen} />
-      <Stack.Screen name="OrderSummary" component={Screens.OrderSummaryScreen} options={{headerShown: true, title: "Order Summary", headerShadowVisible: false}} />
-      <Stack.Screen name="AccountSetting" component={Screens.AccountSettingScreen} options={{headerShown: true, title: "Account Setting", headerShadowVisible: false}} />
-      <Stack.Screen name="Wishlist" component={Screens.WishlistScreen} options={{headerShown: true, title: "Wishlist", headerShadowVisible: false}} />
-      <Stack.Screen name="PurchaseHistory" component={Screens.PurchaseHistoryScreen} options={{headerShown: true, title: "Purchase History", headerShadowVisible: false}} />
-      <Stack.Screen name="Exhibitor" component={Screens.ExhibitorScreen} options={{headerShown: true, title: "Exhibitor", headerShadowVisible: false}} />
-      <Stack.Screen name="Survey" component={Screens.SurveyScreen} options={{headerShown: true, title: "Survey Your Market"}} />
-      <Stack.Screen name="Halal" component={Screens.HalalScreen} options={{headerShown: true, title: "Halal Your Market"}} />
-      <Stack.Screen name="PodcastPlay" component={Screens.PodcastPlayScreen} options={{headerShown: true, title: "Export Expert Podcast"}} />
+      <Stack.Screen
+        name="OrderSummary"
+        component={Screens.OrderSummaryScreen}
+        options={{ headerShown: true, title: "Order Summary", headerShadowVisible: false }}
+      />
+      <Stack.Screen
+        name="AccountSetting"
+        component={Screens.AccountSettingScreen}
+        options={{ headerShown: true, title: "Account Setting", headerShadowVisible: false }}
+      />
+      <Stack.Screen
+        name="Wishlist"
+        component={Screens.WishlistScreen}
+        options={{ headerShown: true, title: "Wishlist", headerShadowVisible: false }}
+      />
+      <Stack.Screen
+        name="PurchaseHistory"
+        component={Screens.PurchaseHistoryScreen}
+        options={{ headerShown: true, title: "Purchase History", headerShadowVisible: false }}
+      />
+      <Stack.Screen
+        name="Exhibitor"
+        component={Screens.ExhibitorScreen}
+        options={{ headerShown: true, title: "Exhibitor", headerShadowVisible: false }}
+      />
+      <Stack.Screen
+        name="Survey"
+        component={Screens.SurveyScreen}
+        options={{ headerShown: true, title: "Survey Your Market" }}
+      />
+      <Stack.Screen
+        name="Halal"
+        component={Screens.HalalScreen}
+        options={{ headerShown: true, title: "Halal Your Market" }}
+      />
+      <Stack.Screen
+        name="PodcastPlay"
+        component={Screens.PodcastPlayScreen}
+        options={{ headerShown: true, title: "Export Expert Podcast" }}
+      />
       <Stack.Screen name="Success" component={Screens.SuccessScreen} />
-      <Stack.Screen name="Payment" component={Screens.PaymenScreenScreen} options={{headerShown: true, title: "Payment"}} />
+      <Stack.Screen
+        name="Payment"
+        component={Screens.PaymenScreenScreen}
+        options={{ headerShown: true, title: "Payment" }}
+      />
 
       {/** 🔥 Your screens go here */}
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}

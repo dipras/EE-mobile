@@ -1,23 +1,22 @@
-import { observer } from "mobx-react-lite"
-import React, { FC, useRef, useState, useEffect } from "react"
-import { ViewStyle, View, Image, Dimensions, Linking } from "react-native"
-import { Screen, Text, Icon } from "../components"
-import { MainTabScreenProps } from "../navigators/MainNavigator"
-import { colors, spacing } from "../theme"
+import { useQuery } from "@tanstack/react-query"
+import Carousel from "app/components/Carousel"
 import { useStores } from "app/models"
 import { getPodcasApi } from "app/utils/api/article.api"
 import { getActiveBanner } from "app/utils/api/banner.api"
+import { observer } from "mobx-react-lite"
+import React, { FC, useEffect } from "react"
+import { Dimensions, Image, Linking, View, ViewStyle } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import { useQuery } from "@tanstack/react-query"
-import Carousel from "app/components/Carousel"
+import { Icon, Screen, Text } from "../components"
+import { MainTabScreenProps } from "../navigators/MainNavigator"
+import { colors, spacing } from "../theme"
 
 const avatar = require("../../assets/images/avatar.jpg")
 const eventImg = require("../../assets/images/event-img.png")
 const surveyImg = require("../../assets/images/survey-img.png")
 const courseImg = require("../../assets/images/course-img.png")
 const expertImg = require("../../assets/images/expert-img.png")
-const halalImg = require("../../assets/images/halal-img.png");
-
+const halalImg = require("../../assets/images/halal-img.png")
 
 const window = Dimensions.get("window")
 
@@ -32,19 +31,19 @@ const courseImgHeight = courseImgWidth / (335 / 120)
 
 export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_props) {
   const {
-    authenticationStore: { isAuthenticated, authName, authToken },
-    statusStore: { redirect, redirectParams, removeRedirect }
+    authenticationStore: { isAuthenticated, authName },
+    statusStore: { redirect, redirectParams, removeRedirect },
   } = useStores()
 
   useEffect(() => {
-    if (_props.route.params?.redirect &&_props.route.params?.redirect !== undefined) {
-      _props.navigation.setParams({ redirect: undefined });
-      _props.navigation.push(_props.route.params.redirect, {});
+    if (_props.route.params?.redirect && _props.route.params?.redirect !== undefined) {
+      _props.navigation.setParams({ redirect: undefined })
+      _props.navigation.push(_props.route.params.redirect, {})
     }
     if (redirect !== "") {
-      if (redirect == "CourseDetail") {
-        _props.navigation.push("CourseDetail", { id: Number(redirectParams.id) });
-      } else if (redirect == "ExpertDetail") {
+      if (redirect === "CourseDetail") {
+        _props.navigation.push("CourseDetail", { id: Number(redirectParams.id) })
+      } else if (redirect === "ExpertDetail") {
         _props.navigation.push("ExpertDetail", { id: Number(redirectParams.id) })
       }
 
@@ -52,28 +51,30 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
     }
   }, [])
 
-  const {
-    isPending: isPendingPodcast,
-    error: errorPodcast,
-    data: podcastData,
-  } = useQuery({
+  const { isPending: isPendingPodcast, data: podcastData } = useQuery({
     queryKey: ["podcastApi"],
-    queryFn: () => getPodcasApi().then((res) => res.data.data).catch(() => []),
+    queryFn: () =>
+      getPodcasApi()
+        .then((res) => res.data.data)
+        .catch(() => []),
   })
 
-  const {data: bannerData, isPending: isPendingBanner} = useQuery({
+  const { data: bannerData, isPending: isPendingBanner } = useQuery({
     queryKey: ["bannerApi"],
-    queryFn: () => getActiveBanner().then((res) => res.data.data).catch(() => [])
+    queryFn: () =>
+      getActiveBanner()
+        .then((res) => res.data.data)
+        .catch(() => []),
   })
 
   const CarouselCardItem = ({ item, index }: any) => {
     return (
       <TouchableOpacity onPress={() => Linking.openURL(item.url)}>
-          <Image
-            key={index}
-            source={{uri: item.file}}
-            style={{ width: bannerWidth, height: bannerHeight, objectFit: "fill", borderRadius: 10 }}
-          />
+        <Image
+          key={index}
+          source={{ uri: item.file }}
+          style={{ width: bannerWidth, height: bannerHeight, objectFit: "fill", borderRadius: 10 }}
+        />
       </TouchableOpacity>
     )
   }
@@ -82,7 +83,7 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
     return (
       <TouchableOpacity
         onPress={() => {
-          _props.navigation.navigate("PodcastPlay", {data: item})
+          _props.navigation.navigate("PodcastPlay", { data: item })
         }}
       >
         <Image
@@ -96,7 +97,14 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
 
   return (
     <>
-      <View style={{ paddingHorizontal: spacing.sm, paddingTop: spacing.xxl, paddingBottom: 5, backgroundColor: "#FFF" }}>
+      <View
+        style={{
+          paddingHorizontal: spacing.sm,
+          paddingTop: spacing.xxl,
+          paddingBottom: 5,
+          backgroundColor: "#FFF",
+        }}
+      >
         {isAuthenticated && (
           <View style={$top}>
             <View style={$identity}>
@@ -111,12 +119,20 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
                   marginRight: 10,
                 }}
               >
-                <Image source={avatar} style={{ width: "100%", height: "100%", borderRadius: 20 }} />
+                <Image
+                  source={avatar}
+                  style={{ width: "100%", height: "100%", borderRadius: 20 }}
+                />
               </View>
               <Text>{authName}</Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Icon icon="love" size={40} style={{ marginRight: 10 }} onPress={() => _props.navigation.navigate("Wishlist")} />
+              <Icon
+                icon="love"
+                size={40}
+                style={{ marginRight: 10 }}
+                onPress={() => _props.navigation.navigate("Wishlist")}
+              />
               {/* <Icon icon="bell" size={30} /> */}
             </View>
           </View>
@@ -145,7 +161,6 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
         <View style={{ marginTop: 10 }}>
           <TouchableOpacity onPress={() => _props.navigation.push("Course")}>
             <Image source={courseImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
-
           </TouchableOpacity>
         </View>
         <View style={{ marginTop: 10 }}>
@@ -162,7 +177,12 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
           <Text size="lg" weight="bold">
             Podcast
           </Text>
-          <Text size="lg" weight="bold" style={{color: colors.main}} onPress={() => _props.navigation.push("Podcast")}>
+          <Text
+            size="lg"
+            weight="bold"
+            style={{ color: colors.main }}
+            onPress={() => _props.navigation.push("Podcast")}
+          >
             See All
           </Text>
         </View>
@@ -191,12 +211,12 @@ const $identity: ViewStyle = {
   alignItems: "center",
 }
 
-const $searchBar: ViewStyle = {
-  height: 50,
-  width: "100%",
-  backgroundColor: colors.formBackground,
-  borderRadius: 20,
-  flexDirection: "row",
-  alignItems: "center",
-  paddingHorizontal: 20,
-}
+// const $searchBar: ViewStyle = {
+//   height: 50,
+//   width: "100%",
+//   backgroundColor: colors.formBackground,
+//   borderRadius: 20,
+//   flexDirection: "row",
+//   alignItems: "center",
+//   paddingHorizontal: 20,
+// }

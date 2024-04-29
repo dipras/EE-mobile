@@ -84,5 +84,5 @@ export const colors = {
 
   formBackground: palette.neutral200,
 
-  main: "#F6BE2C"
+  main: "#F6BE2C",
 }

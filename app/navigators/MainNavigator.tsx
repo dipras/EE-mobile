@@ -15,7 +15,7 @@ export type MainTabParamList = {
   MainShowroom: { queryIndex?: string; itemIndex?: string }
   Profile: undefined
   Cart: undefined
-  Home: {redirect?: "Login" | "Register"}
+  Home: { redirect?: "Login" | "Register" }
 }
 
 /**

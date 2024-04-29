@@ -31,7 +31,7 @@ import Config from "./config"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { ViewStyle } from "react-native"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { RootSiblingParent } from 'react-native-root-siblings';
+import { RootSiblingParent } from "react-native-root-siblings"
 
 const queryClient = new QueryClient()
 
@@ -56,7 +56,7 @@ const config = {
       },
     },
     Event: "event",
-    PurchaseHistory: "history"
+    PurchaseHistory: "history",
   },
 }
 

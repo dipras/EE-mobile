@@ -5,7 +5,7 @@ export const StatusStoreModel = types
   .props({
     firstTime: true,
     redirect: "",
-    redirectParams: types.frozen()
+    redirectParams: types.frozen(),
   })
   .views((store) => ({
     get isFirstTime() {
@@ -21,11 +21,11 @@ export const StatusStoreModel = types
     },
     setRedirect(redirect: string, redirectParams: any) {
       store.redirectParams = redirectParams
-      store.redirect = redirect;
+      store.redirect = redirect
     },
     removeRedirect() {
       store.redirectParams = {}
-      store.redirect = "";
+      store.redirect = ""
     },
   }))
 
