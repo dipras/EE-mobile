@@ -1,13 +1,16 @@
-import App from "./app/app"
-import React, {useEffect, useRef} from "react"
-import * as SplashScreen from "expo-splash-screen"
-import * as Notifications from 'expo-notifications';
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import * as SplashScreen from "expo-splash-screen";
+import React, { useEffect, useRef } from "react";
+import App from "./app/app";
 
-GoogleSignin.configure({
-	webClientId: "227957573473-g5888vmn7gcdpcdfs6jahgpjqgmr0a4f.apps.googleusercontent.com",
-	scopes: ['profile', 'email'],
-});
+if(Constants.appOwnership !== "expo") {
+  GoogleSignin.configure({
+    webClientId: "227957573473-g5888vmn7gcdpcdfs6jahgpjqgmr0a4f.apps.googleusercontent.com",
+    scopes: ['profile', 'email'],
+  });
+}
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({

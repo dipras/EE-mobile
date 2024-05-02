@@ -9,6 +9,7 @@ import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
+import Constants from 'expo-constants';
 
 const GoogleLogin = async () => {
   await GoogleSignin.hasPlayServices()
@@ -56,6 +57,10 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       setIsLoading(true)
       let response: any
       if (type === "google") {
+        if(Constants.appOwnership === "expo") {
+          alert("This feature only work on native")
+          return;
+        }
         const googleResponse = await GoogleLogin()
         response = await verifyGoogle(`${googleResponse.idToken}`)
       } else {
