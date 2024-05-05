@@ -15,8 +15,8 @@ export const checkoutApi = (authKey: any, params: checkoutParams) =>
     },
   })
 
-export const getPurchaseHistory = (authKey: any) =>
-  apiHandler.get(`/order-detail/purchase-history`, {
+export const getPurchaseHistory = (authKey: any, limit: number = 4, page: number = 1) =>
+  apiHandler.get(`/order-detail/purchase-history?limit=${limit}&page=${page}`, {
     headers: {
       Authorization: `Bearer ${authKey}`,
     },

@@ -1,12 +1,13 @@
-import { Text } from "app/components"
+import { Button, Text } from "app/components"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { useStores } from "app/models"
 import { AppStackScreenProps } from "app/navigators"
 import { colors, spacing } from "app/theme"
 import { getPurchaseHistory } from "app/utils/api/order.api"
 import { rupiah } from "app/utils/formatText"
 import { observer } from "mobx-react-lite"
-import React, { FC, useEffect, useState } from "react"
-import { TouchableOpacity, View, ViewStyle } from "react-native"
+import React, { FC, useEffect, useMemo, useState } from "react"
+import { ActivityIndicator, TouchableOpacity, View, ViewStyle } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
 
 interface PurchaseHistoryScreenProps extends AppStackScreenProps<"PurchaseHistory"> {}
@@ -15,12 +16,24 @@ export const PurchaseHistoryScreen: FC<PurchaseHistoryScreenProps> = observer(
     const {
       authenticationStore: { authToken },
     } = useStores()
-    const [PurchaseHistoryData, setPurchaseHistoryData] = useState([])
-    useEffect(() => {
-      getPurchaseHistory(authToken).then((res: any) => {
-        setPurchaseHistoryData(res.data.data)
-      })
-    }, [])
+    const { data, fetchNextPage, isLoading } = useInfiniteQuery({
+      initialPageParam: 1,
+      queryKey: ["purchaseHistory"],
+      queryFn: ({ pageParam }: { pageParam: number }) => getPurchaseHistory(authToken, 8, pageParam).then(res => res.data),
+      getNextPageParam: (lastPage) => {
+        return lastPage.meta.currentPage + 1
+      },
+    })
+    const notLastPage = useMemo(() => data && Number(data.pageParams.pop()) < data.pages[0].meta.totalPages, [data]);
+    const histories = useMemo(() => {
+      let result: any = [];
+      data?.pages.forEach(page => page.data.forEach((data: any) => result.push(data)));
+
+      if(notLastPage) {
+        result.push(null);
+      }
+      return result;
+    }, [data]);
 
     const handlePress = (status: string, url: string) => {
       if (status !== "Completed") {
@@ -29,6 +42,10 @@ export const PurchaseHistoryScreen: FC<PurchaseHistoryScreenProps> = observer(
     }
 
     const renderItem = ({ item, index }: { item: any; index: number }) => {
+
+      if(!item) {
+        return <ActivityIndicator size={"large"} />
+      }
       return (
         <View style={{ flexDirection: "row", justifyContent: "center" }} key={index}>
           <View style={$wishtlist}>
@@ -42,7 +59,7 @@ export const PurchaseHistoryScreen: FC<PurchaseHistoryScreenProps> = observer(
                 </View>
               </View>
               <View>
-                <Text>Paid: 10 november 2023</Text>
+                <Text>Paid: {item.created_at}</Text>
                 <View
                   style={{
                     flexDirection: "row",
@@ -56,7 +73,7 @@ export const PurchaseHistoryScreen: FC<PurchaseHistoryScreenProps> = observer(
                       {rupiah(item.price)}
                     </Text>
                   </View>
-                  <TouchableOpacity onPress={() => handlePress(item.status, item.snapUrl)}>
+                  <TouchableOpacity onPress={() => handlePress(item.status, item.snapUrl)} style={{display: item.status == "Canceled" ? "none" : "flex"}}>
                     <View
                       style={{
                         backgroundColor: colors.main,
@@ -79,8 +96,8 @@ export const PurchaseHistoryScreen: FC<PurchaseHistoryScreenProps> = observer(
     }
 
     return (
-      <View style={{ paddingHorizontal: spacing.md, flex: 1, paddingTop: 50 }}>
-        <FlatList data={PurchaseHistoryData} renderItem={renderItem} style={{ flex: 1 }} />
+      <View style={{ paddingHorizontal: spacing.md, flex: 1 }}>
+        <FlatList data={histories} renderItem={renderItem} style={{ flex: 1, marginBottom: 50 }} showsVerticalScrollIndicator={true} onEndReached={() => fetchNextPage()} ListEmptyComponent={isLoading ? <ActivityIndicator size={"large"} /> : <Text style={{textAlign: "center"}}>Your history is empty</Text>} />
       </View>
     )
   },
