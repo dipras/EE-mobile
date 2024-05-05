@@ -6,7 +6,7 @@ import { MainTabScreenProps } from "../navigators/MainNavigator"
 import { spacing } from "../theme"
 import { useStores } from "../models"
 
-const avatar = require("../../assets/images/avatar.jpg")
+const avatar = require("../../assets/icons/user2.png")
 const avatarSize = 150
 export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(function DemoDebugScreen(
   _props,

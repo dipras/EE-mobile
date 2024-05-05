@@ -11,12 +11,12 @@ import { Icon, Screen, Text } from "../components"
 import { MainTabScreenProps } from "../navigators/MainNavigator"
 import { colors, spacing } from "../theme"
 
-const avatar = require("../../assets/images/avatar.jpg")
 const eventImg = require("../../assets/images/event-img.png")
 const surveyImg = require("../../assets/images/survey-img.png")
 const courseImg = require("../../assets/images/course-img.png")
 const expertImg = require("../../assets/images/expert-img.png")
 const halalImg = require("../../assets/images/halal-img.png")
+const userImg = require("../../assets/icons/user.png")
 
 const window = Dimensions.get("window")
 
@@ -107,25 +107,27 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
       >
         {isAuthenticated && (
           <View style={$top}>
-            <View style={$identity}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: colors.border,
-                  padding: 5,
-                  height: 40,
-                  width: 40,
-                  borderRadius: 20,
-                  marginRight: 10,
-                }}
-              >
-                <Image
-                  source={avatar}
-                  style={{ width: "100%", height: "100%", borderRadius: 20 }}
-                />
+            <TouchableOpacity onPress={() => _props.navigation.navigate("ProfileDetail")}>
+              <View style={$identity}>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                    padding: 5,
+                    height: 40,
+                    width: 40,
+                    borderRadius: 20,
+                    marginRight: 10,
+                  }}
+                >
+                  <Image
+                    source={userImg}
+                    style={{ width: "100%", height: "100%", borderRadius: 20 }}
+                  />
+                </View>
+                <Text>{authName}</Text>
               </View>
-              <Text>{authName}</Text>
-            </View>
+            </TouchableOpacity>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Icon
                 icon="love"

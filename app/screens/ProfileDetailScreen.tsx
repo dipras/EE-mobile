@@ -10,7 +10,7 @@ import { ActivityIndicator, Image, View, ViewStyle } from "react-native"
 import DatePicker from "react-native-date-picker"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
-const avatarImg = require("../../assets/images/avatar.jpg")
+const avatarImg = require("../../assets/icons/user2.png")
 
 const avatarSize = 150
 
