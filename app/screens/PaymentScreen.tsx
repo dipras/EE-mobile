@@ -8,9 +8,13 @@ import { spacing } from "app/theme"
 interface PaymenScreenScreenProps extends AppStackScreenProps<"Payment"> {}
 export const PaymenScreenScreen: FC<PaymenScreenScreenProps> = observer((_props) => {
   const navigationChange = (state: any) => {
-    const url = new URL(state.url)
+    const url = new URL(state.url);
     if (url.hostname.includes("exportexpert")) {
-      _props.navigation.navigate("Success")
+      if(url.searchParams.get("transaction_status") == "pending") {
+        _props.navigation.navigate("PurchaseHistory");
+      } else {
+        _props.navigation.navigate("Success")
+      }
     }
   }
 
