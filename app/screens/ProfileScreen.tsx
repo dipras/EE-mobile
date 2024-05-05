@@ -15,10 +15,12 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
     authenticationStore: { logout, isAuthenticated, authName },
   } = useStores()
 
+  const redirectLogin = () =>  _props.navigation.replace("Main", { screen: "Home", params: { redirect: "Login" } });
+
   useEffect(() => {
     if (!isAuthenticated) {
       const unsubscribe = _props.navigation.addListener("focus", () => {
-        _props.navigation.replace("Main", { screen: "Home", params: { redirect: "Login" } })
+        redirectLogin();
       })
 
       // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -103,9 +105,18 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
           </Button>
         </>
       ) : (
-        <Text style={{ textAlign: "center" }} size="lg">
-          You must login first
-        </Text>
+        <>
+          <Text style={{ textAlign: "center" }} size="lg">
+            You must login first
+          </Text>
+          <Button
+            style={{ backgroundColor: "#F6BE2C", borderWidth: 0, borderRadius: 10, marginTop: 20 }}
+            onPress={redirectLogin}
+            textStyle={{ color: "white" }}
+          >
+            Log Out
+          </Button>
+        </>
       )}
     </Screen>
   )
