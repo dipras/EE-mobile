@@ -64,7 +64,7 @@ export const BoardingScreen: FC<BoardingScreenProps> = function BoardingScreen(_
     if (data[index + 1]) {
       setIndex(index + 1)
     } else {
-      _props.navigation.push("BoardingSign")
+      _props.navigation.navigate("BoardingSign")
     }
   }
   return (
@@ -86,7 +86,7 @@ export const BoardingScreen: FC<BoardingScreenProps> = function BoardingScreen(_
           >
             {data[index].title}
           </Text>
-          <TouchableOpacity onPress={() => _props.navigation.push("BoardingSign")}>
+          <TouchableOpacity onPress={() => _props.navigation.navigate("BoardingSign")}>
             <Text size="lg" style={{ color: "white", marginRight: 20 }}>
               Skip
             </Text>

@@ -42,9 +42,9 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
     }
     if (redirect !== "") {
       if (redirect === "CourseDetail") {
-        _props.navigation.push("CourseDetail", { id: Number(redirectParams.id) })
+        _props.navigation.navigate("CourseDetail", { id: Number(redirectParams.id) })
       } else if (redirect === "ExpertDetail") {
-        _props.navigation.push("ExpertDetail", { id: Number(redirectParams.id) })
+        _props.navigation.navigate("ExpertDetail", { id: Number(redirectParams.id) })
       }
 
       removeRedirect()
@@ -153,7 +153,7 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
         )}
 
         <View style={{ marginTop: 30, flexDirection: "row", justifyContent: "space-between" }}>
-          <TouchableOpacity onPress={() => _props.navigation.push("Event")}>
+          <TouchableOpacity onPress={() => _props.navigation.navigate("Event")}>
             <Image source={eventImg} style={{ width: surveyImgWidth, height: surveyImgHeight }} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => _props.navigation.navigate("Survey")}>
@@ -161,7 +161,7 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
           </TouchableOpacity>
         </View>
         <View style={{ marginTop: 10 }}>
-          <TouchableOpacity onPress={() => _props.navigation.push("Course")}>
+          <TouchableOpacity onPress={() => _props.navigation.navigate("Course")}>
             <Image source={courseImg} style={{ width: courseImgWidth, height: courseImgHeight }} />
           </TouchableOpacity>
         </View>
@@ -183,7 +183,7 @@ export const Home: FC<MainTabScreenProps<"Home">> = observer(function Home(_prop
             size="lg"
             weight="bold"
             style={{ color: colors.main }}
-            onPress={() => _props.navigation.push("Podcast")}
+            onPress={() => _props.navigation.navigate("Podcast")}
           >
             See All
           </Text>

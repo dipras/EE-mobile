@@ -68,7 +68,7 @@ export const ExpertDetailScreen: FC<ExpertDetailScreenProps> = observer(function
       return
     }
 
-    _props.navigation.push("OrderSummary", {
+    _props.navigation.navigate("OrderSummary", {
       id: expertId,
       price: data.price,
       image: data.image.uri,

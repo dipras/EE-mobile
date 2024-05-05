@@ -122,7 +122,7 @@ export const ExpertScreen: FC<ExpertScreenProps> = observer(function Course(_pro
                     }}
                   >
                     <TouchableOpacity
-                      onPress={() => _props.navigation.push("ExpertDetail", { id: val.id })}
+                      onPress={() => _props.navigation.navigate("ExpertDetail", { id: val.id })}
                     >
                       <View
                         style={{

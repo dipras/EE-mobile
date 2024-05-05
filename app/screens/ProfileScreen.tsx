@@ -46,12 +46,12 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
             {authName}
           </Text>
           <View>
-            <TouchableOpacity onPress={() => _props.navigation.push("ProfileDetail")}>
+            <TouchableOpacity onPress={() => _props.navigation.navigate("ProfileDetail")}>
               <Text size="md" weight="medium" style={$menu}>
                 Profile
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => _props.navigation.push("AccountSetting")}>
+            <TouchableOpacity onPress={() => _props.navigation.navigate("AccountSetting")}>
               <Text size="md" weight="medium" style={$menu}>
                 Account Setting
               </Text>
@@ -76,12 +76,12 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
                 Purchase History
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => _props.navigation.push("Wishlist")}>
+            <TouchableOpacity onPress={() => _props.navigation.navigate("Wishlist")}>
               <Text size="md" weight="medium" style={$menu}>
                 Wishlist
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => _props.navigation.push("About")}>
+            <TouchableOpacity onPress={() => _props.navigation.navigate("About")}>
               <View style={$menu}>
                 <Text size="md" weight="medium">
                   About Expert Export Indonesia
@@ -96,7 +96,7 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
             style={{ backgroundColor: "#F6BE2C", borderWidth: 0, borderRadius: 10, marginTop: 20 }}
             onPress={() => {
               logout()
-              _props.navigation.push("Main", { screen: "Home", params: {} })
+              _props.navigation.navigate("Main", { screen: "Home", params: {} })
               alert("Success Logout")
             }}
             textStyle={{ color: "white" }}
