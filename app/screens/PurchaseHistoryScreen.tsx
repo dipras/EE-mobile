@@ -27,10 +27,10 @@ export const PurchaseHistoryScreen: FC<PurchaseHistoryScreenProps> = observer(
     const notLastPage = useMemo(() => data && Number(data.pageParams.pop()) < data.pages[0].meta.totalPages, [data]);
     const histories = useMemo(() => {
       let result: any = [];
-      data?.pages.forEach(page => page.data.forEach((data: any) => result.navigate(data)));
+      data?.pages.forEach(page => page.data.forEach((data: any) => result.push(data)));
 
       if(notLastPage) {
-        result.navigate(null);
+        result.push(null);
       }
       return result;
     }, [data]);
