@@ -114,7 +114,7 @@ export const ProfileScreen: FC<MainTabScreenProps<"Profile">> = observer(functio
             onPress={redirectLogin}
             textStyle={{ color: "white" }}
           >
-            Log Out
+            Log In
           </Button>
         </>
       )}
