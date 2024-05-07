@@ -40,7 +40,9 @@ export const ProfileDetailScreen: FC<ProfileDetailScreenProps> = observer((_prop
       const data = response.data.data
       console.log(data)
       setName(data.name)
-      setDate(new Date(data.date_of_birth))
+      if(data.date_of_birth) {
+        setDate(new Date(data.date_of_birth))
+      }
       setPhone(data.phone_number)
       setGender(data.gender === "Perempuan" ? "1" : "0")
       setDomicile(data.domicile)
