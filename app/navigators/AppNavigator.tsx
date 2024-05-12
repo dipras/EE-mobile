@@ -75,7 +75,8 @@ export type AppStackParamList = {
   PurchaseHistory: undefined
   PodcastPlay: { data: any }
   Success: undefined
-  Payment: { url: string }
+  Payment: { url: string },
+  PrivyLogin: undefined
 
   // 🔥 Your screens go here
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
@@ -184,6 +185,11 @@ const AppStack = observer(function AppStack() {
         name="Payment"
         component={Screens.PaymenScreenScreen}
         options={{ headerShown: true, title: "Payment" }}
+      />
+      <Stack.Screen
+        name="PrivyLogin"
+        component={Screens.PrivyLoginScreen}
+        options={{ headerShown: true, title: "Privy Login" }}
       />
 
       {/** 🔥 Your screens go here */}

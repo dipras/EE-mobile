@@ -19,7 +19,7 @@ const GoogleLogin = async () => {
 
 const googleIcon = require("../../assets/images/google.png")
 const privyIcon = require("../../assets/images/privy.png")
-interface LoginScreenProps extends AppStackScreenProps<"Login"> {}
+interface LoginScreenProps extends AppStackScreenProps<"Login"> { }
 
 export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_props) {
   const authPasswordInput = useRef<TextInput>(null)
@@ -57,7 +57,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       setIsLoading(true)
       let response: any
       if (type === "google") {
-        if(Constants.appOwnership === "expo") {
+        if (Constants.appOwnership === "expo") {
           alert("This feature only work on native")
           return;
         }
@@ -210,7 +210,9 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         <TouchableOpacity onPress={() => login("google")}>
           <Image source={googleIcon} style={{ width: 40, height: 40, marginRight: 10 }} />
         </TouchableOpacity>
-        <Image source={privyIcon} style={{ width: 115, height: 30 }} />
+        <TouchableOpacity onPress={() => _props.navigation.navigate("PrivyLogin")}>
+          <Image source={privyIcon} style={{ width: 115, height: 30 }} />
+        </TouchableOpacity>
       </View>
 
       <View style={{ flexDirection: "row", justifyContent: "center" }}>

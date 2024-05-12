@@ -14,7 +14,7 @@ const googleIcon = require("../../assets/images/google.png")
 const privyIcon = require("../../assets/images/privy.png")
 const checkSuccess = require("assets/images/check-success.png")
 
-interface RegisterScreenProps extends AppStackScreenProps<"Register"> {}
+interface RegisterScreenProps extends AppStackScreenProps<"Register"> { }
 
 const GoogleLogin = async () => {
   await GoogleSignin.hasPlayServices()
@@ -232,7 +232,9 @@ export const RegisterScreen: FC<RegisterScreenProps> = observer(function Registe
         <TouchableOpacity onPress={() => login("google")}>
           <Image source={googleIcon} style={{ width: 40, height: 40, marginRight: 10 }} />
         </TouchableOpacity>
-        <Image source={privyIcon} style={{ width: 115, height: 30 }} />
+        <TouchableOpacity onPress={() => _props.navigation.navigate("PrivyLogin")}>
+          <Image source={privyIcon} style={{ width: 115, height: 30 }} />
+        </TouchableOpacity>
       </View>
 
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
