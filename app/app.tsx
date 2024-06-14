@@ -98,7 +98,7 @@ function App(props: AppProps) {
   if (!rehydrated || !isNavigationStateRestored || !areFontsLoaded) return null
 
   const linking = {
-    prefixes: [prefix, "https://m.exportexpert.id"],
+    prefixes: [prefix],
     config,
   }
 

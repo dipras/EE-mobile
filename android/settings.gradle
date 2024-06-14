@@ -1,4 +1,4 @@
-rootProject.name = 'EE-mobile'
+rootProject.name = 'EEI'
 
 dependencyResolutionManagement {
   versionCatalogs {
